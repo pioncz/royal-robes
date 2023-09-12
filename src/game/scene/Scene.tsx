@@ -1,16 +1,19 @@
 import * as THREE from 'three';
 import Stats from 'three/addons/libs/stats.module.js';
-// import OrbitControls from './../../utils/OrbitControls';
-// import GameControls from './../../utils/GameControls';
-// import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import GameControls from 'game/controls/GameControls';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OrbitControls } from  'three/examples/jsm/controls/OrbitControls';
 import { type GameContext } from './../Game';
 
 class Scene {
   $: THREE.Scene;
   renderer: THREE.WebGLRenderer;
   camera: THREE.OrthographicCamera;
+  controls: GameControls;
+  composer: EffectComposer;
+  debugControls?: OrbitControls;
   stats?: Stats;
 
   constructor(context: GameContext) {
@@ -52,81 +55,66 @@ class Scene {
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.$.add(this.camera);
 
-    // // Controls
-    // this.controls = new GameControls(
-    //   this.camera,
-    //   this.renderer.domElement,
-    // );
+    // Controls
+    this.controls = new GameControls();
 
-    // // Ambient light
-    // if (debug) {
-    //   this.$.add(new THREE.AmbientLight(0xffffff, 0.4));
-    // } else {
-    //   this.$.add(new THREE.AmbientLight(0x002299, 0.18));
-    // }
+    // Ambient light
+    if (context.debug) {
+      this.$.add(new THREE.AmbientLight(0xffffff, 0.4));
+    } else {
+      this.$.add(new THREE.AmbientLight(0x002299, 0.18));
+    }
 
-    // // post processing
-    // this.composer = new EffectComposer(this.renderer);
-    // this.composer.addPass(new RenderPass(this.$, this.camera));
-    // const bloomPass = new UnrealBloomPass(1.0, 0.3, 1.0, 0.1);
-    // this.composer.addPass(bloomPass);
+    // post processing
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(new RenderPass(this.$, this.camera));
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(1.0,1.0), 0.3, 1.0, 0.1);
+    this.composer.addPass(bloomPass);
 
-    // // DebugControls
-    // if (debug) {
-    //   this.debugControls = new OrbitControls(
-    //     this.camera,
-    //     this.renderer.domElement,
-    //   );
-    // }
+    // DebugControls
+    if (context.debug) {
+      this.debugControls = new OrbitControls(
+        this.camera,
+        this.renderer.domElement,
+      );
+    }
 
-    // this.objects = [];
-
-    // this.loader = new THREE.TextureLoader();
-
-    // window.addEventListener('resize', this.onWindowResize, false);
+    window.addEventListener('resize', this.onWindowResize, false);
   }
 
-  // onWindowResize = () => {
-  //   this.camera.aspect = window.innerWidth / window.innerHeight;
-  //   this.camera.updateProjectionMatrix();
-  //   this.renderer.setSize(window.innerWidth, window.innerHeight);
-  // };
+  onWindowResize = () => {
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  };
 
-  // getMaxAnisotropy() {
-  //   this.renderer.capabilities.getMaxAnisotropy();
-  // }
+  getMaxAnisotropy(): number {
+    return this.renderer.capabilities.getMaxAnisotropy();
+  }
 
-  // getControls() {
-  //   return this.controls;
-  // }
+  remove = () => {
+    window.removeEventListener('resize', this.onWindowResize);
+    if (this.stats) {
+      document.body.removeChild(this.stats.dom);
+    }
+    document.body.removeChild(this.renderer.domElement);
+    this.renderer.dispose();
+    this.controls.remove();
+    if (this.debugControls) {
+      this.debugControls.dispose();
+    }
+  };
 
-  // getCamera() {
-  //   return this.camera;
-  // }
+  animate = () => {
+    if (this.stats) {
+      this.stats.begin();
+    }
+  };
 
-  // getStats() {
-  //   return this.stats;
-  // }
-
-  // add(obj) {
-  //   this.$.add(obj);
-  // }
-
-  // remove = () => {
-  //   window.removeEventListener('resize', this.onWindowResize);
-  //   document.body.removeChild(this.stats.dom);
-  //   document.body.removeChild(this.renderer.domElement);
-  //   this.renderer.dispose();
-  // };
-
-  // animate = () => {
-  //   this.stats.begin();
-  //   this.controls.update();
-  // };
-
-  // animateFinish = () => {
-  //   this.stats.end();
-  // };
+  animateFinish = () => {
+    if (this.stats) {
+      this.stats.end();
+    }
+  };
 }
 
 export default Scene;

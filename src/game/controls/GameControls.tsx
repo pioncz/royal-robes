@@ -1,26 +1,17 @@
-import EventsEmitter from './EventsEmitter';
+import EventsEmitter from 'game/utils/EventsEmitter';
 
 class GameControls extends EventsEmitter {
-  constructor(camera, domElement) {
+  keys: Record<string, boolean>;
+
+  constructor() {
     super();
-    this.mouse = { x: 0, y: 0 };
-    this.target = { x: 0, y: 0 };
-    this.startRotation = { x: 0, y: 0 };
-    this.camera = camera;
-    this.windowHalf = new THREE.Vector2(
-      window.innerWidth / 2,
-      window.innerHeight / 2,
-    );
-    this.mouseDown = false;
+
     this.keys = {};
 
-    document.addEventListener('mousemove', this.onMouseMove, false);
-    document.addEventListener('mousedown', this.onMouseDown, false);
-    document.addEventListener('mouseup', this.onMouseUp, false);
     document.addEventListener('keyup', this.onKeyUp);
     document.addEventListener('keydown', this.onKeyDown);
   }
-  onKeyDown = (e) => {
+  onKeyDown = (e: KeyboardEvent) => {
     let returnKey = e.key;
 
     if (e.key === 'ArrowDown' || e.key === 's') {
@@ -42,8 +33,8 @@ class GameControls extends EventsEmitter {
       this.keys[e.key] = true;
     }
     this.emit('keydown', { key: returnKey });
-  };
-  onKeyUp = (e) => {
+  }
+  onKeyUp = (e: KeyboardEvent) => {
     let returnKey = e.key;
 
     if (e.key === 'ArrowDown' || e.key === 's') {
@@ -65,22 +56,10 @@ class GameControls extends EventsEmitter {
       this.keys[e.key] = false;
     }
     this.emit('keyup', { key: returnKey });
-  };
-  onMouseDown = () => {
-    this.mouseDown = true;
-    this.startRotation.x = this.camera.rotation.x;
-    this.startRotation.y = this.camera.rotation.y;
-  };
-  onMouseUp = () => {
-    this.mouseDown = false;
-  };
-  onMouseMove = (e) => {
-    this.mouse.x = e.clientX - this.windowHalf.x;
-    this.mouse.y = e.clientY - this.windowHalf.x;
-  };
-  update() {}
-  dispose() {
-    document.removeEventListener('mousemove', onMouseMove, false);
+  }
+  remove() {
+    document.removeEventListener('keyup', this.onKeyUp);
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 }
 
