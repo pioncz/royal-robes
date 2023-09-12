@@ -1,16 +1,22 @@
 import AssetsLoader from "./assets/AssetsLoader";
+import Scene from "./scene/Scene";
+
+export type GameContext = { debug: boolean, maxAnisotropy: number }
 
 class Main {
   assetsLoader: AssetsLoader;
   loadingAssets: boolean;
+  scene?: Scene;
+  context: GameContext;
 
   constructor() {
     this.assetsLoader = new AssetsLoader();
+    this.context = { debug: true, maxAnisotropy: 0 };
     this.loadingAssets = true;
     this.assetsLoader.load.then(() => {
       console.log('loaded')
+      this.scene = new Scene(this.context);
     });
-    //   this.scene = new Scene({ debug });
 
     //   this.maxAnisotropy = this.scene.getMaxAnisotropy();
     //   this.controls = this.scene.getControls();

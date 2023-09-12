@@ -8,4 +8,5 @@ export default defineConfig({
     open: true,
     port: 8080,
   },
+  base: './',
 })
