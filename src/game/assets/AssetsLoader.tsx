@@ -4,10 +4,14 @@ import { SpriteData, AssetNames } from './AssetsLoaderHelpers'
 class AssetsLoader {
   load: Promise<unknown>;
   assets: Record<string, SpriteData>;
+  reject: ((value?: unknown) => void) | null = null;
 
   constructor() {
     let resolve: ((value?: unknown) => void) | null = null;
-    this.load = new Promise((r: (value?: unknown) => void) => (resolve = r));
+    this.load = new Promise((promiseResolve: (value?: unknown) => void, promiseReject: (value?: unknown) => void) => {
+      resolve = promiseResolve;
+      this.reject = promiseReject;
+    });
     this.assets = {};
 
     const spritesPromise = new Promise((resolve: (value?: unknown) => void) => {
@@ -24,6 +28,12 @@ class AssetsLoader {
         resolve();
       }
     });
+  }
+
+  remove() {
+    if (this.reject) {
+      this.reject();
+    }
   }
 }
 

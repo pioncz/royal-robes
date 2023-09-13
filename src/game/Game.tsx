@@ -22,7 +22,7 @@ class Main {
   lastAnimationTick: number;
   animationFrameId?: number;
 
-  constructor() {
+  constructor({ containerId }: { containerId: string}) {
     this.assetsLoader = new AssetsLoader();
     this.context = { debug };
     this.loadingAssets = true;
@@ -31,11 +31,9 @@ class Main {
 
     this.assetsLoader.load.then(() => {
       // Scene
-      this.scene = new Scene(this.context);
+      this.scene = new Scene(this.context, containerId);
       this.context.maxAnisotropy = this.scene.getMaxAnisotropy();
       this.context.controls = this.scene.controls;
-
-
 
       this.loadingAssets = false;
 
@@ -43,6 +41,8 @@ class Main {
       setTimeout(() => {
         this.animate(0, 0);
       }, 0);
+    }, () => {
+      console.log('Assets load error')
     });
 
     //   this.map = new Map({
@@ -197,6 +197,17 @@ class Main {
     // this.enemy.sprite.animate(delta);
     this.scene!.composer.render();
     this.scene!.animateFinish();
+  }
+
+  remove = () => {
+    this.assetsLoader.remove();
+    if (this.animationFrameId) {
+      window.cancelAnimationFrame(this.animationFrameId);
+    }
+    this.animationFrameId = undefined;
+    if (this.scene) {
+      this.scene.remove();
+    }
   }
 }
 

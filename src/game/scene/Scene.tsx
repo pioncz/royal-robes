@@ -14,19 +14,16 @@ class Scene {
   controls: GameControls;
   composer: EffectComposer;
   debugControls?: OrbitControls;
+  containerId?: string;
   stats?: Stats;
 
-  constructor(context: GameContext) {
+  constructor(context: GameContext, containerId: string) {
+    const container = document.querySelector(`#${containerId}`) || document.body;
+    this.containerId = containerId;
+
     // Scene
     this.$ = new THREE.Scene();
     this.$.fog = new THREE.FogExp2(0x000000, 0.0025);
-
-    // Stats
-    if (context.debug) {
-      this.stats = new Stats();
-      this.stats.showPanel(0);
-      document.body.appendChild(this.stats.dom);
-    }
 
     // Renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -36,8 +33,14 @@ class Scene {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
-    document.body.appendChild(this.renderer.domElement);
-    document.body.style.background = '#222';
+    container.appendChild(this.renderer.domElement);
+    
+    // Stats
+    if (context.debug) {
+      this.stats = new Stats();
+      this.stats.showPanel(0);
+      container.appendChild(this.stats.dom);
+    }
 
     // Camera
     const x = 1.8;
@@ -93,10 +96,11 @@ class Scene {
 
   remove = () => {
     window.removeEventListener('resize', this.onWindowResize);
+    const container = document.querySelector(`#${this.containerId}`) || document.body;
     if (this.stats) {
-      document.body.removeChild(this.stats.dom);
+      container.removeChild(this.stats.dom);
     }
-    document.body.removeChild(this.renderer.domElement);
+    container.removeChild(this.renderer.domElement);
     this.renderer.dispose();
     this.controls.remove();
     if (this.debugControls) {

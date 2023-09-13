@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import GameComponent from './game/GameComponent'
 
 function App() {
@@ -7,7 +6,6 @@ function App() {
 
   return (
     <>
-      Royal Robes
       <GameComponent />
     </>
   )
