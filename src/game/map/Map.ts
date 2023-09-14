@@ -1,11 +1,16 @@
 import * as THREE from 'three';
 import TilesetManager from './TilesetManager';
 import { pointInDirection } from 'game/utils/Math';
-// import { getMoveStepForSpeed } from 'game/utils/creature';
+import { getMoveStepForSpeed } from 'game/creature/CreatureHelpers';
 import { type GameContext } from 'game/Game';
-import { type Point, type MapCell } from 'game/utils/Types';
+import {
+  type Point,
+  type MapCell,
+  type MapTile,
+} from 'game/utils/Types';
 import { MapData } from './MapData';
 import Sprite from 'game/sprite/Sprite';
+import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 
 const FloorHeight = 0.05;
 const WallHeight = 2.5;
@@ -17,9 +22,11 @@ class Map {
   walls: THREE.Group;
   floors: THREE.Group;
   tilesetManager: TilesetManager;
+  mapTiles: MapTile[];
 
   constructor(context: GameContext, position: Point) {
     this.mapData = MapData;
+    this.mapTiles = [];
 
     // Sprites to animate
     this.sprites = [];
@@ -32,34 +39,40 @@ class Map {
     this.$.add(this.floors);
 
     this.tilesetManager = new TilesetManager(context.maxAnisotropy);
-    this.tilesetManager.load([FarmTiles, CatacombsTiles]).then(() => {
-      const posTiles = this.mapData.map((wallMapObject) => {
-        const tile = this.tilesetManager.findTile(wallMapObject.id);
+    const farmTileset =
+      context.assetsLoader.tilesets[AssetNames.FarmTileset];
+    const catacombTileset =
+      context.assetsLoader.tilesets[AssetNames.CatacombsTileset];
+    this.tilesetManager
+      .load([farmTileset, catacombTileset])
+      .then(() => {
+        const mapTiles = this.mapData.map((mapCell) => {
+          const tile = this.tilesetManager.findTile(mapCell.id);
 
-        if (!tile) {
-          console.error('Error, no tile with id', wallMapObject.id);
-        }
+          if (!tile) {
+            console.error('Error, no tile with id', mapCell.id);
+          }
 
-        return { tile, data: wallMapObject };
+          return { tile, cell: mapCell };
+        });
+
+        const walls = mapTiles.filter(
+          ({ tile }) => tile?.type === 'wall',
+        ) as MapTile[];
+        const floors = mapTiles.filter(
+          ({ tile }) => tile?.type === 'floor',
+        ) as MapTile[];
+
+        this.mapTiles = mapTiles.filter((p) => !!p.tile) as MapTile[];
+        this.buildWalls(walls);
+        this.buildFloors(floors);
       });
-
-      const walls = posTiles.filter(
-        ({ tile }) => tile.type === 'wall',
-      );
-      const floors = posTiles.filter(
-        ({ tile }) => tile.type === 'floor',
-      );
-
-      this.posTiles = posTiles;
-      this.buildWalls(walls);
-      this.buildFloors(floors);
-    });
     this.setPosition(position);
   }
-  buildWalls(tilesData) {
-    tilesData.forEach(({ data, tile }) => {
-      const width = tile?.size?.w || 1;
-      const height = tile?.size?.h || WallHeight;
+  private buildWalls(mapTiles: MapTile[]) {
+    mapTiles.forEach(({ cell, tile }) => {
+      const width = tile?.size?.width || 1;
+      const height = tile?.size?.height || WallHeight;
       const geometryPlane = new THREE.BoxGeometry(
         width,
         height,
@@ -80,12 +93,12 @@ class Map {
       });
       const wall = new THREE.Mesh(geometryPlane, materialPlane);
 
-      wall.position.x = data.x;
-      wall.position.y = data.y + WallHeight / 2 - FloorHeight;
-      wall.position.z = data.z;
-      if (data.r) {
-        wall.rotation.set(0, (data.r * Math.PI) / 180, 0);
-        wall.position.z = data.z + 0.5;
+      wall.position.x = cell.x;
+      wall.position.y = cell.y + WallHeight / 2 - FloorHeight;
+      wall.position.z = cell.z;
+      if (cell.r) {
+        wall.rotation.set(0, (cell.r * Math.PI) / 180, 0);
+        wall.position.z = cell.z + 0.5;
       } else {
         wall.position.x += 0.5;
       }
@@ -103,13 +116,13 @@ class Map {
           distance,
           decay,
         );
-        light.position.set(0, 0, 0.01 * data.r ? -1 : 1);
+        light.position.set(0, 0, 0.01 * (cell?.r ? -1 : 1));
         wall.add(light);
       }
     });
   }
-  buildFloors(tilesData) {
-    tilesData.forEach(({ data, tile }) => {
+  private buildFloors(mapTiles: MapTile[]) {
+    mapTiles.forEach(({ cell, tile }) => {
       const geometryPlane = new THREE.BoxGeometry(1, FloorHeight, 1);
       const materialPlane = new THREE.MeshPhongMaterial({
         ...(tile.texture ? { map: tile.texture } : {}),
@@ -121,27 +134,32 @@ class Map {
       });
       const floor = new THREE.Mesh(geometryPlane, materialPlane);
 
-      floor.position.x = data.x + 0.5;
+      floor.position.x = cell.x + 0.5;
       floor.position.y = -FloorHeight;
-      floor.position.z = data.z + 0.5;
+      floor.position.z = cell.z + 0.5;
       this.floors.add(floor);
     });
   }
-  getPosTileObjectByPosition(x, z) {
-    return this.posTiles.filter(
-      ({ data }) => data.x === x && data.z === z,
+  private getPosTileObjectByPosition(x: number, z: number) {
+    return this.mapTiles.filter(
+      ({ cell }) => cell.x === x && cell.z === z,
     );
   }
-  getPosTileObjectsByRange(x1, x2, z1, z2) {
-    return this.posTiles.filter(
-      ({ data }) =>
-        data.x >= x1 && data.x <= x2 && data.z >= z1 && data.z <= z2,
+  private getPosTileObjectsByRange(
+    x1: number,
+    x2: number,
+    z1: number,
+    z2: number,
+  ) {
+    return this.mapTiles.filter(
+      ({ cell }) =>
+        cell.x >= x1 && cell.x <= x2 && cell.z >= z1 && cell.z <= z2,
     );
   }
-  setPosition({ x, z }) {
+  private setPosition({ x, z }: { x: number; z: number }) {
     this.$.position.set(-x, 0, -z);
   }
-  isPositionValid(toPosition) {
+  private isPositionValid(toPosition: { x: number; z: number }) {
     const floorDataObjects = this.getPosTileObjectByPosition(
       Math.floor(toPosition.x),
       Math.floor(toPosition.z),
@@ -168,20 +186,20 @@ class Map {
     ).filter((obj) => obj.tile.type === 'wall' && !obj.tile.walkable);
 
     if (wallDataObjects.length) {
-      wallDataObjects.forEach(({ data }) => {
-        if (data.r === 90) {
+      wallDataObjects.forEach(({ cell }) => {
+        if (cell.r === 90) {
           if (
-            Math.abs(data.x - toPosition.x) < 0.6 &&
-            toPosition.z + 0.5 >= data.z &&
-            toPosition.z - 1.5 <= data.z
+            Math.abs(cell.x - toPosition.x) < 0.6 &&
+            toPosition.z + 0.5 >= cell.z &&
+            toPosition.z - 1.5 <= cell.z
           ) {
             isValid = false;
           }
         } else {
           if (
-            Math.abs(data.z - toPosition.z) < 0.6 &&
-            toPosition.x + 0.5 >= data.x &&
-            toPosition.x - 1.5 <= data.x
+            Math.abs(cell.z - toPosition.z) < 0.6 &&
+            toPosition.x + 0.5 >= cell.x &&
+            toPosition.x - 1.5 <= cell.x
           ) {
             isValid = false;
           }
@@ -190,34 +208,22 @@ class Map {
     }
 
     // Check creatures collision
-    this.creaturesGroup.children.forEach((creature) => {
-      const a = toPosition.x - creature.position.x;
-      const b = toPosition.z - creature.position.z;
-      const distance = Math.sqrt(a * a + b * b);
+    // this.creaturesGroup.children.forEach((creature) => {
+    //   const a = toPosition.x - creature.position.x;
+    //   const b = toPosition.z - creature.position.z;
+    //   const distance = Math.sqrt(a * a + b * b);
 
-      if (distance < 1) {
-        isValid = false;
-      }
-    });
+    //   if (distance < 1) {
+    //     isValid = false;
+    //   }
+    // });
 
     return isValid;
   }
   getPosition() {
     return { x: -this.$.position.x, z: -this.$.position.z };
   }
-  addCreature(creature) {
-    this.creatures.push(creature);
-    this.creaturesGroup.add(creature.$);
-  }
-  isPlayerInRadius(position, radius) {
-    const playerPos = this.getPosition();
-    const diffX = playerPos.x - position.x;
-    const diffZ = playerPos.z - position.z;
-    const playerDistance = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-    return playerDistance < radius;
-  }
-  movePlayerInDirection = (direction, speed) => {
+  movePlayerInDirection = (direction: number, speed: number) => {
     const radius = getMoveStepForSpeed(speed);
     const currentPosition = this.getPosition();
     const { x, z } = pointInDirection(
@@ -225,7 +231,7 @@ class Map {
       direction,
       radius,
     );
-    const shortenPos = (a, b) => a + (b - a) / 3;
+    const shortenPos = (a: number, b: number) => a + (b - a) / 3;
 
     if (this.isPositionValid({ x, z })) {
       this.setPosition({ x, z });
@@ -241,7 +247,7 @@ class Map {
       });
     }
   };
-  animate(delta) {
+  animate(delta: number) {
     this.sprites.forEach((sprite) => {
       sprite.animate(delta);
     });

@@ -49,7 +49,7 @@ class Main {
 
         // Map
         this.map = new Map(this.context, { x: 20.5, z: 4 });
-        this.scene.add(this.map.$);
+        this.scene.$.add(this.map.$);
 
         this.loadingAssets = false;
 
@@ -201,7 +201,7 @@ class Main {
     //   }
     // });
 
-    // this.map.animate(delta);
+    this.map!.animate(delta);
     // this.player.animate(delta);
     // this.npc.sprite.animate(delta);
     // this.enemy.sprite.animate(delta);
