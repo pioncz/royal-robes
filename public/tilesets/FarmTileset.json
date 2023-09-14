@@ -1,66 +1,76 @@
 {
   "assetUrl": "tilesets/farm.png",
   "tiles": [
-    { "id": 0, "color": "blue", "walkable": false, "type": "floor" },
-    { "id": 1, "color": "green", "walkable": true, "type": "floor" },
     {
-      "id": 2,
+      "id": "0",
+      "color": "blue",
+      "walkable": false,
+      "type": "floor"
+    },
+    {
+      "id": "1",
+      "color": "green",
+      "walkable": true,
+      "type": "floor"
+    },
+    {
+      "id": "2",
       "frame": { "x": 80, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 3,
+      "id": "3",
       "frame": { "x": 96, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 4,
+      "id": "4",
       "frame": { "x": 112, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
 
     {
-      "id": 5,
+      "id": "5",
       "frame": { "x": 0, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 6,
+      "id": "6",
       "frame": { "x": 16, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 7,
+      "id": "7",
       "frame": { "x": 32, "y": 0, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 8,
+      "id": "8",
       "frame": { "x": 0, "y": 16, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 9,
+      "id": "9",
       "frame": { "x": 16, "y": 16, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 10,
+      "id": "10",
       "frame": { "x": 32, "y": 16, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 11,
+      "id": "11",
       "frame": { "x": 0, "y": 32, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 12,
+      "id": "12",
       "frame": { "x": 16, "y": 32, "width": 16, "height": 16 },
       "type": "floor"
     },
     {
-      "id": 13,
+      "id": "13",
       "frame": { "x": 32, "y": 32, "width": 16, "height": 16 },
       "type": "floor"
     }

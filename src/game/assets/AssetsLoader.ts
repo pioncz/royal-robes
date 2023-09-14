@@ -51,7 +51,7 @@ class AssetsLoader {
         fetch(CatacombsTiles)
           .then((response) => response.json())
           .then((spriteData) => {
-            this.tilesets[AssetNames.FarmTileset] = spriteData;
+            this.tilesets[AssetNames.CatacombsTileset] = spriteData;
             resolve();
           });
       },
