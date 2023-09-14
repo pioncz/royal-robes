@@ -1,17 +1,23 @@
 import * as THREE from 'three';
-import AssetsLoader from "./assets/AssetsLoader";
-import Scene from "./scene/Scene";
+import AssetsLoader from './assets/AssetsLoader';
+import Scene from './scene/Scene';
 import GameControls from 'game/controls/GameControls';
 import {
   degreesToRadians,
   getObjectsInRadius,
   distanceBetweenPoints,
 } from 'game/utils/Math';
+import Map from './map/Map';
 
 const fpsInterval = 1 / 80;
 const debug = true;
 
-export type GameContext = { debug: boolean, maxAnisotropy?: number, controls?: GameControls }
+export type GameContext = {
+  debug: boolean;
+  maxAnisotropy: number;
+  controls?: GameControls;
+  assetsLoader: AssetsLoader;
+};
 
 class Main {
   assetsLoader: AssetsLoader;
@@ -21,36 +27,41 @@ class Main {
   clock: THREE.Clock;
   lastAnimationTick: number;
   animationFrameId?: number;
+  map?: Map;
 
-  constructor({ containerId }: { containerId: string}) {
+  constructor({ containerId }: { containerId: string }) {
     this.assetsLoader = new AssetsLoader();
-    this.context = { debug };
+    this.context = {
+      debug,
+      maxAnisotropy: 0,
+      assetsLoader: this.assetsLoader,
+    };
     this.loadingAssets = true;
     this.lastAnimationTick = 0;
     this.clock = new THREE.Clock();
 
-    this.assetsLoader.load.then(() => {
-      // Scene
-      this.scene = new Scene(this.context, containerId);
-      this.context.maxAnisotropy = this.scene.getMaxAnisotropy();
-      this.context.controls = this.scene.controls;
+    this.assetsLoader.load.then(
+      () => {
+        // Scene
+        this.scene = new Scene(this.context, containerId);
+        this.context.maxAnisotropy = this.scene.getMaxAnisotropy();
+        this.context.controls = this.scene.controls;
 
-      this.loadingAssets = false;
+        // Map
+        this.map = new Map(this.context, { x: 20.5, z: 4 });
+        this.scene.add(this.map.$);
 
-      // Start main loop
-      setTimeout(() => {
-        this.animate(0, 0);
-      }, 0);
-    }, () => {
-      console.log('Assets load error')
-    });
+        this.loadingAssets = false;
 
-    //   this.map = new Map({
-    //     maxAnisotropy: this.maxAnisotropy,
-    //     mapPos,
-    //   });
-    //   this.map.setPosition({ x: 20.5, z: 4 });
-    //   this.scene.add(this.map.$);
+        // Start main loop
+        setTimeout(() => {
+          this.animate(0, 0);
+        }, 0);
+      },
+      () => {
+        console.log('Assets load error');
+      },
+    );
 
     //   this.player = new Player({
     //     debug,
@@ -97,7 +108,6 @@ class Main {
 
     //   this.loadingAssets = false;
     // });
-
   }
 
   animate(delta: number, elapsed: number) {
@@ -144,18 +154,18 @@ class Main {
       } else if (kLeft) {
         direction = 180;
       }
-//      const radians = degreesToRadians(direction);
+      //      const radians = degreesToRadians(direction);
 
-    //   this.player.turn(mapMoveDirectionToTextureOrientation(radians));
+      //   this.player.turn(mapMoveDirectionToTextureOrientation(radians));
 
-    //   this.map.movePlayerInDirection(
-    //     degreesToRadians(direction),
-    //     this.player.speed,
-    //   );
+      //   this.map.movePlayerInDirection(
+      //     degreesToRadians(direction),
+      //     this.player.speed,
+      //   );
     } else if (kSpace) {
-//      this.player.setState(States.attack);
+      //      this.player.setState(States.attack);
     } else {
-  //    this.player.setState(States.idle);
+      //    this.player.setState(States.idle);
     }
 
     // // Calculate attacks
@@ -208,7 +218,7 @@ class Main {
     if (this.scene) {
       this.scene.remove();
     }
-  }
+  };
 }
 
 export default Main;

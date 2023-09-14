@@ -1,5 +1,8 @@
 import NightbornSprite from '/sprites/nightborne.json?url'
-import { SpriteData, AssetNames } from './AssetsLoaderHelpers'
+import { AssetNames } from './AssetsLoaderHelpers'
+import { SpriteData } from 'game/utils/Types'
+import FarmTileset from '/tilesets/FarmTileset.json?url';
+import CatacombsTiles from '/tilesets/CatacombsTileset.json?url';
 
 class AssetsLoader {
   load: Promise<unknown>;
@@ -23,7 +26,25 @@ class AssetsLoader {
         });
     });
 
-    Promise.all([spritesPromise]).then(() => {
+    const farmTilesetPromise = new Promise((resolve: (value?: unknown) => void) => {
+      fetch(FarmTileset)
+        .then((response) => response.json())
+        .then((spriteData) => {
+          this.assets[AssetNames.FarmTileset] = spriteData;
+          resolve();
+        });
+    });
+
+    const catacombTilesetPromise = new Promise((resolve: (value?: unknown) => void) => {
+      fetch(CatacombsTiles)
+        .then((response) => response.json())
+        .then((spriteData) => {
+          this.assets[AssetNames.FarmTileset] = spriteData;
+          resolve();
+        });
+    });
+
+    Promise.all([spritesPromise, farmTilesetPromise, catacombTilesetPromise]).then(() => {
       if (resolve) {
         resolve();
       }
