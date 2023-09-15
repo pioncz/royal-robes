@@ -1,18 +1,25 @@
-import Sprite from './Sprite.js';
-import { pointInDirection } from './utils/math.js';
-import { getMoveStepForSpeed } from './utils/creature.js';
-import CreatureEffects, { TextTypes } from './CreatureEffects';
-
-export const States = {
-  idle: 'idle',
-  walking: 'walking',
-  talking: 'talking',
-  attack: 'attack',
-  chase: 'chase',
-  dead: 'dead',
-};
+import * as THREE from 'three';
+import Sprite from 'game/sprite/Sprite';
+import { pointInDirection } from 'game/utils/Math';
+import { getMoveStepForSpeed } from './CreatureHelpers';
+import CreatureEffects from './CreatureEffects';
+import {
+  type CreatureOrientation,
+  type CreatureStates,
+} from 'game/utils/Types';
 
 class Creature {
+  $: THREE.Group;
+  sprite$: THREE.Mesh;
+  debug$?: THREE.Mesh;
+  sprite: Sprite;
+  texture: THREE.Texture;
+  speed: number;
+  health: number;
+  defence: number;
+  attack: number;
+  creatureEffects?: CreatureEffects;
+
   constructor({
     debug = false,
     maxAnisotropy,
@@ -22,6 +29,15 @@ class Creature {
     defence = 10,
     attack = 5,
     creatureEffects = true,
+  }: {
+    debug?: boolean;
+    maxAnisotropy: number;
+    color?: string;
+    speed?: number;
+    health?: number;
+    defence?: number;
+    attack?: number;
+    creatureEffects?: boolean;
   }) {
     this.speed = speed;
     this.health = health;
@@ -32,8 +48,6 @@ class Creature {
     this.$.rotation.y = -Math.PI / 4;
 
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
     const texture = new THREE.CanvasTexture(canvas);
     texture.anisotropy = maxAnisotropy;
     texture.magFilter = THREE.NearestFilter;
@@ -72,20 +86,26 @@ class Creature {
     }
 
     if (creatureEffects) {
-      this.creatureEffects = new CreatureEffects({
-        debug,
-        maxAnisotropy,
-      });
+      this.creatureEffects = new CreatureEffects(maxAnisotropy);
       this.$.add(this.creatureEffects.$);
     }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('Failed to retrieve context 2d from canvas');
+      return;
+    }
+    ctx.imageSmoothingEnabled = false;
   }
-  turn = (orientation) => {
-    this.sprite$.scale.x = orientation === 'left' ? 1 : -1;
+  turn = (orientation: CreatureOrientation) => {
+    if (this.sprite$) {
+      this.sprite$.scale.x = orientation === 'left' ? 1 : -1;
+    }
     if (this.creatureEffects) {
       this.creatureEffects.turn(orientation);
     }
   };
-  moveInDirection = (direction) => {
+  moveInDirection = (direction: number) => {
     const radius = getMoveStepForSpeed(this.speed);
     const { x, z } = pointInDirection(
       this.$.position,
@@ -96,18 +116,19 @@ class Creature {
     this.$.position.x = x;
     this.$.position.z = z;
   };
-  calculateDamage = (opponent) =>
+  calculateDamage = (opponent: Creature) =>
     Math.max(this.attack - opponent.defence, 0);
-  dealDamage = (damage) => {
+  dealDamage = (damage: number) => {
     this.health = Math.max(this.health - damage, 0);
     if (this.health === 0 && this.setState) {
-      this.setState(States.dead);
+      this.setState('dead');
     }
     if (this.creatureEffects) {
-      this.creatureEffects.add(TextTypes.Damage, damage);
+      this.creatureEffects.add('damage', `-${damage}`);
     }
   };
-  animate(delta) {
+  setState?(state: CreatureStates) {}
+  animate(delta: number) {
     if (this.creatureEffects) {
       this.creatureEffects.animate(delta);
     }

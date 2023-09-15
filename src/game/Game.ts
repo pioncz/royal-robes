@@ -8,6 +8,11 @@ import {
   distanceBetweenPoints,
 } from 'game/utils/Math';
 import Map from './map/Map';
+import Player from './creature/Player';
+import { mapMoveDirectionToTextureOrientation } from './creature/CreatureHelpers';
+import Npc from './creature/Npc';
+import Enemy from './creature/Enemy';
+import { AssetNames } from './assets/AssetsLoaderHelpers';
 
 const fpsInterval = 1 / 80;
 const debug = true;
@@ -17,6 +22,7 @@ export type GameContext = {
   maxAnisotropy: number;
   controls?: GameControls;
   assetsLoader: AssetsLoader;
+  map?: Map;
 };
 
 class Main {
@@ -28,6 +34,10 @@ class Main {
   lastAnimationTick: number;
   animationFrameId?: number;
   map?: Map;
+  player?: Player;
+  npc?: Npc;
+  enemies?: Enemy[];
+  enemy?: Enemy;
 
   constructor({ containerId }: { containerId: string }) {
     this.assetsLoader = new AssetsLoader();
@@ -50,6 +60,54 @@ class Main {
         // Map
         this.map = new Map(this.context, { x: 20.5, z: 4 });
         this.scene.$.add(this.map.$);
+        this.context.map = this.map;
+
+        // Player
+        this.player = new Player({
+          debug,
+          maxAnisotropy: this.context.maxAnisotropy,
+        });
+        this.scene.$.add(this.player.$);
+
+        // Npc
+        this.npc = new Npc(this.context, {
+          color: '#004400',
+          position: { x: 3, y: 0.5, z: 1 },
+        });
+        this.scene.$.add(this.player.$);
+
+        this.enemies = [];
+        this.enemy = new Enemy(this.context, {
+          color: '#440000',
+          position: { x: 28, y: 0.5, z: 2 },
+        });
+        this.scene.$.add(this.enemy.$);
+        this.enemies.push(this.enemy);
+
+        const nightborneSpriteData =
+          this.assetsLoader.assets[AssetNames.Nightborne];
+
+        this.player.sprite.setAssetPath(
+          nightborneSpriteData.assetPath,
+        );
+        this.player.sprite.setAnimations(
+          nightborneSpriteData.objects[0],
+        );
+        this.player.sprite.playContinuous('idle');
+
+        this.npc.sprite.setAssetPath(nightborneSpriteData.assetPath);
+        this.npc.sprite.setAnimations(
+          nightborneSpriteData.objects[0],
+        );
+        this.npc.sprite.playContinuous('idle');
+
+        this.enemy.sprite.setAssetPath(
+          nightborneSpriteData.assetPath,
+        );
+        this.enemy.sprite.setAnimations(
+          nightborneSpriteData.objects[0],
+        );
+        this.enemy.sprite.playContinuous('idle');
 
         this.loadingAssets = false;
 
@@ -62,52 +120,6 @@ class Main {
         console.log('Assets load error');
       },
     );
-
-    //   this.player = new Player({
-    //     debug,
-    //     maxAnisotropy: this.maxAnisotropy,
-    //   });
-    //   this.scene.add(this.player.$);
-
-    //   this.npc = new Npc({
-    //     debug,
-    //     maxAnisotropy: this.maxAnisotropy,
-    //     color: '#004400',
-    //     position: { x: 3, y: 0.5, z: 1 },
-    //   });
-    //   this.map.addCreature(this.npc);
-
-    //   this.enemies = [];
-    //   this.enemy = new Enemy({
-    //     debug,
-    //     maxAnisotropy: this.maxAnisotropy,
-    //     color: '#440000',
-    //     position: { x: 28, y: 0.5, z: 2 },
-    //   });
-    //   this.map.addCreature(this.enemy);
-    //   this.enemies.push(this.enemy);
-
-    //   const nightborneSpriteData =
-    //     this.assetsLoader.assets[AssetNames.Nightborne];
-
-    //   this.player.sprite.setAssetPath(nightborneSpriteData.assetPath);
-    //   this.player.sprite.setAnimations(
-    //     nightborneSpriteData.objects[0],
-    //   );
-    //   this.player.sprite.playContinuous('idle');
-
-    //   this.npc.sprite.setAssetPath(nightborneSpriteData.assetPath);
-    //   this.npc.sprite.setAnimations(nightborneSpriteData.objects[0]);
-    //   this.npc.sprite.playContinuous('idle');
-
-    //   this.enemy.sprite.setAssetPath(nightborneSpriteData.assetPath);
-    //   this.enemy.sprite.setAnimations(
-    //     nightborneSpriteData.objects[0],
-    //   );
-    //   this.enemy.sprite.playContinuous('idle');
-
-    //   this.loadingAssets = false;
-    // });
   }
 
   animate(delta: number, elapsed: number) {
@@ -119,7 +131,14 @@ class Main {
     );
 
     const elapsedDiff = elapsed - this.lastAnimationTick;
-    if (elapsedDiff < fpsInterval) {
+    if (
+      elapsedDiff < fpsInterval ||
+      !this.map ||
+      !this.player ||
+      !this.enemies ||
+      !this.npc ||
+      !this.enemy
+    ) {
       return;
     }
     this.lastAnimationTick = elapsed;
@@ -154,57 +173,57 @@ class Main {
       } else if (kLeft) {
         direction = 180;
       }
-      //      const radians = degreesToRadians(direction);
+      const radians = degreesToRadians(direction);
 
-      //   this.player.turn(mapMoveDirectionToTextureOrientation(radians));
+      this.player.turn(mapMoveDirectionToTextureOrientation(radians));
 
-      //   this.map.movePlayerInDirection(
-      //     degreesToRadians(direction),
-      //     this.player.speed,
-      //   );
+      this.map.movePlayerInDirection(
+        degreesToRadians(direction),
+        this.player.speed,
+      );
     } else if (kSpace) {
-      //      this.player.setState(States.attack);
+      this.player.setState('attack');
     } else {
-      //    this.player.setState(States.idle);
+      this.player.setState('idle');
     }
 
-    // // Calculate attacks
-    // const playerPosition = this.map.getPosition();
-    // if (
-    //   this.player.shouldTriggerAttack &&
-    //   !this.player.attackTriggered
-    // ) {
-    //   getObjectsInRadius(
-    //     playerPosition,
-    //     this.enemies,
-    //     this.player.attackRadius,
-    //   ).forEach((enemy) => {
-    //     const damage = this.player.calculateDamage(enemy);
-    //     enemy.dealDamage(damage);
-    //     console.log('Enemy HP: ', enemy.health);
-    //   });
-    //   this.player.attackTriggered = true;
-    // }
-    // this.enemies.forEach((enemy) => {
-    //   if (!enemy.shouldTriggerAttack || enemy.attackTriggered) {
-    //     return;
-    //   }
-    //   const distanceToPlayer = distanceBetweenPoints(
-    //     playerPosition,
-    //     enemy.$.position,
-    //   );
-    //   if (distanceToPlayer < enemy.attackRadius) {
-    //     const damage = enemy.calculateDamage(this.player);
-    //     this.player.dealDamage(damage);
-    //     enemy.attackTriggered = true;
-    //     console.log('Player HP: ', this.player.health);
-    //   }
-    // });
+    // Calculate attacks
+    const playerPosition = this.map.getPosition();
+    if (
+      this.player.shouldTriggerAttack &&
+      !this.player.attackTriggered
+    ) {
+      getObjectsInRadius(
+        playerPosition,
+        this.enemies,
+        this.player.attackRadius,
+      ).forEach((enemy) => {
+        const damage = this.player!.calculateDamage(enemy);
+        enemy.dealDamage(damage);
+        console.log('Enemy HP: ', enemy.health);
+      });
+      this.player.attackTriggered = true;
+    }
+    this.enemies.forEach((enemy) => {
+      if (!enemy.shouldTriggerAttack || enemy.attackTriggered) {
+        return;
+      }
+      const distanceToPlayer = distanceBetweenPoints(
+        playerPosition,
+        enemy.$.position,
+      );
+      if (distanceToPlayer < enemy.attackRadius) {
+        const damage = enemy.calculateDamage(this.player!);
+        this.player!.dealDamage(damage);
+        enemy.attackTriggered = true;
+        console.log('Player HP: ', this.player!.health);
+      }
+    });
 
     this.map!.animate(delta);
-    // this.player.animate(delta);
-    // this.npc.sprite.animate(delta);
-    // this.enemy.sprite.animate(delta);
+    this.player.animate(delta);
+    this.npc.sprite.animate(delta);
+    this.enemy.sprite.animate(delta);
     this.scene!.composer.render();
     this.scene!.animateFinish();
   }

@@ -57,6 +57,26 @@ export type MapCell = {
   r?: number;
 };
 
+export type CreatureOrientation = 'left' | 'right';
+
 export type MapSize = { x: number; z: number; y?: number };
 
 export type MapTile = { tile: Tile; cell: MapCell };
+
+export type CreatureStates =
+  | 'idle'
+  | 'walking'
+  | 'talking'
+  | 'attack'
+  | 'chase'
+  | 'dead';
+
+export type CreatureEffectsTextTypes = 'damage';
+
+export type CreatureEffectsTextAnimation = {
+  type: CreatureEffectsTextTypes;
+  value: string;
+  lengthLeft: number;
+  length: number;
+  orientation: CreatureOrientation;
+};

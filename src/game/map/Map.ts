@@ -220,6 +220,17 @@ class Map {
 
     return isValid;
   }
+  isPlayerInRadius(
+    position: { x: number; z: number },
+    radius: number,
+  ) {
+    const playerPos = this.getPosition();
+    const diffX = playerPos.x - position.x;
+    const diffZ = playerPos.z - position.z;
+    const playerDistance = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+    return playerDistance < radius;
+  }
   getPosition() {
     return { x: -this.$.position.x, z: -this.$.position.z };
   }
