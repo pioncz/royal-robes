@@ -1,14 +1,9 @@
-import { useState } from 'react'
 import GameComponent from './game/GameComponent'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
+const App = () => (
     <>
       <GameComponent />
     </>
   )
-}
 
 export default App

@@ -1,6 +1,5 @@
 import { Point } from './Types';
-import Creature from './creature/Creature';
-import * as THREE from 'three';
+import Creature from 'game/creature/Creature';
 
 export const degreesToRadians = (degrees: number) =>
   (degrees * Math.PI) / 180;
