@@ -132,6 +132,9 @@ class Creature {
     if (this.creatureEffects) {
       this.creatureEffects.animate(delta);
     }
+    if (this.sprite) {
+      this.sprite.animate(delta);
+    }
   }
 }
 

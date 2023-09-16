@@ -74,14 +74,14 @@ class Main {
           color: '#004400',
           position: { x: 3, y: 0.5, z: 1 },
         });
-        this.scene.$.add(this.player.$);
+        this.map.$.add(this.npc.$);
 
         this.enemies = [];
         this.enemy = new Enemy(this.context, {
-          color: '#440000',
+          color: '#ffffff',
           position: { x: 28, y: 0.5, z: 2 },
         });
-        this.scene.$.add(this.enemy.$);
+        this.map.$.add(this.enemy.$);
         this.enemies.push(this.enemy);
 
         const nightborneSpriteData =
@@ -133,26 +133,27 @@ class Main {
     const elapsedDiff = elapsed - this.lastAnimationTick;
     if (
       elapsedDiff < fpsInterval ||
+      !this.scene ||
       !this.map ||
       !this.player ||
       !this.enemies ||
-      !this.npc ||
-      !this.enemy
+      !this.enemy ||
+      !this.npc
     ) {
       return;
     }
     this.lastAnimationTick = elapsed;
 
-    this.scene!.animate();
+    this.scene.animate();
 
-    const kUp = this.scene!.controls.keys.arrowUp;
-    const kDown = this.scene!.controls.keys.arrowDown;
-    const kLeft = this.scene!.controls.keys.arrowLeft;
-    const kRight = this.scene!.controls.keys.arrowRight;
-    const kSpace = this.scene!.controls.keys.space;
+    const kUp = this.scene.controls.keys.arrowUp;
+    const kDown = this.scene.controls.keys.arrowDown;
+    const kLeft = this.scene.controls.keys.arrowLeft;
+    const kRight = this.scene.controls.keys.arrowRight;
+    const kSpace = this.scene.controls.keys.space;
 
     if (kUp || kDown || kLeft || kRight) {
-      // this.player.setState(States.walking);
+      this.player.setState('walking');
 
       let direction = 0;
 
@@ -220,12 +221,12 @@ class Main {
       }
     });
 
-    this.map!.animate(delta);
+    this.map.animate(delta);
     this.player.animate(delta);
-    this.npc.sprite.animate(delta);
-    this.enemy.sprite.animate(delta);
-    this.scene!.composer.render();
-    this.scene!.animateFinish();
+    this.npc.animate(delta);
+    this.enemy.animate(delta);
+    this.scene.composer.render();
+    this.scene.animateFinish();
   }
 
   remove = () => {

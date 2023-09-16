@@ -1,3 +1,6 @@
+poukladac zawartosc Game.ts - sprite inicjalizowany w Creature, nie w Game
+czy cos z animate mozna przeniesc do klasy postaci?
+
 dodac mozliwosc atakowania wroga:
 +gdy postaci sa blisko siebie wchodza w stan walki
 +animacja walki

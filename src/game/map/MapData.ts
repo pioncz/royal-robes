@@ -1,4 +1,7 @@
-import { generateMapFromFragments, generateColumn } from './Generators'
+import {
+  generateMapFromFragments,
+  generateColumn,
+} from './Generators';
 
 let MapData = generateMapFromFragments([
   // Floors
@@ -13,8 +16,12 @@ let MapData = generateMapFromFragments([
     ids: ['5', '6', '7', '8', '9', '10', '11', '12', '13'],
     fillFunction: (ids, x, z, size) => {
       let id = ids[4];
-      if (!size?.z || !size?.x || !z) {
-        return { id: ids[0] }
+      if (
+        typeof size?.x !== 'number' ||
+        typeof size?.z !== 'number' ||
+        typeof z !== 'number'
+      ) {
+        return { id: ids[0] };
       }
       if (x === 0 && z === 0) {
         id = ids[0];
@@ -100,4 +107,3 @@ MapData = [...MapData, ...generateColumn(19, 2, 'c3', 0.5)];
 MapData = [...MapData, ...generateColumn(24, 2, 'c3', 0.5)];
 
 export { MapData };
-

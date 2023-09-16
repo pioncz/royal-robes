@@ -95,7 +95,9 @@ class Npc extends Creature {
 
     this.state = newState;
   }
-  animate() {
+  animate(delta: number) {
+    super.animate(delta);
+
     const isPlayerInRadius = this.context.map?.isPlayerInRadius(
       this.$.position,
       EventRadius,

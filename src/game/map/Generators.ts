@@ -1,15 +1,23 @@
-import { MapSize, MapCell } from 'game/utils/Types'
+import { MapSize, MapCell } from 'game/utils/Types';
 
-const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+const rand = (min: number, max: number) =>
+  Math.random() * (max - min) + min;
 
-const makeArray = (length: number) => Array.from({ length }, (v, i) => i);
+const makeArray = (length: number) =>
+  Array.from({ length }, (v, i) => i);
 
 type MapFragment = {
   size: MapSize;
   offset?: MapSize;
   ids: string[];
   r?: number;
-  fillFunction?: (ids: string[], x: number, z?: number, size?: MapSize, offset?: MapSize) => { id: string | null };
+  fillFunction?: (
+    ids: string[],
+    x: number,
+    z?: number,
+    size?: MapSize,
+    offset?: MapSize,
+  ) => { id: string | null };
 };
 
 const generateMapFragment = ({
@@ -20,30 +28,42 @@ const generateMapFragment = ({
   fillFunction,
 }: MapFragment) => {
   return makeArray(size.x)
-  .map((x) =>
-    makeArray(size.z).map((z) => {
-      const fillFunctionValue = fillFunction ? fillFunction(ids, x, z, size, offset) : null;
-      const id = fillFunctionValue?.id ? fillFunctionValue.id : ids[Math.floor(rand(0, ids.length))];
+    .map((x) =>
+      makeArray(size.z).map((z) => {
+        const fillFunctionValue = fillFunction
+          ? fillFunction(ids, x, z, size, offset)
+          : null;
+        const id = fillFunction
+          ? fillFunctionValue?.id
+          : ids[Math.floor(rand(0, ids.length))];
 
-      return {
-        x: x + (offset?.x || 0),
-        y: size.y || 0,
-        z: z + (offset?.z || 0),
-        id,
-        ...(r ? { r } : {}),
-      }
-  }))
-  .flat()
-  .filter((mapPos) => !!mapPos.id);
-}
+        return {
+          x: x + (offset?.x || 0),
+          y: size.y || 0,
+          z: z + (offset?.z || 0),
+          id,
+          ...(r ? { r } : {}),
+        };
+      }),
+    )
+    .flat()
+    .filter((mapPos) => !!mapPos.id);
+};
 
-export const generateMapFromFragments = (fragments: MapFragment[]): MapCell[] => {
+export const generateMapFromFragments = (
+  fragments: MapFragment[],
+): MapCell[] => {
   return [
     ...fragments.map((fragment) => generateMapFragment(fragment)),
   ].flat();
 };
 
-export const generateColumn = (x: number, z: number, id: string, width: number) => {
+export const generateColumn = (
+  x: number,
+  z: number,
+  id: string,
+  width: number,
+) => {
   const pos = [];
   const width2 = width / 2;
   pos.push({

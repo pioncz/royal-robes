@@ -35,10 +35,24 @@ class Player extends Creature {
         this.sprite.animationName === 'attack')
     )
       return;
+
+    if (newState === 'idle') {
+      this.sprite.playContinuous('idle');
+    } else if (newState === 'attack') {
+      this.sprite.playOnce('attack');
+    } else if (newState === 'walking') {
+      this.sprite.playContinuous('run');
+    }
+
+    if (newState !== 'attack') {
+      this.shouldTriggerAttack = false;
+      this.attackTriggered = false;
+    }
+
+    this.state = newState;
   }
   animate(delta: number) {
     super.animate(delta);
-    this.sprite.animate(delta);
 
     if (
       this.sprite.animationName === 'attack' &&
