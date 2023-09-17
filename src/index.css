@@ -1,12 +1,13 @@
 @font-face {
-  font-family: "expressionpro";
-  src: url("fonts/ExpressionPro.woff") format("woff");
+  font-family: 'expressionpro';
+  src: url('fonts/ExpressionPro.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 :root {
-  font-family: ExpressionPro, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: ExpressionPro, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

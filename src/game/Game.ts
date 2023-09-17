@@ -71,14 +71,14 @@ class Main {
 
         // Npc
         this.npc = new Npc(this.context, {
-          color: '#004400',
+          color: '#00ff00',
           position: { x: 3, y: 0.5, z: 1 },
         });
         this.map.$.add(this.npc.$);
 
         this.enemies = [];
         this.enemy = new Enemy(this.context, {
-          color: '#ffffff',
+          color: '#ff0000',
           position: { x: 28, y: 0.5, z: 2 },
         });
         this.map.$.add(this.enemy.$);

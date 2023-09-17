@@ -3,5 +3,6 @@
   "trailingComma": "all",
   "singleQuote": true,
   "printWidth": 70,
+  "editor.formatOnSave": true,
   "proseWrap": "never"
 }

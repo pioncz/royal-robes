@@ -1,3 +1,7 @@
+Ui:
+- GameDb - przechowuje aktualne dane gry. Dane zapisywane w localStorage
+- WelcomeModal - ustawia poczatkowe info gracza (name, w przyszlosci wyglad). Widoczny tylko jak GameDb nie ma name. Jak jest widoczny, to nie ma <Game />
+
 poukladac zawartosc Game.ts - sprite inicjalizowany w Creature, nie w Game
 czy cos z animate mozna przeniesc do klasy postaci?
 
