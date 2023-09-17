@@ -12,7 +12,6 @@ import Player from './creature/Player';
 import { mapMoveDirectionToTextureOrientation } from './creature/CreatureHelpers';
 import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
-import { AssetNames } from './assets/AssetsLoaderHelpers';
 
 const fpsInterval = 1 / 80;
 const debug = true;
@@ -63,10 +62,7 @@ class Main {
         this.context.map = this.map;
 
         // Player
-        this.player = new Player({
-          debug,
-          maxAnisotropy: this.context.maxAnisotropy,
-        });
+        this.player = new Player(this.context);
         this.scene.$.add(this.player.$);
 
         // Npc
@@ -83,31 +79,6 @@ class Main {
         });
         this.map.$.add(this.enemy.$);
         this.enemies.push(this.enemy);
-
-        const nightborneSpriteData =
-          this.assetsLoader.assets[AssetNames.Nightborne];
-
-        this.player.sprite.setAssetPath(
-          nightborneSpriteData.assetPath,
-        );
-        this.player.sprite.setAnimations(
-          nightborneSpriteData.objects[0],
-        );
-        this.player.sprite.playContinuous('idle');
-
-        this.npc.sprite.setAssetPath(nightborneSpriteData.assetPath);
-        this.npc.sprite.setAnimations(
-          nightborneSpriteData.objects[0],
-        );
-        this.npc.sprite.playContinuous('idle');
-
-        this.enemy.sprite.setAssetPath(
-          nightborneSpriteData.assetPath,
-        );
-        this.enemy.sprite.setAnimations(
-          nightborneSpriteData.objects[0],
-        );
-        this.enemy.sprite.playContinuous('idle');
 
         this.loadingAssets = false;
 

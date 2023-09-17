@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import Creature from './Creature';
 import { type CreatureStates } from 'game/utils/Types';
+import { type GameContext } from 'game/Game';
+import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 
 class Player extends Creature {
   state: CreatureStates;
@@ -8,14 +10,13 @@ class Player extends Creature {
   attackTriggered: boolean;
   attackRadius: number;
 
-  constructor({
-    debug,
-    maxAnisotropy,
-  }: {
-    debug: boolean;
-    maxAnisotropy: number;
-  }) {
-    super({ debug, maxAnisotropy, attack: 15, defence: 4 });
+  constructor(context: GameContext) {
+    super({
+      debug: context.debug,
+      maxAnisotropy: context.maxAnisotropy,
+      attack: 15,
+      defence: 4,
+    });
 
     this.$.position.set(0, 0.5, 0);
 
@@ -23,10 +24,16 @@ class Player extends Creature {
     pointLight.position.set(0, 0.8, 0);
     this.$.add(pointLight);
 
-    this.state = 'walking';
+    this.state = 'idle';
     this.shouldTriggerAttack = false;
     this.attackTriggered = false;
     this.attackRadius = 1.3;
+
+    const spriteData =
+      context.assetsLoader.assets[AssetNames.Nightborne];
+    this.sprite.setAssetPath(spriteData.assetPath);
+    this.sprite.setAnimations(spriteData.objects[0]);
+    this.sprite.playContinuous('idle');
   }
   setState(newState: CreatureStates) {
     if (

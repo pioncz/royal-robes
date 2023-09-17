@@ -9,6 +9,7 @@ import {
   mapMoveDirectionToTextureScale,
   getMoveStepForSpeed,
 } from 'game/creature/CreatureHelpers';
+import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 
 const EventRadius = 5;
 const DialogTypes = {
@@ -64,6 +65,12 @@ class Npc extends Creature {
     ];
     this.lastPosition = 0;
     this.targetPosition = 1;
+
+    const spriteData =
+      context.assetsLoader.assets[AssetNames.Nightborne];
+    this.sprite.setAssetPath(spriteData.assetPath);
+    this.sprite.setAnimations(spriteData.objects[0]);
+    this.sprite.playContinuous('idle');
   }
 
   getDialog(type = 'greetings') {

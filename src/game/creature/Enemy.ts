@@ -9,6 +9,7 @@ import {
   mapMoveDirectionToTextureOrientation,
   getMoveStepForSpeed,
 } from 'game/creature/CreatureHelpers';
+import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 
 const PlayerNoticeDistance = 5;
 const PlayerAttackDistance = 1.3;
@@ -52,6 +53,12 @@ class Enemy extends Creature {
     this.shouldTriggerAttack = false;
     this.attackTriggered = false;
     this.attackRadius = 1.3;
+
+    const spriteData =
+      context.assetsLoader.assets[AssetNames.Nightborne];
+    this.sprite.setAssetPath(spriteData.assetPath);
+    this.sprite.setAnimations(spriteData.objects[0]);
+    this.sprite.playContinuous('idle');
   }
   setState(newState: CreatureStates) {
     if (newState === this.state) return;
