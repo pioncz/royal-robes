@@ -1,11 +1,16 @@
 import GameComponent from './game/GameComponent'
 import GameUi from './game-ui/GameUi'
-import { styled } from '@stitches/react';
+import { useContext } from 'react';
+import GameDbContext from 'game-ui/contexts/GameDbContext';
 
-const App = () => (
-  <>
-    <GameComponent />
-    <GameUi />
-  </>)
+const App = () => {
+  const { name } = useContext(GameDbContext);
+  
+  return (
+    <>
+      {!!name && <GameComponent />}
+      <GameUi />
+    </>)
+}
 
-export default App
+  export default App;

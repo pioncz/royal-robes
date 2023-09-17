@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Modal from './components/Modal';
 import Input from './components/Input';
 import Button from './components/Button';
 import { styled } from '@stitches/react';
+import GameDbContext from './contexts/GameDbContext';
 
 const WelcomeModal = () => {
-  const [name, setName] = useState('');
+  const { name, setName } = useContext(GameDbContext);
+  const [tempName, setTempName] = useState(name);
+
+  const handleSubmitClick = () => {
+    setName(tempName);
+  }
 
   return (
     <Modal
@@ -14,11 +20,11 @@ const WelcomeModal = () => {
         <Content>
           <div>To join world full of magic and quests you need to choose your name first.</div>
           <Input
-            onChange={(newName) => setName(newName)}
-            value={name}
+            onChange={(newName) => setTempName(newName)}
+            value={tempName}
             placeholder="New name"
           />
-          <Button onClick={() => {}}>Wybierz</Button>
+          <Button onClick={handleSubmitClick}>Wybierz</Button>
         </Content>
       }
   />

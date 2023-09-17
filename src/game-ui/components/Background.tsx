@@ -15,7 +15,8 @@ const Root = styled(motion.div, {
   left: 0,
   width: '100%',
   height: '100%',
-  background: `url(${BackgroundUrl})`
+  background: `url(${BackgroundUrl}) center`,
+  backgroundSize: 'cover',
 });
 
 export default Background;

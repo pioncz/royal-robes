@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import WelcomeModal from './WelcomeModal'
 import Backdrop from './components/Backdrop'
 import Background from './components/Background'
 import { styled } from '@stitches/react';
 import { AnimatePresence } from "framer-motion"
+import GameDbContext from './contexts/GameDbContext';
 
 const GameUi = () => {
-  const [welcomeModalOpen, setWelcomeModalOpen] = useState(true);
+  const { name } = useContext(GameDbContext);
 
+  const welcomeModalOpen = !name;
   const anyModalOpen = welcomeModalOpen;
-console.log(welcomeModalOpen)
+
   return (
-    <Root onClick={() => setWelcomeModalOpen(w => true)}>
+    <Root>
       <AnimatePresence>
         {welcomeModalOpen && <Background key="background" />}
         {anyModalOpen && <Backdrop key="backdrop" />}
