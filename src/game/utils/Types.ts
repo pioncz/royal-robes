@@ -72,11 +72,3 @@ export type CreatureStates =
   | 'dead';
 
 export type CreatureEffectsTextTypes = 'damage';
-
-export type CreatureEffectsTextAnimation = {
-  type: CreatureEffectsTextTypes;
-  value: string;
-  lengthLeft: number;
-  length: number;
-  orientation: CreatureOrientation;
-};

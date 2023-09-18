@@ -3,12 +3,12 @@ import { FontNames } from 'game/assets/AssetsLoaderHelpers';
 import {
   type CreatureOrientation,
   type CreatureEffectsTextTypes,
-  type CreatureEffectsTextAnimation,
 } from 'game/utils/Types';
+import Animation from 'game/utils/Animation';
 
 class CreatureEffects {
   maxAnisotropy: number;
-  texts: CreatureEffectsTextAnimation[];
+  textAnimations: Animation[];
   size: number;
   ctx: CanvasRenderingContext2D | null;
   orientation: CreatureOrientation;
@@ -17,7 +17,7 @@ class CreatureEffects {
 
   constructor(maxAnisotropy: number) {
     this.maxAnisotropy = maxAnisotropy;
-    this.texts = [];
+    this.textAnimations = [];
     this.size = 256;
     this.orientation = 'right';
 
@@ -51,42 +51,52 @@ class CreatureEffects {
     this.orientation = orientation;
   }
   add(type: CreatureEffectsTextTypes, value: string) {
-    if (this.texts.length) return;
-
-    this.texts.push({
-      type,
-      value: value,
-      lengthLeft: 1,
-      length: 1,
-      orientation: this.orientation,
-    });
+    this.textAnimations.push(
+      new Animation({
+        duration: 1,
+        data: {
+          type,
+          value: value,
+          orientation: this.orientation,
+        },
+      }),
+    );
   }
   animate(delta: number) {
-    if (!this.ctx || !this.texts.length || !this.texture) return;
+    if (!this.ctx || !this.textAnimations.length || !this.texture)
+      return;
 
     this.ctx.clearRect(0, 0, this.size, this.size);
 
-    for (let i = this.texts.length - 1; i >= 0; i--) {
-      const text = this.texts[i];
-      const progress = 1 - text.lengthLeft / text.length;
+    for (let i = this.textAnimations.length - 1; i >= 0; i--) {
+      const animation = this.textAnimations[i];
 
-      if (text.lengthLeft <= 0) {
-        this.texts.splice(i, 1);
-      } else if (text.type === 'damage') {
-        const y = Math.round(80 + 140 * (1 - progress));
-        const x = text.orientation === 'left' ? 10 : this.size - 10;
+      animation.animate(
+        delta,
+        ({
+          progress,
+          finished,
+          data: { type, orientation, value },
+        }) => {
+          if (!this.ctx) return;
 
-        this.ctx.textAlign =
-          text.orientation === 'left' ? 'start' : 'end';
-        this.ctx.font = `72px ${FontNames.ExpressionPro}`;
-        this.ctx.fillStyle = '#6d0000';
-        this.ctx.lineWidth = 8;
-        this.ctx.strokeStyle = '#000000';
-        this.ctx.strokeText(text.value, x, y);
-        this.ctx.fillText(text.value, x, y);
-      }
+          if (finished) {
+            this.textAnimations.splice(i, 1);
+          } else if (type === 'damage') {
+            const y = Math.round(80 + 140 * (1 - progress));
+            const x = orientation === 'left' ? 10 : this.size - 10;
 
-      text.lengthLeft -= delta;
+            this.ctx.textAlign =
+              orientation === 'left' ? 'start' : 'end';
+            this.ctx.font = `72px ${FontNames.ExpressionPro}`;
+            this.ctx.fillStyle = '#6d0000';
+            this.ctx.lineWidth = 8;
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.strokeText(value, x, y);
+            this.ctx.fillText(value, x, y);
+          }
+        },
+      );
     }
     this.texture.needsUpdate = true;
   }
