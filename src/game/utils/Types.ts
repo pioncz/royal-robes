@@ -72,8 +72,15 @@ export type CreatureStates =
   | 'dead'
   | 'dying';
 
-export type CreatureEffectsTextTypes = 'damage';
+export type CreatureEffectsTextTypes = 'damage' | 'experience';
 
 export type PlayerStatistics = {
   alive: boolean;
+  gold: number;
+  health: number;
+  experience: number;
+};
+
+export type EnemyLoot = {
+  gold?: number;
 };

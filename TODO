@@ -1,22 +1,16 @@
-dodac mozliwosc atakowania wroga:
-+gdy postaci sa blisko siebie wchodza w stan walki
-+animacja walki
-+zadaja sobie obrazenia
-+cyferki z dmg
-+naprawic buga ze Enemy nie przestaje atakowac
-+gracz moze atakowac
--potwor moze umrzec
-+gracz moze umrzec
--potwor po smierci moze dac: xp, gold?
--jak wpada xp, to podobnie jak damage pokazuje sie na bialo
+Mob spawner: jaki potwor, ile, w jakim obszarze, co jaki czas 1 mob
 
 Ui:
 - dock z ikonkami: postać (statystyki + eq), quest log
 
 GameDb: autosave health, experience, gold, position each 10 seconds, set it when logged in again
 
+Level up system:
+- which lvl for how many experience?
+- animation on lvl up
+- reset cooldowns / hp on lvl up
+
 --- lower prio / pozniej
-Mob spawner: jaki potwor, ile, w jakim obszarze, co jaki czas 1 mob
 Npc / EnemySpawner dodane do mapy
 gracz nie moze przechodzic przez potwory. Map.ts szukaj "Check creatures collision"
 przełączanie między trybem normal/debug live za pomocą ~

@@ -28,12 +28,14 @@ export const distanceBetweenPoints = (
   return Math.sqrt(a * a + b * b);
 };
 
-export const getObjectsInRadius = (
+export const getObjectsInRadius = <
+  T extends { $: { position: Point } },
+>(
   originPosition: Point,
-  objects: Creature[],
+  objects: T[],
   radius: number,
 ) =>
   objects.filter(
-    (o) =>
+    (o: T) =>
       distanceBetweenPoints(originPosition, o.$.position) < radius,
   );

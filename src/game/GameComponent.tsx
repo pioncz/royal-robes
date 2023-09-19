@@ -9,9 +9,9 @@ const GameComponent = () => {
   useEffect(() => {
     const g = new Game({ containerId: 'game' });
 
-    g.on('playerUpdate', ({ alive }) => {
-      console.log('update', alive);
-      setAlive(alive);
+    g.on('playerUpdate', (playerStatistics) => {
+      console.log('update', playerStatistics);
+      setAlive(playerStatistics.alive);
     });
     setGameInstance(g);
 
