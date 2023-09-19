@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SpriteDataObject, Frame } from 'game/utils/Types'
+import { SpriteDataObject, Frame } from 'game/utils/Types';
 
 class Sprite {
   canvas: HTMLCanvasElement;
@@ -16,13 +16,19 @@ class Sprite {
   defaultAnimationName: string | null;
   replayTimes: number;
   spriteData?: SpriteDataObject;
+  stopAfter?: boolean;
 
-  constructor(canvas: HTMLCanvasElement, texture: THREE.CanvasTexture, fps = 60) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    texture: THREE.CanvasTexture,
+    fps = 60,
+  ) {
     this.canvas = canvas;
-    this.width = canvas.width;
-    this.height = canvas.height;
     this.texture = texture;
     this.ctx = this.canvas.getContext('2d');
+    if (this.ctx) {
+      this.ctx.imageSmoothingEnabled = false;
+    }
 
     // fps count = 1 / ms interval in animation loop
     this.interval = 1 / fps;
@@ -34,6 +40,10 @@ class Sprite {
     this.animationFrames = [];
     this.defaultAnimationName = null;
     this.replayTimes = 0;
+  }
+  resize(width: number, height: number) {
+    this.canvas.width = width;
+    this.canvas.height = height;
   }
   setAssetImage(image: HTMLImageElement) {
     this.assetImage = image;
@@ -54,10 +64,24 @@ class Sprite {
   setAnimations(spriteData: SpriteDataObject) {
     this.spriteData = spriteData;
   }
-  play(name: string, replayTimes = 1) {
+  play(name: string, replayTimes = 1, stopAfter = false) {
     const animation = this.spriteData?.animations.find(
       (animation) => animation.name === name,
     );
+
+    if (!animation) {
+      console.error(`Animation ${name} not found`);
+      return;
+    }
+
+    if (
+      (animation.frames?.[0]?.width, animation.frames?.[0]?.height)
+    ) {
+      this.resize(
+        animation.frames?.[0]?.width,
+        animation.frames?.[0]?.height,
+      );
+    }
 
     if (!this.defaultAnimationName) {
       this.defaultAnimationName = this.animationName;
@@ -66,12 +90,16 @@ class Sprite {
     this.animationFrame = 0;
     this.animationFrames = animation?.frames || [];
     this.replayTimes = replayTimes;
+    this.stopAfter = stopAfter;
   }
   playOnce(name: string) {
     this.play(name);
   }
   playContinuous(name: string) {
     this.play(name, Number.POSITIVE_INFINITY);
+  }
+  playAndStop(name: string) {
+    this.play(name, Number.POSITIVE_INFINITY, true);
   }
   stop() {
     this.animationName = null;
@@ -98,13 +126,25 @@ class Sprite {
         this.animationFrames = animation?.frames || [];
       }
 
+      if (
+        this.stopAfter &&
+        this.animationFrame === this.animationFrames.length - 1
+      ) {
+        return;
+      }
+
       if (this.animationFrames.length) {
         this.animationFrame++;
         this.animationFrame =
           this.animationFrame % this.animationFrames.length;
         const frame = this.animationFrames[this.animationFrame];
 
-        this.ctx.clearRect(0, 0, this.width, this.height);
+        this.ctx.clearRect(
+          0,
+          0,
+          this.canvas.width,
+          this.canvas.height,
+        );
         this.ctx.drawImage(
           this.assetImage,
           frame.x,
@@ -113,8 +153,8 @@ class Sprite {
           frame.height,
           0,
           0,
-          this.width,
-          this.height,
+          this.canvas.width,
+          this.canvas.height,
         );
 
         if (this.animationFrame === this.animationFrames.length - 1) {
@@ -125,8 +165,8 @@ class Sprite {
             this.animationName = this.defaultAnimationName;
           }
         }
+        this.texture.needsUpdate = true;
       }
-      this.texture.needsUpdate = true;
     }
 
     this.delta = this.delta % this.interval;

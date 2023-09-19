@@ -54,7 +54,7 @@ class Creature {
     texture.minFilter = THREE.LinearMipMapLinearFilter;
     this.texture = texture;
     this.sprite = new Sprite(canvas, texture, 10);
-    const geometrySprite = new THREE.PlaneGeometry(1, 1);
+    const geometrySprite = new THREE.PlaneGeometry(2, 2);
     const materialSprite = new THREE.MeshBasicMaterial({
       map: texture,
       ...(color ? { color } : {}),

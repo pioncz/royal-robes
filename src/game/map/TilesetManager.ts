@@ -87,7 +87,7 @@ class TilesetManager {
             texture.anisotropy = this.maxAnisotropy;
             texture.magFilter = THREE.NearestFilter;
             texture.minFilter = THREE.LinearMipMapLinearFilter;
-            const sprite = new Sprite(canvas, texture, 10);
+            const sprite = new Sprite(canvas, texture, 2);
             sprite.setAssetImage(tileset.asset);
             sprite.setAnimations({
               id: tile.id,
@@ -104,7 +104,7 @@ class TilesetManager {
                 },
               ],
             });
-            sprite.playOnce('main');
+            sprite.playContinuous('main');
             tile.sprite = sprite;
             tile.texture = texture;
           }
