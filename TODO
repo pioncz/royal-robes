@@ -1,9 +1,3 @@
-Śmierć gracza:
-+UiOverylay z napisem GameOver "Click anywhere to respawn..."
--Gracz się nie rusza
--Inna animacja gracza po śmierci
--Respawn resetuje pozycje gracza i hp
-
 dodac mozliwosc atakowania wroga:
 +gdy postaci sa blisko siebie wchodza w stan walki
 +animacja walki
@@ -12,11 +6,18 @@ dodac mozliwosc atakowania wroga:
 +naprawic buga ze Enemy nie przestaje atakowac
 +gracz moze atakowac
 -potwor moze umrzec
--gracz moze umrzec
++gracz moze umrzec
 -potwor po smierci moze dac: xp, gold?
 -jak wpada xp, to podobnie jak damage pokazuje sie na bialo
 
+Ui:
+- dock z ikonkami: postać (statystyki + eq), quest log
+
+GameDb: autosave health, experience, gold, position each 10 seconds, set it when logged in again
+
 --- lower prio / pozniej
+Mob spawner: jaki potwor, ile, w jakim obszarze, co jaki czas 1 mob
+Npc / EnemySpawner dodane do mapy
 gracz nie moze przechodzic przez potwory. Map.ts szukaj "Check creatures collision"
 przełączanie między trybem normal/debug live za pomocą ~
 npc: chodzi w kolko, jak gracz jest blisko to pokazuje dymek dialogu, jak gracz zagada, to sie zatrzyma i zacznie rozmawiac
@@ -27,6 +28,7 @@ noszenie equipmentu
 handlowanie z NPC
 system levelowania: jaka skala? animacja przy lvl up, reset hp
 podstawowy quest: zabij 5 potworow, zdobadz nagrode
+Mini map; Big map in the dock
 wyglad postaci: base skin (4 katy obrotu) + equipment
 potwory nie moga przechodzic przez elementy mapy
 occlusion culling? pokaz gracza jesli przechodzi obok wysokich budynkow
