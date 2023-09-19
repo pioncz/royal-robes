@@ -118,7 +118,7 @@ class Creature {
   };
   calculateDamage = (opponent: Creature) =>
     Math.max(this.attack - opponent.defence, 0);
-  dealDamage = (damage: number) => {
+  dealDamage(damage: number) {
     this.health = Math.max(this.health - damage, 0);
     if (this.health === 0 && this.setState) {
       this.setState('dying');
@@ -126,7 +126,7 @@ class Creature {
     if (this.creatureEffects) {
       this.creatureEffects.add('damage', `-${damage}`);
     }
-  };
+  }
   // eslint-disable-next-line
   setState?(state: CreatureStates) {}
   animate(delta: number) {

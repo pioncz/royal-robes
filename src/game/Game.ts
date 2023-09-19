@@ -84,6 +84,8 @@ class Main extends EventsEmitted {
         this.enemy = new Enemy(this.context, {
           color: '#ff0000',
           position: { x: 28, y: 0.5, z: 2 },
+          gold: 5,
+          experience: 20,
         });
         this.map.$.add(this.enemy.$);
         this.enemies.push(this.enemy);
@@ -176,19 +178,31 @@ class Main extends EventsEmitted {
         this.player.shouldTriggerAttack &&
         !this.player.attackTriggered
       ) {
-        getObjectsInRadius(
+        getObjectsInRadius<Enemy>(
           playerPosition,
           this.enemies,
           this.player.attackRadius,
         ).forEach((enemy) => {
+          if (!enemy.alive) return;
+
           const damage = this.player!.calculateDamage(enemy);
           enemy.dealDamage(damage);
+
+          if (!enemy.alive) {
+            this.player?.receiveExperience(enemy.experience);
+            this.player?.receiveLoot({ gold: enemy.gold });
+          }
+
           console.log('Enemy HP: ', enemy.health);
         });
         this.player.attackTriggered = true;
       }
       this.enemies.forEach((enemy) => {
-        if (!enemy.shouldTriggerAttack || enemy.attackTriggered) {
+        if (
+          !enemy.alive ||
+          !enemy.shouldTriggerAttack ||
+          enemy.attackTriggered
+        ) {
           return;
         }
         const distanceToPlayer = distanceBetweenPoints(

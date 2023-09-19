@@ -50,13 +50,13 @@ class CreatureEffects {
   turn(orientation: CreatureOrientation) {
     this.orientation = orientation;
   }
-  add(type: CreatureEffectsTextTypes, value: string) {
+  add(type: CreatureEffectsTextTypes, value: string | number) {
     this.textAnimations.push(
       new Animation({
         duration: 1,
         data: {
           type,
-          value: value,
+          value,
           orientation: this.orientation,
         },
       }),
@@ -94,6 +94,19 @@ class CreatureEffects {
             this.ctx.strokeStyle = '#000000';
             this.ctx.strokeText(value, x, y);
             this.ctx.fillText(value, x, y);
+          } else if (type === 'experience') {
+            const y = Math.round(80 + 140 * (1 - progress));
+            const x = orientation === 'left' ? 10 : this.size - 10;
+            const text = `+${value}exp`;
+
+            this.ctx.textAlign =
+              orientation === 'left' ? 'start' : 'end';
+            this.ctx.font = `72px ${FontNames.ExpressionPro}`;
+            this.ctx.fillStyle = '#CECECE';
+            this.ctx.lineWidth = 8;
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.strokeText(text, x, y);
+            this.ctx.fillText(text, x, y);
           }
         },
       );

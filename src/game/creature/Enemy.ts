@@ -23,15 +23,22 @@ class Enemy extends Creature {
   shouldTriggerAttack: boolean;
   attackTriggered: boolean;
   attackRadius: number;
+  alive: boolean;
+  experience: number;
+  gold: number;
 
   constructor(
     context: GameContext,
     {
       color,
       position,
+      experience,
+      gold,
     }: {
       color: string;
       position: { x: number; y: number; z: number };
+      experience: number;
+      gold: number;
     },
   ) {
     super({
@@ -40,7 +47,7 @@ class Enemy extends Creature {
       color,
       speed: 20,
       health: 20,
-      attack: 1000,
+      attack: 10,
       defence: 1,
     });
 
@@ -53,6 +60,9 @@ class Enemy extends Creature {
     this.shouldTriggerAttack = false;
     this.attackTriggered = false;
     this.attackRadius = 1.3;
+    this.alive = true;
+    this.experience = experience;
+    this.gold = gold;
 
     const spriteData =
       context.assetsLoader.assets[AssetNames.Nightborne];
@@ -71,6 +81,10 @@ class Enemy extends Creature {
       this.sprite.playContinuous('run');
     } else if (newState === 'attack') {
       this.sprite.playContinuous('attack');
+    } else if (newState === 'dying') {
+      this.sprite.playAndStop('dying');
+      this.alive = false;
+      this.creatureEffects?.add('experience', this.experience);
     }
 
     this.state = newState;
@@ -78,7 +92,7 @@ class Enemy extends Creature {
   animate(delta: number) {
     super.animate(delta);
 
-    if (!this.context.map) return;
+    if (!this.context.map || !this.alive) return;
 
     const playerPosition = this.context.map.getPosition();
     const distanceToPlayer = distanceBetweenPoints(

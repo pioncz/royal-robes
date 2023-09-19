@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Creature from './Creature';
 import {
+  EnemyLoot,
   type CreatureStates,
   type PlayerStatistics,
 } from 'game/utils/Types';
@@ -18,6 +19,8 @@ class Player extends Creature {
   context: GameContext;
   light: THREE.PointLight;
   fadeLightOnDeathAnimation: Animation | null;
+  gold: number;
+  experience: number;
 
   constructor(
     context: GameContext,
@@ -44,6 +47,8 @@ class Player extends Creature {
     this.onUpdate = onUpdate;
     this.context = context;
     this.fadeLightOnDeathAnimation = null;
+    this.gold = 0;
+    this.experience = 0;
 
     const spriteData =
       context.assetsLoader.assets[AssetNames.Nightborne];
@@ -72,7 +77,7 @@ class Player extends Creature {
         duration: 1,
       });
     } else if (newState === 'dead') {
-      this.onUpdate({ alive: this.alive });
+      this.handleUpdate();
     }
 
     if (newState !== 'attack') {
@@ -82,6 +87,18 @@ class Player extends Creature {
 
     this.state = newState;
   }
+  dealDamage(value: number) {
+    super.dealDamage(value);
+    this.handleUpdate();
+  }
+  handleUpdate() {
+    this.onUpdate({
+      alive: this.alive,
+      gold: this.gold,
+      health: this.health,
+      experience: this.experience,
+    });
+  }
   restart() {
     this.state = 'idle';
     this.sprite.playContinuous('idle');
@@ -89,6 +106,14 @@ class Player extends Creature {
     this.context?.map?.restart();
     this.alive = true;
     this.onUpdate({ alive: this.alive });
+  }
+  receiveLoot(loot: EnemyLoot) {
+    this.gold += loot?.gold || 0;
+    this.handleUpdate();
+  }
+  receiveExperience(experience: number) {
+    this.experience += experience;
+    this.handleUpdate();
   }
   animate(delta: number) {
     super.animate(delta);
