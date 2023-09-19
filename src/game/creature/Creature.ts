@@ -121,7 +121,7 @@ class Creature {
   dealDamage = (damage: number) => {
     this.health = Math.max(this.health - damage, 0);
     if (this.health === 0 && this.setState) {
-      this.setState('dead');
+      this.setState('dying');
     }
     if (this.creatureEffects) {
       this.creatureEffects.add('damage', `-${damage}`);

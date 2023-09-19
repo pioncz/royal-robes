@@ -1,16 +1,28 @@
 import * as THREE from 'three';
 import Creature from './Creature';
-import { type CreatureStates } from 'game/utils/Types';
+import {
+  type CreatureStates,
+  type PlayerStatistics,
+} from 'game/utils/Types';
 import { type GameContext } from 'game/Game';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
+import Animation from 'game/utils/Animation';
 
 class Player extends Creature {
   state: CreatureStates;
   shouldTriggerAttack: boolean;
   attackTriggered: boolean;
   attackRadius: number;
+  alive: boolean;
+  onUpdate: (newStats: PlayerStatistics) => void;
+  context: GameContext;
+  light: THREE.PointLight;
+  fadeLightOnDeathAnimation: Animation | null;
 
-  constructor(context: GameContext) {
+  constructor(
+    context: GameContext,
+    onUpdate: (newStats: PlayerStatistics) => void,
+  ) {
     super({
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
@@ -20,14 +32,18 @@ class Player extends Creature {
 
     this.$.position.set(0, 0.5, 0);
 
-    const pointLight = new THREE.PointLight('#F9DDFF', 0.5, 8, 2);
-    pointLight.position.set(0, 0.8, 0);
-    this.$.add(pointLight);
+    this.light = new THREE.PointLight('#F9DDFF', 1, 120, 1);
+    this.light.position.set(0, 0.8, 0);
+    this.$.add(this.light);
 
     this.state = 'idle';
     this.shouldTriggerAttack = false;
     this.attackTriggered = false;
     this.attackRadius = 1.3;
+    this.alive = true;
+    this.onUpdate = onUpdate;
+    this.context = context;
+    this.fadeLightOnDeathAnimation = null;
 
     const spriteData =
       context.assetsLoader.assets[AssetNames.Nightborne];
@@ -49,6 +65,14 @@ class Player extends Creature {
       this.sprite.playOnce('attack');
     } else if (newState === 'walking') {
       this.sprite.playContinuous('run');
+    } else if (newState === 'dying') {
+      this.alive = false;
+      this.sprite.playAndStop('dying');
+      this.fadeLightOnDeathAnimation = new Animation({
+        duration: 1,
+      });
+    } else if (newState === 'dead') {
+      this.onUpdate({ alive: this.alive });
     }
 
     if (newState !== 'attack') {
@@ -58,8 +82,30 @@ class Player extends Creature {
 
     this.state = newState;
   }
+  restart() {
+    this.state = 'idle';
+    this.sprite.playContinuous('idle');
+    this.health = 100;
+    this.context?.map?.restart();
+    this.alive = true;
+    this.onUpdate({ alive: this.alive });
+  }
   animate(delta: number) {
     super.animate(delta);
+
+    if (this.fadeLightOnDeathAnimation) {
+      this.fadeLightOnDeathAnimation.animate(
+        delta,
+        ({ progress, finished }) => {
+          this.light.intensity = 1 * (1 - progress);
+
+          if (finished) {
+            this.fadeLightOnDeathAnimation = null;
+            this.setState('dead');
+          }
+        },
+      );
+    }
 
     if (
       this.sprite.animationName === 'attack' &&

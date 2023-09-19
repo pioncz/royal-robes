@@ -1,17 +1,27 @@
-import React, { useEffect, memo } from 'react';
+import { useEffect, memo, useContext } from 'react';
 import Game from './Game';
 import { styled } from '@stitches/react';
+import GameDbContext from 'game-ui/contexts/GameDbContext';
 
 const GameComponent = () => {
+  const { setAlive, setGameInstance } = useContext(GameDbContext);
+
   useEffect(() => {
     const g = new Game({ containerId: 'game' });
 
+    g.on('playerUpdate', ({ alive }) => {
+      console.log('update', alive);
+      setAlive(alive);
+    });
+    setGameInstance(g);
+
     return () => {
       g.remove();
-    }
+      setGameInstance();
+    };
   }, []);
 
-  return <Root id="game" />
+  return <Root id="game" />;
 };
 
 const Root = styled('div', {
@@ -22,9 +32,9 @@ const Root = styled('div', {
   '& > div': {
     left: '50% !important',
     transform: 'translateX(-50%)',
-  }
+  },
 });
 
-const memoGameComponent = memo(GameComponent)
+const memoGameComponent = memo(GameComponent);
 
 export default memoGameComponent;
