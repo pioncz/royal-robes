@@ -69,6 +69,11 @@ export type CreatureStates =
   | 'talking'
   | 'attack'
   | 'chase'
-  | 'dead';
+  | 'dead'
+  | 'dying';
 
 export type CreatureEffectsTextTypes = 'damage';
+
+export type PlayerStatistics = {
+  alive: boolean;
+};

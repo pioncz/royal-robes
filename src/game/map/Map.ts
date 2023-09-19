@@ -23,6 +23,7 @@ class Map {
   floors: THREE.Group;
   tilesetManager: TilesetManager;
   mapTiles: MapTile[];
+  initialPosition: Point;
 
   constructor(context: GameContext, position: Point) {
     this.mapData = MapData;
@@ -68,6 +69,7 @@ class Map {
         this.buildFloors(floors);
       });
     this.setPosition(position);
+    this.initialPosition = position;
   }
   private buildWalls(mapTiles: MapTile[]) {
     mapTiles.forEach(({ cell, tile }) => {
@@ -258,6 +260,9 @@ class Map {
       });
     }
   };
+  restart() {
+    this.setPosition(this.initialPosition);
+  }
   animate(delta: number) {
     this.sprites.forEach((sprite) => {
       sprite.animate(delta);

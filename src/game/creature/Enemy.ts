@@ -40,7 +40,7 @@ class Enemy extends Creature {
       color,
       speed: 20,
       health: 20,
-      attack: 10,
+      attack: 1000,
       defence: 1,
     });
 
@@ -85,18 +85,21 @@ class Enemy extends Creature {
       playerPosition,
       this.$.position,
     );
+    const playerAlive = this.context?.player?.alive;
 
     if (
       distanceToPlayer < PlayerNoticeDistance &&
-      this.state === 'idle'
+      this.state === 'idle' &&
+      playerAlive
     ) {
       this.setState('chase');
     } else if (
-      distanceToPlayer > PlayerNoticeDistance &&
+      (distanceToPlayer > PlayerNoticeDistance || !playerAlive) &&
       (this.state === 'chase' || this.state === 'attack')
     ) {
       this.setState('walking');
     } else if (
+      playerAlive &&
       distanceToPlayer < PlayerNoticeDistance &&
       distanceToPlayer > PlayerAttackDistance &&
       this.state === 'attack'

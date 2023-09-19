@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
-import Modal from './components/Modal';
-import Input from './components/Input';
-import Button from './components/Button';
+import { useContext, useState } from 'react';
+import Modal from '../basic/Modal';
+import Input from '../basic/Input';
+import Button from '../basic/Button';
 import { styled } from '@stitches/react';
-import GameDbContext from './contexts/GameDbContext';
+import GameDbContext from '../contexts/GameDbContext';
 
 const WelcomeModal = () => {
   const { name, setName } = useContext(GameDbContext);

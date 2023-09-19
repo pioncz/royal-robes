@@ -12,6 +12,7 @@ import Player from './creature/Player';
 import { mapMoveDirectionToTextureOrientation } from './creature/CreatureHelpers';
 import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
+import EventsEmitted from './utils/EventsEmitter';
 
 const fpsInterval = 1 / 80;
 const debug = true;
@@ -22,9 +23,10 @@ export type GameContext = {
   controls?: GameControls;
   assetsLoader: AssetsLoader;
   map?: Map;
+  player?: Player;
 };
 
-class Main {
+class Main extends EventsEmitted {
   assetsLoader: AssetsLoader;
   loadingAssets: boolean;
   scene?: Scene;
@@ -39,6 +41,7 @@ class Main {
   enemy?: Enemy;
 
   constructor({ containerId }: { containerId: string }) {
+    super();
     this.assetsLoader = new AssetsLoader();
     this.context = {
       debug,
@@ -56,14 +59,19 @@ class Main {
         this.context.maxAnisotropy = this.scene.getMaxAnisotropy();
         this.context.controls = this.scene.controls;
 
+        const playerInitialPosition = { x: 20.5, z: 4 };
+
         // Map
-        this.map = new Map(this.context, { x: 20.5, z: 4 });
+        this.map = new Map(this.context, playerInitialPosition);
         this.scene.$.add(this.map.$);
         this.context.map = this.map;
 
         // Player
-        this.player = new Player(this.context);
+        this.player = new Player(this.context, (newStats) => {
+          this.emit('playerUpdate', newStats);
+        });
         this.scene.$.add(this.player.$);
+        this.context.player = this.player;
 
         // Npc
         this.npc = new Npc(this.context, {
@@ -123,74 +131,78 @@ class Main {
     const kRight = this.scene.controls.keys.arrowRight;
     const kSpace = this.scene.controls.keys.space;
 
-    if (kUp || kDown || kLeft || kRight) {
-      this.player.setState('walking');
+    if (this.player.alive) {
+      if (kUp || kDown || kLeft || kRight) {
+        this.player.setState('walking');
 
-      let direction = 0;
+        let direction = 0;
 
-      if (kUp && kRight) {
-        direction = 315;
-      } else if (kUp && kLeft) {
-        direction = 225;
-      } else if (kLeft && kDown) {
-        direction = 135;
-      } else if (kDown && kRight) {
-        direction = 45;
-      } else if (kUp) {
-        direction = 270;
-      } else if (kDown) {
-        direction = 90;
-      } else if (kRight) {
-        direction = 0;
-      } else if (kLeft) {
-        direction = 180;
+        if (kUp && kRight) {
+          direction = 315;
+        } else if (kUp && kLeft) {
+          direction = 225;
+        } else if (kLeft && kDown) {
+          direction = 135;
+        } else if (kDown && kRight) {
+          direction = 45;
+        } else if (kUp) {
+          direction = 270;
+        } else if (kDown) {
+          direction = 90;
+        } else if (kRight) {
+          direction = 0;
+        } else if (kLeft) {
+          direction = 180;
+        }
+        const radians = degreesToRadians(direction);
+
+        this.player.turn(
+          mapMoveDirectionToTextureOrientation(radians),
+        );
+
+        this.map.movePlayerInDirection(
+          degreesToRadians(direction),
+          this.player.speed,
+        );
+      } else if (kSpace) {
+        this.player.setState('attack');
+      } else {
+        this.player.setState('idle');
       }
-      const radians = degreesToRadians(direction);
 
-      this.player.turn(mapMoveDirectionToTextureOrientation(radians));
-
-      this.map.movePlayerInDirection(
-        degreesToRadians(direction),
-        this.player.speed,
-      );
-    } else if (kSpace) {
-      this.player.setState('attack');
-    } else {
-      this.player.setState('idle');
-    }
-
-    // Calculate attacks
-    const playerPosition = this.map.getPosition();
-    if (
-      this.player.shouldTriggerAttack &&
-      !this.player.attackTriggered
-    ) {
-      getObjectsInRadius(
-        playerPosition,
-        this.enemies,
-        this.player.attackRadius,
-      ).forEach((enemy) => {
-        const damage = this.player!.calculateDamage(enemy);
-        enemy.dealDamage(damage);
-        console.log('Enemy HP: ', enemy.health);
+      // Calculate attacks
+      const playerPosition = this.map.getPosition();
+      if (
+        this.player.shouldTriggerAttack &&
+        !this.player.attackTriggered
+      ) {
+        getObjectsInRadius(
+          playerPosition,
+          this.enemies,
+          this.player.attackRadius,
+        ).forEach((enemy) => {
+          const damage = this.player!.calculateDamage(enemy);
+          enemy.dealDamage(damage);
+          console.log('Enemy HP: ', enemy.health);
+        });
+        this.player.attackTriggered = true;
+      }
+      this.enemies.forEach((enemy) => {
+        if (!enemy.shouldTriggerAttack || enemy.attackTriggered) {
+          return;
+        }
+        const distanceToPlayer = distanceBetweenPoints(
+          playerPosition,
+          enemy.$.position,
+        );
+        if (distanceToPlayer < enemy.attackRadius) {
+          const damage = enemy.calculateDamage(this.player!);
+          this.player!.dealDamage(damage);
+          enemy.attackTriggered = true;
+          console.log('Player HP: ', this.player!.health);
+        }
       });
-      this.player.attackTriggered = true;
     }
-    this.enemies.forEach((enemy) => {
-      if (!enemy.shouldTriggerAttack || enemy.attackTriggered) {
-        return;
-      }
-      const distanceToPlayer = distanceBetweenPoints(
-        playerPosition,
-        enemy.$.position,
-      );
-      if (distanceToPlayer < enemy.attackRadius) {
-        const damage = enemy.calculateDamage(this.player!);
-        this.player!.dealDamage(damage);
-        enemy.attackTriggered = true;
-        console.log('Player HP: ', this.player!.health);
-      }
-    });
 
     this.map.animate(delta);
     this.player.animate(delta);
@@ -199,6 +211,10 @@ class Main {
     this.scene.composer.render();
     this.scene.animateFinish();
   }
+
+  restart = () => {
+    this?.player?.restart();
+  };
 
   remove = () => {
     this.assetsLoader.remove();

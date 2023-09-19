@@ -1,28 +1,35 @@
 import { useContext, useState } from 'react';
-import WelcomeModal from './WelcomeModal'
-import Backdrop from './components/Backdrop'
-import Background from './components/Background'
+import WelcomeModal from './components/WelcomeModal';
+import Backdrop from './basic/Backdrop';
+import Background from './components/Background';
+import GameOver from './components/GameOver';
 import { styled } from '@stitches/react';
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
 
 const GameUi = () => {
-  const { name } = useContext(GameDbContext);
+  const { name, alive, restart } = useContext(GameDbContext);
 
+  const gameOverVisible = !alive;
   const welcomeModalOpen = !name;
-  const anyModalOpen = welcomeModalOpen;
+  const backdropVisible = welcomeModalOpen || gameOverVisible;
+
+  const handleClick = () => {
+    if (!alive) {
+      restart();
+    }
+  };
 
   return (
-    <Root>
+    <Root onClick={handleClick}>
       <AnimatePresence>
         {welcomeModalOpen && <Background key="background" />}
-        {anyModalOpen && <Backdrop key="backdrop" />}
-        {welcomeModalOpen &&
-          <WelcomeModal key="welcomeModal" />
-        }
+        {backdropVisible && <Backdrop key="backdrop" />}
+        {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}
+        {gameOverVisible && <GameOver />}
       </AnimatePresence>
     </Root>
-  )
+  );
 };
 
 const Root = styled('div', {

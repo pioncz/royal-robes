@@ -1,3 +1,9 @@
+Śmierć gracza:
++UiOverylay z napisem GameOver "Click anywhere to respawn..."
+-Gracz się nie rusza
+-Inna animacja gracza po śmierci
+-Respawn resetuje pozycje gracza i hp
+
 dodac mozliwosc atakowania wroga:
 +gdy postaci sa blisko siebie wchodza w stan walki
 +animacja walki

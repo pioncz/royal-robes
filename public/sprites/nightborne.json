@@ -9,58 +9,58 @@
           "name": "idle",
           "frames": [
             {
-              "x": 19,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 0,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 99,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 80,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 179,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 160,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 259,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 240,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 339,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 320,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 419,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 400,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 499,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 480,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 579,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 560,
+              "y": 0,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 659,
-              "y": 35,
-              "width": 35,
-              "height": 29
+              "x": 640,
+              "y": 0,
+              "width": 80,
+              "height": 80
             }
           ]
         },
@@ -68,40 +68,40 @@
           "name": "run",
           "frames": [
             {
-              "x": 19,
-              "y": 118,
-              "width": 36,
-              "height": 25
+              "x": 0,
+              "y": 80,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 98,
-              "y": 116,
-              "width": 37,
-              "height": 28
+              "x": 80,
+              "y": 80,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 178,
-              "y": 117,
-              "width": 37,
-              "height": 28
+              "x": 160,
+              "y": 80,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 258,
-              "y": 116,
-              "width": 37,
-              "height": 28
+              "x": 240,
+              "y": 80,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 337,
-              "y": 116,
-              "width": 37,
-              "height": 28
+              "x": 320,
+              "y": 80,
+              "width": 80,
+              "height": 80
             },
             {
-              "x": 417,
-              "y": 117,
-              "width": 37,
-              "height": 28
+              "x": 400,
+              "y": 80,
+              "width": 80,
+              "height": 80
             }
           ]
         },
@@ -355,6 +355,35 @@
             {
               "x": 1760,
               "y": 320,
+              "width": 80,
+              "height": 80
+            }
+          ]
+        },
+        {
+          "name": "dying",
+          "frames": [
+            {
+              "x": 0,
+              "y": 400,
+              "width": 80,
+              "height": 80
+            },
+            {
+              "x": 80,
+              "y": 400,
+              "width": 80,
+              "height": 80
+            },
+            {
+              "x": 160,
+              "y": 400,
+              "width": 80,
+              "height": 80
+            },
+            {
+              "x": 240,
+              "y": 400,
               "width": 80,
               "height": 80
             }
