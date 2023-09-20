@@ -1,9 +1,12 @@
-Mob spawner: jaki potwor, ile, w jakim obszarze, co jaki czas 1 mob
+Bug: when enemy starts to chase player, his sprite disappear for short amount of time
 
 Ui:
 - dock z ikonkami: postać (statystyki + eq), quest log
 
 GameDb: autosave health, experience, gold, position each 10 seconds, set it when logged in again
+
+Enemy:
+- when they start attack, they have to finish (or at least progress more) before chasing player
 
 Level up system:
 - which lvl for how many experience?

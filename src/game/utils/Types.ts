@@ -70,7 +70,8 @@ export type CreatureStates =
   | 'attack'
   | 'chase'
   | 'dead'
-  | 'dying';
+  | 'dying'
+  | 'to_remove';
 
 export type CreatureEffectsTextTypes = 'damage' | 'experience';
 
