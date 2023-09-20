@@ -26,6 +26,7 @@ class Enemy extends Creature {
   alive: boolean;
   experience: number;
   gold: number;
+  deadElapsedTime: number;
 
   constructor(
     context: GameContext,
@@ -63,6 +64,7 @@ class Enemy extends Creature {
     this.alive = true;
     this.experience = experience;
     this.gold = gold;
+    this.deadElapsedTime = 0;
 
     const spriteData =
       context.assetsLoader.assets[AssetNames.Nightborne];
@@ -92,7 +94,7 @@ class Enemy extends Creature {
   animate(delta: number) {
     super.animate(delta);
 
-    if (!this.context.map || !this.alive) return;
+    if (!this.context.map) return;
 
     const playerPosition = this.context.map.getPosition();
     const distanceToPlayer = distanceBetweenPoints(
@@ -102,9 +104,10 @@ class Enemy extends Creature {
     const playerAlive = this.context?.player?.alive;
 
     if (
+      this.alive &&
+      playerAlive &&
       distanceToPlayer < PlayerNoticeDistance &&
-      this.state === 'idle' &&
-      playerAlive
+      this.state === 'idle'
     ) {
       this.setState('chase');
     } else if (
@@ -182,6 +185,27 @@ class Enemy extends Creature {
     ) {
       this.shouldTriggerAttack = false;
       this.attackTriggered = false;
+    }
+
+    if (
+      this.state === 'dying' &&
+      this.sprite.animationFrame ===
+        this.sprite.animationFrames.length - 1
+    ) {
+      this.setState('dead');
+    }
+    if (this.state === 'dead') {
+      this.deadElapsedTime += delta;
+
+      // @ts-ignore
+      if (!isNaN(this.sprite$?.material?.opacity)) {
+        const opacity = Math.max(0, (4 - this.deadElapsedTime) / 2);
+        // @ts-ignore
+        this.sprite$.material.opacity = opacity;
+        if (opacity === 0) {
+          this.setState('to_remove');
+        }
+      }
     }
   }
 }

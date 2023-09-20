@@ -234,7 +234,7 @@ class Map {
     return playerDistance < radius;
   }
   getPosition() {
-    return { x: -this.$.position.x, z: -this.$.position.z };
+    return { x: -this.$.position.x, z: -this.$.position.z } as Point;
   }
   movePlayerInDirection = (direction: number, speed: number) => {
     const radius = getMoveStepForSpeed(speed);

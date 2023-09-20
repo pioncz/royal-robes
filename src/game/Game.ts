@@ -13,9 +13,10 @@ import { mapMoveDirectionToTextureOrientation } from './creature/CreatureHelpers
 import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
 import EventsEmitted from './utils/EventsEmitter';
+import EnemySpawner from './creature/EnemySpawner';
 
 const fpsInterval = 1 / 80;
-const debug = true;
+const debug = false;
 
 export type GameContext = {
   debug: boolean;
@@ -37,8 +38,7 @@ class Main extends EventsEmitted {
   map?: Map;
   player?: Player;
   npc?: Npc;
-  enemies?: Enemy[];
-  enemy?: Enemy;
+  enemySpawner?: EnemySpawner;
 
   constructor({ containerId }: { containerId: string }) {
     super();
@@ -80,15 +80,12 @@ class Main extends EventsEmitted {
         });
         this.map.$.add(this.npc.$);
 
-        this.enemies = [];
-        this.enemy = new Enemy(this.context, {
-          color: '#ff0000',
-          position: { x: 28, y: 0.5, z: 2 },
-          gold: 5,
-          experience: 20,
+        this.enemySpawner = new EnemySpawner(this.context, {
+          amount: 3,
+          radius: 2,
+          delay: 5,
+          origin: { x: 28, z: 2 },
         });
-        this.map.$.add(this.enemy.$);
-        this.enemies.push(this.enemy);
 
         this.loadingAssets = false;
 
@@ -117,8 +114,7 @@ class Main extends EventsEmitted {
       !this.scene ||
       !this.map ||
       !this.player ||
-      !this.enemies ||
-      !this.enemy ||
+      !this.enemySpawner ||
       !this.npc
     ) {
       return;
@@ -180,7 +176,7 @@ class Main extends EventsEmitted {
       ) {
         getObjectsInRadius<Enemy>(
           playerPosition,
-          this.enemies,
+          this.enemySpawner.enemies,
           this.player.attackRadius,
         ).forEach((enemy) => {
           if (!enemy.alive) return;
@@ -197,31 +193,12 @@ class Main extends EventsEmitted {
         });
         this.player.attackTriggered = true;
       }
-      this.enemies.forEach((enemy) => {
-        if (
-          !enemy.alive ||
-          !enemy.shouldTriggerAttack ||
-          enemy.attackTriggered
-        ) {
-          return;
-        }
-        const distanceToPlayer = distanceBetweenPoints(
-          playerPosition,
-          enemy.$.position,
-        );
-        if (distanceToPlayer < enemy.attackRadius) {
-          const damage = enemy.calculateDamage(this.player!);
-          this.player!.dealDamage(damage);
-          enemy.attackTriggered = true;
-          console.log('Player HP: ', this.player!.health);
-        }
-      });
     }
 
     this.map.animate(delta);
     this.player.animate(delta);
     this.npc.animate(delta);
-    this.enemy.animate(delta);
+    this.enemySpawner.animate(delta);
     this.scene.composer.render();
     this.scene.animateFinish();
   }
