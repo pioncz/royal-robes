@@ -5,8 +5,6 @@ export type Point = { x: number; z: number };
 export type Frame = {
   x: number;
   y: number;
-  width: number;
-  height: number;
 };
 
 export type SpriteDataAnimation = {
@@ -17,6 +15,8 @@ export type SpriteDataAnimation = {
 export type SpriteDataObject = {
   id: string;
   name: string;
+  width: number;
+  height: number;
   animations: SpriteDataAnimation[];
 };
 
