@@ -4,6 +4,7 @@ export const useStorage = <T = string>(
   propertyName: string,
   defaultValue: T,
   convert?: (storageValue: string | null) => T,
+  convertBack?: (storageValue: T) => string,
 ): [T, (newValue: T) => void] => {
   const storageValue = localStorage.getItem(propertyName);
 
@@ -28,7 +29,10 @@ export const useStorage = <T = string>(
   return [
     value,
     (newValue: T) => {
-      localStorage.setItem(propertyName, '' + newValue);
+      const valueToSave = convertBack
+        ? convertBack(newValue)
+        : '' + newValue;
+      localStorage.setItem(propertyName, valueToSave);
       setValue(newValue);
     },
   ];

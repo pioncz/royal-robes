@@ -3,30 +3,49 @@ import WelcomeModal from './components/WelcomeModal';
 import Backdrop from './basic/Backdrop';
 import Background from './components/Background';
 import GameOver from './components/GameOver';
+import Dock from './components/Dock';
+import StatisticsModal from './components/StatisticsModal';
+import QuestLogModal from './components/QuestLogModal';
 import { styled } from '@stitches/react';
 import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
 
 const GameUi = () => {
-  const { name, alive, restart } = useContext(GameDbContext);
+  const { name, statistics, restart } = useContext(GameDbContext);
+  const [statisticsOpen, setStatisticsOpen] = useState(false);
+  const [questLogOpen, setQuestLogOpen] = useState(false);
 
-  const gameOverVisible = !alive;
+  const gameOverVisible = !statistics.alive;
   const welcomeModalOpen = !name;
-  const backdropVisible = welcomeModalOpen || gameOverVisible;
+  const backdropVisible =
+    welcomeModalOpen ||
+    gameOverVisible ||
+    statisticsOpen ||
+    questLogOpen;
 
   const handleClick = () => {
-    if (!alive) {
+    if (!statistics.alive) {
       restart();
     }
   };
 
   return (
     <Root onClick={handleClick}>
+      <Dock
+        onStatisticsClick={() => setStatisticsOpen((v) => !v)}
+        onQuestLogClick={() => setQuestLogOpen((v) => !v)}
+      />
       <AnimatePresence>
         {welcomeModalOpen && <Background key="background" />}
         {backdropVisible && <Backdrop key="backdrop" />}
         {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}
         {gameOverVisible && <GameOver />}
+        {statisticsOpen && (
+          <StatisticsModal onClose={() => setStatisticsOpen(false)} />
+        )}
+        {questLogOpen && (
+          <QuestLogModal onClose={() => setQuestLogOpen(false)} />
+        )}
       </AnimatePresence>
     </Root>
   );

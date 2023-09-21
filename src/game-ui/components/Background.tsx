@@ -1,12 +1,15 @@
-import React from 'react';
 import { styled } from '@stitches/react';
-import { motion } from "framer-motion";
-import BackgroundUrl from 'assets/background.jpg'
+import { motion } from 'framer-motion';
+import BackgroundUrl from 'assets/background.jpg';
 
 const Background = () => {
   return (
-    <Root initial={{ opacity: 0}} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
-  )
+    <Root
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    />
+  );
 };
 
 const Root = styled(motion.div, {

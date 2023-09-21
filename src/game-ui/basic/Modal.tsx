@@ -1,20 +1,40 @@
 import React from 'react';
 import { styled } from '@stitches/react';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
-const Modal = ({ title, content, onClick }: { title: string, content: React.ReactNode, onClick?: () => void }) => {
+const Modal = ({
+  title,
+  content,
+  onClick,
+  className,
+}: {
+  title: string;
+  content: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+}) => {
   return (
     <Root
       onClick={onClick}
-      initial={{ transform: 'scale3d(0.7, 0.7, 0.7) translateY(100px)', opacity: 0 }}
-      animate={{ transform: 'scale3d(1, 1, 1) translateY(0px)', opacity: 1 }}
-      exit={{ transform: 'scale3d(0.7, 0.7, 0.7) translateY(100px)', opacity: 0 }}
-      transition={{  duration: 0.2 }}
+      initial={{
+        transform: 'scale3d(0.7, 0.7, 0.7) translateY(100px)',
+        opacity: 0,
+      }}
+      animate={{
+        transform: 'scale3d(1, 1, 1) translateY(0px)',
+        opacity: 1,
+      }}
+      exit={{
+        transform: 'scale3d(0.7, 0.7, 0.7) translateY(100px)',
+        opacity: 0,
+      }}
+      transition={{ duration: 0.2 }}
+      className={className}
     >
-      <Title>{title}</Title>
-      <Content>{content}</Content>
+      <Title className="modal-title">{title}</Title>
+      <Content className="modal-content">{content}</Content>
     </Root>
-  )
+  );
 };
 
 const Root = styled(motion.div, {

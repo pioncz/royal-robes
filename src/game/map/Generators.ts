@@ -3,8 +3,9 @@ import { MapSize, MapCell } from 'game/utils/Types';
 const rand = (min: number, max: number) =>
   Math.random() * (max - min) + min;
 
-const makeArray = (length: number) =>
-  Array.from({ length }, (v, i) => i);
+const makeArray = (
+  length: number, // @ts-ignore
+) => Array.from({ length }, (v, i) => i);
 
 type MapFragment = {
   size: MapSize;

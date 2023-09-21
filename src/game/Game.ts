@@ -5,7 +5,6 @@ import GameControls from 'game/controls/GameControls';
 import {
   degreesToRadians,
   getObjectsInRadius,
-  distanceBetweenPoints,
 } from 'game/utils/Math';
 import Map from './map/Map';
 import Player from './creature/Player';

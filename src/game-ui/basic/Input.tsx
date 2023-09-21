@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from '@stitches/react';
 
 const Input = ({
@@ -6,9 +5,9 @@ const Input = ({
   value,
   placeholder,
 }: {
-  onChange: (newValue: string) => void,
-    value: string,
-  placeholder: string,
+  onChange: (newValue: string) => void;
+  value: string;
+  placeholder: string;
 }) => {
   return (
     <Root
@@ -16,7 +15,7 @@ const Input = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
-  )
+  );
 };
 
 const Root = styled('input', {
@@ -26,7 +25,7 @@ const Root = styled('input', {
   fontFamily: 'inherit',
   fontSize: 18,
   outline: 'none',
-  
+
   '&:hover': {
     background: 'rgb(117 134 192)',
   },
@@ -37,8 +36,8 @@ const Root = styled('input', {
   },
 
   '&::placeholder': {
-    color: 'rgba(255,255, 255, 0.4)'
-  }
+    color: 'rgba(255,255, 255, 0.4)',
+  },
 });
 
 export default Input;

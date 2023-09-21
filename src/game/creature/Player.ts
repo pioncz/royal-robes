@@ -105,7 +105,12 @@ class Player extends Creature {
     this.health = 100;
     this.context?.map?.restart();
     this.alive = true;
-    this.onUpdate({ alive: this.alive });
+    this.onUpdate({
+      alive: this.alive,
+      health: this.health,
+      gold: this.gold,
+      experience: this.experience,
+    });
   }
   receiveLoot(loot: EnemyLoot) {
     this.gold += loot?.gold || 0;
