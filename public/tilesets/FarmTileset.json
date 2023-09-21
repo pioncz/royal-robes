@@ -15,63 +15,75 @@
     },
     {
       "id": "2",
-      "frame": { "x": 80, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 80, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "3",
-      "frame": { "x": 96, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 96, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "4",
-      "frame": { "x": 112, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 112, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
 
     {
       "id": "5",
-      "frame": { "x": 0, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 0, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "6",
-      "frame": { "x": 16, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 16, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "7",
-      "frame": { "x": 32, "y": 0, "width": 16, "height": 16 },
+      "frame": { "x": 32, "y": 0 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "8",
-      "frame": { "x": 0, "y": 16, "width": 16, "height": 16 },
+      "frame": { "x": 0, "y": 16 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "9",
-      "frame": { "x": 16, "y": 16, "width": 16, "height": 16 },
+      "frame": { "x": 16, "y": 16 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "10",
-      "frame": { "x": 32, "y": 16, "width": 16, "height": 16 },
+      "frame": { "x": 32, "y": 16 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "11",
-      "frame": { "x": 0, "y": 32, "width": 16, "height": 16 },
+      "frame": { "x": 0, "y": 32 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "12",
-      "frame": { "x": 16, "y": 32, "width": 16, "height": 16 },
+      "frame": { "x": 16, "y": 32 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     },
     {
       "id": "13",
-      "frame": { "x": 32, "y": 32, "width": 16, "height": 16 },
+      "frame": { "x": 32, "y": 32 },
+      "frameSize": { "width": 16, "height": 16 },
       "type": "floor"
     }
   ]

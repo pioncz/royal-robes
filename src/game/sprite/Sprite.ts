@@ -3,8 +3,6 @@ import { SpriteDataObject, Frame } from 'game/utils/Types';
 
 class Sprite {
   canvas: HTMLCanvasElement;
-  width: number;
-  height: number;
   texture: THREE.CanvasTexture;
   ctx: CanvasRenderingContext2D | null;
   interval: number;
@@ -141,8 +139,8 @@ class Sprite {
           this.assetImage,
           frame.x,
           frame.y,
-          frame.width,
-          frame.height,
+          this.canvas.width,
+          this.canvas.height,
           0,
           0,
           this.canvas.width,

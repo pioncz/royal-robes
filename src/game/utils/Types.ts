@@ -30,6 +30,7 @@ export type Tile = {
   type: 'floor' | 'wall';
   frame?: Frame;
   frames?: Frame[];
+  frameSize: { width: number; height: number };
   size?: { width: number; height: number };
   light?: {
     color?: string;
