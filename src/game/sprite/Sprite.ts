@@ -3,8 +3,6 @@ import { SpriteDataObject, Frame } from 'game/utils/Types';
 
 class Sprite {
   canvas: HTMLCanvasElement;
-  width: number;
-  height: number;
   texture: THREE.CanvasTexture;
   ctx: CanvasRenderingContext2D | null;
   interval: number;
@@ -63,6 +61,7 @@ class Sprite {
   }
   setAnimations(spriteData: SpriteDataObject) {
     this.spriteData = spriteData;
+    this.resize(spriteData.width, spriteData.height);
   }
   play(name: string, replayTimes = 1, stopAfter = false) {
     const animation = this.spriteData?.animations.find(
@@ -72,15 +71,6 @@ class Sprite {
     if (!animation) {
       console.error(`Animation ${name} not found`);
       return;
-    }
-
-    if (
-      (animation.frames?.[0]?.width, animation.frames?.[0]?.height)
-    ) {
-      this.resize(
-        animation.frames?.[0]?.width,
-        animation.frames?.[0]?.height,
-      );
     }
 
     if (!this.defaultAnimationName) {
@@ -149,8 +139,8 @@ class Sprite {
           this.assetImage,
           frame.x,
           frame.y,
-          frame.width,
-          frame.height,
+          this.canvas.width,
+          this.canvas.height,
           0,
           0,
           this.canvas.width,

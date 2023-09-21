@@ -58,21 +58,21 @@ class TilesetManager {
           }
 
           if (tile.frame) {
-            const { frame } = tile;
-            canvas.width = frame.width;
-            canvas.height = frame.height;
+            const { frame, frameSize } = tile;
+            canvas.width = frameSize.width;
+            canvas.height = frameSize.height;
 
             ctx.imageSmoothingEnabled = false;
             ctx.drawImage(
               tileset.asset,
               frame.x,
               frame.y,
-              frame.width,
-              frame.height,
+              frameSize.width,
+              frameSize.height,
               0,
               0,
-              frame.width,
-              frame.height,
+              frameSize.width,
+              frameSize.height,
             );
             const texture = new THREE.CanvasTexture(canvas);
             texture.anisotropy = this.maxAnisotropy;
@@ -80,8 +80,8 @@ class TilesetManager {
             texture.minFilter = THREE.LinearMipMapLinearFilter;
             tile.texture = texture;
           } else if (tile?.frames?.length) {
-            canvas.width = tile.frames[0].width;
-            canvas.height = tile.frames[0].height;
+            canvas.width = tile.frameSize.width;
+            canvas.height = tile.frameSize.height;
             ctx.imageSmoothingEnabled = false;
             const texture = new THREE.CanvasTexture(canvas);
             texture.anisotropy = this.maxAnisotropy;
@@ -92,14 +92,14 @@ class TilesetManager {
             sprite.setAnimations({
               id: tile.id,
               name: tile.id,
+              width: tile.frameSize.width,
+              height: tile.frameSize.height,
               animations: [
                 {
                   name: 'main',
                   frames: tile.frames.map((frame) => ({
                     x: frame.x,
                     y: frame.y,
-                    width: frame.width,
-                    height: frame.height,
                   })),
                 },
               ],

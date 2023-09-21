@@ -1,5 +1,3 @@
-Bug: when enemy starts to chase player, his sprite disappear for short amount of time
-
 Ui:
 - dock z ikonkami: postać (statystyki + eq), quest log
 
