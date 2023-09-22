@@ -4,9 +4,6 @@ GameDb:
  - on init read position, health, gold, experience from storage
 
 Enemy:
-- when they start attack, they have to finish (or at least progress more) before chasing player
-
-Enemy:
 - od razu po zabiciu, niech w miare szybko zniknie Name i hp bar
 
 Level up system:

@@ -15,7 +15,7 @@ import EventsEmitted from './utils/EventsEmitter';
 import EnemySpawner from './creature/EnemySpawner';
 
 const fpsInterval = 1 / 80;
-const debug = true;
+const debug = false;
 
 export type GameContext = {
   debug: boolean;

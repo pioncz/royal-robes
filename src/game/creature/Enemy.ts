@@ -148,10 +148,13 @@ class Enemy extends Creature {
           this.shouldTriggerAttack = true;
         }
 
-        if (distanceToPlayer > PlayerNoticeDistance || !playerAlive) {
-          this.setState('walking');
-        }
         if (
+          attackAnimationFinished &&
+          (distanceToPlayer > PlayerNoticeDistance || !playerAlive)
+        ) {
+          this.setState('walking');
+        } else if (
+          attackAnimationFinished &&
           playerAlive &&
           distanceToPlayer < PlayerNoticeDistance &&
           distanceToPlayer > PlayerAttackDistance
