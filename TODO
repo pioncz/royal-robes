@@ -3,9 +3,6 @@ GameDb:
  - save it only in 10 second delays
  - on init read position, health, gold, experience from storage
 
-Enemy:
-- od razu po zabiciu, niech w miare szybko zniknie Name i hp bar
-
 Level up system:
 - which lvl for how many experience?
 - animation on lvl up

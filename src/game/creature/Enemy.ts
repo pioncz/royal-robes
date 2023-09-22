@@ -10,6 +10,7 @@ import {
   getMoveStepForSpeed,
 } from 'game/creature/CreatureHelpers';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
+import Animation from 'game/utils/Animation';
 
 const PlayerNoticeDistance = 5;
 const PlayerAttackDistance = 1.3;
@@ -26,6 +27,7 @@ class Enemy extends Creature {
   experience: number;
   gold: number;
   deadElapsedTime: number;
+  deadAnimation?: Animation;
 
   constructor(
     context: GameContext,
@@ -86,6 +88,8 @@ class Enemy extends Creature {
       this.sprite.playAndStop('dying');
       this.alive = false;
       this.creatureEffects?.add('experience', this.experience);
+    } else if (newState === 'dead') {
+      this.deadAnimation = new Animation({ duration: 0.3 });
     }
 
     this.state = newState;
@@ -194,6 +198,17 @@ class Enemy extends Creature {
       }
       case 'dead': {
         this.deadElapsedTime += delta;
+
+        this.deadAnimation?.animate(
+          delta,
+          ({ progress, finished }) => {
+            // @ts-ignore
+            this.creatureHeader.$.material.opacity = 1 - progress;
+            if (finished) {
+              this.deadAnimation = undefined;
+            }
+          },
+        );
 
         // @ts-ignore
         if (!isNaN(this.sprite$?.material?.opacity)) {
