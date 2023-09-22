@@ -17,7 +17,6 @@ const PlayerAttackDistance = 1.3;
 class Enemy extends Creature {
   state: CreatureStates;
   initialPosition: { x: number; y: number; z: number };
-  name: string;
   context: GameContext;
   enemy: boolean;
   shouldTriggerAttack: boolean;
@@ -45,6 +44,7 @@ class Enemy extends Creature {
     super({
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
+      name: 'Enemy 1',
       color,
       speed: 20,
       health: 20,
@@ -55,7 +55,6 @@ class Enemy extends Creature {
     this.context = context;
     this.initialPosition = position;
     this.$.position.set(position.x, position.y, position.z);
-    this.name = 'Enemy 1';
     this.state = 'idle';
     this.enemy = true;
     this.shouldTriggerAttack = false;

@@ -7,6 +7,7 @@ import {
   type CreatureOrientation,
   type CreatureStates,
 } from 'game/utils/Types';
+import CreatureHeader from './CreatureHeader';
 
 class Creature {
   $: THREE.Group;
@@ -14,13 +15,17 @@ class Creature {
   debug$?: THREE.Mesh;
   sprite: Sprite;
   texture: THREE.Texture;
+  name: string;
   speed: number;
   health: number;
+  maxHealth: number;
   defence: number;
   attack: number;
   creatureEffects?: CreatureEffects;
+  creatureHeader: CreatureHeader;
 
   constructor({
+    name,
     debug = false,
     maxAnisotropy,
     color,
@@ -30,6 +35,7 @@ class Creature {
     attack = 5,
     creatureEffects = true,
   }: {
+    name: string;
     debug?: boolean;
     maxAnisotropy: number;
     color?: string;
@@ -39,8 +45,10 @@ class Creature {
     attack?: number;
     creatureEffects?: boolean;
   }) {
+    this.name = name;
     this.speed = speed;
     this.health = health;
+    this.maxHealth = health;
     this.defence = defence;
     this.attack = attack;
 
@@ -90,6 +98,14 @@ class Creature {
       this.$.add(this.creatureEffects.$);
     }
 
+    this.creatureHeader = new CreatureHeader({
+      maxAnisotropy,
+      name,
+      health,
+    });
+    this.creatureHeader.$.position.set(0, 0.4, 0);
+    this.$.add(this.creatureHeader.$);
+
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       console.error('Failed to retrieve context 2d from canvas');
@@ -120,6 +136,7 @@ class Creature {
     Math.max(this.attack - opponent.defence, 0);
   dealDamage(damage: number) {
     this.health = Math.max(this.health - damage, 0);
+    this.creatureHeader.setHealth(this.health);
     if (this.health === 0 && this.setState) {
       this.setState('dying');
     }

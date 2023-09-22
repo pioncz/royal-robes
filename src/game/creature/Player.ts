@@ -24,9 +24,11 @@ class Player extends Creature {
 
   constructor(
     context: GameContext,
+    { name }: { name: string },
     onUpdate: (newStats: PlayerStatistics) => void,
   ) {
     super({
+      name,
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
       attack: 15,

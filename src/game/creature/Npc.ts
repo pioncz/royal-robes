@@ -37,6 +37,7 @@ class Npc extends Creature {
     },
   ) {
     super({
+      name: 'Npc 1',
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
       color,
@@ -45,7 +46,6 @@ class Npc extends Creature {
     });
 
     this.context = context;
-    this.name = 'Npc 1';
     this.state = 'idle';
     this.dialogs = {
       greetings: [

@@ -15,7 +15,7 @@ import EventsEmitted from './utils/EventsEmitter';
 import EnemySpawner from './creature/EnemySpawner';
 
 const fpsInterval = 1 / 80;
-const debug = false;
+const debug = true;
 
 export type GameContext = {
   debug: boolean;
@@ -39,7 +39,13 @@ class Main extends EventsEmitted {
   npc?: Npc;
   enemySpawner?: EnemySpawner;
 
-  constructor({ containerId }: { containerId: string }) {
+  constructor({
+    containerId,
+    name,
+  }: {
+    containerId: string;
+    name: string;
+  }) {
     super();
     this.assetsLoader = new AssetsLoader();
     this.context = {
@@ -66,9 +72,13 @@ class Main extends EventsEmitted {
         this.context.map = this.map;
 
         // Player
-        this.player = new Player(this.context, (newStats) => {
-          this.emit('playerUpdate', newStats);
-        });
+        this.player = new Player(
+          this.context,
+          { name },
+          (newStats) => {
+            this.emit('playerUpdate', newStats);
+          },
+        );
         this.scene.$.add(this.player.$);
         this.context.player = this.player;
 

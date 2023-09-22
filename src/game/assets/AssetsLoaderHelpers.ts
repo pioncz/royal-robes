@@ -6,4 +6,5 @@ export enum AssetNames {
 
 export enum FontNames {
   ExpressionPro = 'ExpressionPro',
+  m5x7 = 'm5x7',
 }

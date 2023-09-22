@@ -4,11 +4,11 @@ import { styled } from '@stitches/react';
 import GameDbContext from 'game-ui/contexts/GameDbContext';
 
 const GameComponent = () => {
-  const { setGameInstance, setStatistics } =
+  const { name, setGameInstance, setStatistics } =
     useContext(GameDbContext);
 
   useEffect(() => {
-    const g = new Game({ containerId: 'game' });
+    const g = new Game({ containerId: 'game', name });
 
     g.on('playerUpdate', (playerStatistics) => {
       setStatistics(playerStatistics);
