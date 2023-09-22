@@ -1,5 +1,3 @@
-nazwa postaci, pasek hp (u mobow jesli mniej niz 100?)
-
 GameDb:
  - add position to update
  - save it only in 10 second delays
