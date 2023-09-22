@@ -60,6 +60,11 @@ const Root = styled('div', {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  pointerEvents: 'none',
+
+  '& *': {
+    pointerEvents: 'all',
+  },
 });
 
 export default GameUi;

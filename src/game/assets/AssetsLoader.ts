@@ -1,5 +1,5 @@
 import NightbornSprite from '/sprites/nightborne.json?url';
-import { AssetNames } from './AssetsLoaderHelpers';
+import { AssetNames, FontPaths } from './AssetsLoaderHelpers';
 import { SpriteData, Tileset } from 'game/utils/Types';
 import FarmTileset from '/tilesets/FarmTileset.json?url';
 import CatacombsTiles from '/tilesets/CatacombsTileset.json?url';
@@ -57,10 +57,24 @@ class AssetsLoader {
       },
     );
 
+    const fontPromises = Object.entries(FontPaths).map(
+      ([fontName, fontPath]) => {
+        console.log(fontName, fontPath);
+        return new Promise<void>((resolve, reject) => {
+          const fontFace = new FontFace(fontName, `url(${fontPath})`);
+          fontFace.load().then(() => {
+            document.fonts.add(fontFace);
+            resolve();
+          }, reject);
+        });
+      },
+    );
+
     Promise.all([
       spritesPromise,
       farmTilesetPromise,
       catacombTilesetPromise,
+      ...fontPromises,
     ]).then(() => {
       if (resolve) {
         resolve();
