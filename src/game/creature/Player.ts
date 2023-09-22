@@ -57,6 +57,7 @@ class Player extends Creature {
     this.sprite.setAssetPath(spriteData.assetPath);
     this.sprite.setAnimations(spriteData.objects[0]);
     this.sprite.playContinuous('idle');
+    console.log(this.sprite.interval);
   }
   setState(newState: CreatureStates) {
     if (
@@ -67,18 +68,23 @@ class Player extends Creature {
       return;
 
     if (newState === 'idle') {
+      this.sprite.setFps(10);
       this.sprite.playContinuous('idle');
     } else if (newState === 'attack') {
+      this.sprite.setFps(60);
       this.sprite.playOnce('attack');
     } else if (newState === 'walking') {
+      this.sprite.setFps(10);
       this.sprite.playContinuous('run');
     } else if (newState === 'dying') {
+      this.sprite.setFps(10);
       this.alive = false;
       this.sprite.playAndStop('dying');
       this.fadeLightOnDeathAnimation = new Animation({
         duration: 1,
       });
     } else if (newState === 'dead') {
+      this.sprite.setFps(10);
       this.handleUpdate();
     }
 
