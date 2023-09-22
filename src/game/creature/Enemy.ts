@@ -101,109 +101,107 @@ class Enemy extends Creature {
       this.$.position,
     );
     const playerAlive = this.context?.player?.alive;
+    const distanceToInitialPosition = distanceBetweenPoints(
+      this.$.position,
+      this.initialPosition,
+    );
 
-    if (
-      this.alive &&
-      playerAlive &&
-      distanceToPlayer < PlayerNoticeDistance &&
-      this.state === 'idle'
-    ) {
-      this.setState('chase');
-    } else if (
-      (distanceToPlayer > PlayerNoticeDistance || !playerAlive) &&
-      (this.state === 'chase' || this.state === 'attack')
-    ) {
-      this.setState('walking');
-    } else if (
-      playerAlive &&
-      distanceToPlayer < PlayerNoticeDistance &&
-      distanceToPlayer > PlayerAttackDistance &&
-      this.state === 'attack'
-    ) {
-      this.attackTriggered = false;
-      this.shouldTriggerAttack = false;
-      this.setState('chase');
-    }
-
-    if (this.state === 'chase') {
-      const startPosition = this.$.position;
-      const playerPosition = this.context.map.getPosition();
-      const distance = distanceBetweenPoints(
-        startPosition,
-        playerPosition,
-      );
-
-      if (distance < PlayerAttackDistance) {
-        this.setState('attack');
-      } else {
-        const radians = angleBetweenPoints(
-          startPosition,
-          playerPosition,
-        );
-
-        this.moveInDirection(radians);
-        this.turn(mapMoveDirectionToTextureOrientation(radians));
-      }
-    }
-    if (this.state === 'walking') {
-      const startPosition = this.$.position;
-      const endPosition = this.initialPosition;
-      const distance = distanceBetweenPoints(
-        startPosition,
-        endPosition,
-      );
-      const moveStep = getMoveStepForSpeed(this.speed);
-
-      if (distance < moveStep) {
-        this.$.position.x = endPosition.x;
-        this.$.position.z = endPosition.z;
-        this.setState('idle');
-      } else {
-        const radians = angleBetweenPoints(
-          startPosition,
-          endPosition,
-        );
-
-        this.moveInDirection(radians);
-        this.turn(mapMoveDirectionToTextureOrientation(radians));
-      }
-    }
-    if (
-      this.sprite.animationName === 'attack' &&
-      this.sprite.animationFrame >=
-        Math.round(0.75 * this.sprite.animationFrames.length) &&
-      !this.shouldTriggerAttack &&
-      !this.attackTriggered
-    ) {
-      this.shouldTriggerAttack = true;
-    }
-    if (
-      this.sprite.animationName === 'attack' &&
-      this.sprite.animationFrame ===
-        this.sprite.animationFrames.length - 1
-    ) {
-      this.shouldTriggerAttack = false;
-      this.attackTriggered = false;
-    }
-
-    if (
-      this.state === 'dying' &&
-      this.sprite.animationFrame ===
-        this.sprite.animationFrames.length - 1
-    ) {
-      this.setState('dead');
-    }
-    if (this.state === 'dead') {
-      this.deadElapsedTime += delta;
-
-      // @ts-ignore
-      if (!isNaN(this.sprite$?.material?.opacity)) {
-        const opacity = Math.max(0, (4 - this.deadElapsedTime) / 2);
-        // @ts-ignore
-        this.sprite$.material.opacity = opacity;
-        if (opacity === 0) {
-          this.setState('to_remove');
+    switch (this.state) {
+      case 'idle':
+        if (
+          this.alive &&
+          playerAlive &&
+          distanceToPlayer < PlayerNoticeDistance
+        ) {
+          this.setState('chase');
         }
+        break;
+      case 'chase':
+        if (distanceToPlayer > PlayerNoticeDistance || !playerAlive) {
+          this.setState('walking');
+        } else if (distanceToPlayer < PlayerAttackDistance) {
+          this.setState('attack');
+        } else {
+          const radians = angleBetweenPoints(
+            this.$.position,
+            playerPosition,
+          );
+
+          this.moveInDirection(radians);
+          this.turn(mapMoveDirectionToTextureOrientation(radians));
+        }
+        break;
+      case 'attack': {
+        const attackAnimationFinished =
+          this.sprite.animationFrame ===
+          this.sprite.animationFrames.length - 1;
+
+        if (attackAnimationFinished) {
+          this.shouldTriggerAttack = false;
+          this.attackTriggered = false;
+        } else if (
+          this.sprite.animationFrame >=
+            Math.round(0.75 * this.sprite.animationFrames.length) &&
+          !this.shouldTriggerAttack &&
+          !this.attackTriggered
+        ) {
+          this.shouldTriggerAttack = true;
+        }
+
+        if (distanceToPlayer > PlayerNoticeDistance || !playerAlive) {
+          this.setState('walking');
+        }
+        if (
+          playerAlive &&
+          distanceToPlayer < PlayerNoticeDistance &&
+          distanceToPlayer > PlayerAttackDistance
+        ) {
+          this.attackTriggered = false;
+          this.shouldTriggerAttack = false;
+          this.setState('chase');
+        }
+        break;
+      }
+      case 'walking': {
+        if (
+          distanceToInitialPosition < getMoveStepForSpeed(this.speed)
+        ) {
+          this.$.position.x = this.initialPosition.x;
+          this.$.position.z = this.initialPosition.z;
+          this.setState('idle');
+        } else {
+          const radians = angleBetweenPoints(
+            this.$.position,
+            this.initialPosition,
+          );
+
+          this.moveInDirection(radians);
+          this.turn(mapMoveDirectionToTextureOrientation(radians));
+        }
+        break;
+      }
+      case 'dying': {
+        if (
+          this.sprite.animationFrame ===
+          this.sprite.animationFrames.length - 1
+        ) {
+          this.setState('dead');
+        }
+        break;
+      }
+      case 'dead': {
+        this.deadElapsedTime += delta;
+
+        // @ts-ignore
+        if (!isNaN(this.sprite$?.material?.opacity)) {
+          const opacity = Math.max(0, (4 - this.deadElapsedTime) / 2);
+          // @ts-ignore
+          this.sprite$.material.opacity = opacity;
+          if (opacity === 0) {
+            this.setState('to_remove');
+          }
+        }
+        break;
       }
     }
   }
