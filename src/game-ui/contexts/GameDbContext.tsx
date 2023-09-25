@@ -42,7 +42,7 @@ export const GameDbContextProvider = ({
   const [position, setPosition] = useStorage(
     'position',
     initialState.position,
-    (v) => (v ? JSON.parse(v) : initialState.statistics),
+    (v) => (v ? JSON.parse(v) : initialState.position),
     (v) => JSON.stringify(v),
   );
   const gameRef = useRef<Game>();
