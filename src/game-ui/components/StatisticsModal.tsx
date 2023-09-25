@@ -4,25 +4,22 @@ import Button from '../basic/Button';
 import Box from '../basic/Box';
 import { styled } from '@stitches/react';
 import GameDbContext from '../contexts/GameDbContext';
+import Equipment from './Equipment';
 
 const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
   const { name, statistics } = useContext(GameDbContext);
 
   const stats = [
     {
-      name: 'Name',
-      value: name,
-    },
-    {
-      name: 'Health',
+      stat: 'Health',
       value: statistics.health,
     },
     {
-      name: 'Experience',
+      stat: 'Experience',
       value: statistics.experience,
     },
     {
-      name: 'Gold',
+      stat: 'Gold',
       value: statistics.gold,
     },
   ];
@@ -32,14 +29,20 @@ const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
       title="Statistics"
       content={
         <>
-          <Box>
-            {stats.map(({ name, value }) => (
-              <Box flexDirection="row" key={name} gap={20}>
-                <div>{name}</div>
+          <Box flexDirection="row">
+            <Box>
+              <div>
+                {name}
+              </div>
+            {stats.map(({ stat, value }) => (
+              <Box flexDirection="row" key={stat} gap={20}>
+                <div>{stat}</div>
                 <div>-</div>
                 <div>{value}</div>
               </Box>
             ))}
+            </Box>
+            <Equipment />
           </Box>
           <Button onClick={onClose}>Close</Button>
         </>
@@ -49,7 +52,7 @@ const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
 };
 
 const StyledModal = styled(Modal, {
-  width: 300,
+  width: 600,
 
   '& .modal-content': {
     display: 'flex',
