@@ -57,7 +57,6 @@ class Player extends Creature {
     this.sprite.setAssetPath(spriteData.assetPath);
     this.sprite.setAnimations(spriteData.objects[0]);
     this.sprite.playContinuous('idle');
-    console.log(this.sprite.interval);
   }
   setState(newState: CreatureStates) {
     if (

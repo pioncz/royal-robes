@@ -24,10 +24,21 @@ class Map {
   tilesetManager: TilesetManager;
   mapTiles: MapTile[];
   initialPosition: Point;
+  onPositionUpdate: (newPosition: Point) => void;
 
-  constructor(context: GameContext, position: Point) {
+  constructor(
+    context: GameContext,
+    {
+      initialPosition,
+      onPositionUpdate,
+    }: {
+      initialPosition: Point;
+      onPositionUpdate: (newPosition: Point) => void;
+    },
+  ) {
     this.mapData = MapData;
     this.mapTiles = [];
+    this.onPositionUpdate = onPositionUpdate;
 
     // Sprites to animate
     this.sprites = [];
@@ -68,8 +79,8 @@ class Map {
         this.buildWalls(walls);
         this.buildFloors(floors);
       });
-    this.setPosition(position);
-    this.initialPosition = position;
+    this.setPosition(initialPosition);
+    this.initialPosition = initialPosition;
   }
   private buildWalls(mapTiles: MapTile[]) {
     mapTiles.forEach(({ cell, tile }) => {
@@ -160,6 +171,7 @@ class Map {
   }
   private setPosition({ x, z }: { x: number; z: number }) {
     this.$.position.set(-x, 0, -z);
+    this.onPositionUpdate({ x, z });
   }
   private isPositionValid(toPosition: { x: number; z: number }) {
     const floorDataObjects = this.getPosTileObjectByPosition(

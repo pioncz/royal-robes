@@ -144,6 +144,7 @@ class Creature {
       this.creatureEffects.add('damage', `-${damage}`);
     }
   }
+  // @ts-ignore
   // eslint-disable-next-line
   setState?(state: CreatureStates) {}
   animate(delta: number) {

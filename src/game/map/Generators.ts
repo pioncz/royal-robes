@@ -27,28 +27,26 @@ const generateMapFragment = ({
   ids,
   r,
   fillFunction,
-}: MapFragment) => {
-  return makeArray(size.x)
-    .map((x) =>
-      makeArray(size.z).map((z) => {
-        const fillFunctionValue = fillFunction
-          ? fillFunction(ids, x, z, size, offset)
-          : null;
-        const id = fillFunction
-          ? fillFunctionValue?.id
-          : ids[Math.floor(rand(0, ids.length))];
+}: MapFragment): MapCell[] => {
+  const arraySizeX = makeArray(size.x);
+  const mappedToCells = arraySizeX.map((z) => {
+    const fillFunctionValue = fillFunction
+      ? fillFunction(ids, size.x, z, size, offset)
+      : null;
+    const id = fillFunction
+      ? fillFunctionValue?.id
+      : ids[Math.floor(rand(0, ids.length))];
 
-        return {
-          x: x + (offset?.x || 0),
-          y: size.y || 0,
-          z: z + (offset?.z || 0),
-          id,
-          ...(r ? { r } : {}),
-        };
-      }),
-    )
-    .flat()
-    .filter((mapPos) => !!mapPos.id);
+    return {
+      x: size.x + (offset?.x || 0),
+      y: size.y || 0,
+      z: z + (offset?.z || 0),
+      id,
+      ...(r ? { r } : {}),
+    };
+  });
+  // @ts-ignore
+  return mappedToCells.flat().filter((mapPos) => !!mapPos.id);
 };
 
 export const generateMapFromFragments = (

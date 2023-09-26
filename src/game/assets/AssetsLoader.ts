@@ -59,7 +59,6 @@ class AssetsLoader {
 
     const fontPromises = Object.entries(FontPaths).map(
       ([fontName, fontPath]) => {
-        console.log(fontName, fontPath);
         return new Promise<void>((resolve, reject) => {
           const fontFace = new FontFace(fontName, `url(${fontPath})`);
           fontFace.load().then(() => {

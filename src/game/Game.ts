@@ -13,6 +13,7 @@ import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
 import EventsEmitted from './utils/EventsEmitter';
 import EnemySpawner from './creature/EnemySpawner';
+import { Point } from './utils/Types';
 
 const fpsInterval = 1 / 80;
 const debug = false;
@@ -42,9 +43,11 @@ class Main extends EventsEmitted {
   constructor({
     containerId,
     name,
+    position,
   }: {
     containerId: string;
     name: string;
+    position: Point;
   }) {
     super();
     this.assetsLoader = new AssetsLoader();
@@ -64,10 +67,13 @@ class Main extends EventsEmitted {
         this.context.maxAnisotropy = this.scene.getMaxAnisotropy();
         this.context.controls = this.scene.controls;
 
-        const playerInitialPosition = { x: 20.5, z: 4 };
-
         // Map
-        this.map = new Map(this.context, playerInitialPosition);
+        this.map = new Map(this.context, {
+          initialPosition: position,
+          onPositionUpdate: (newPosition: Point) => {
+            this.emit('positionUpdate', newPosition);
+          },
+        });
         this.scene.$.add(this.map.$);
         this.context.map = this.map;
 

@@ -23,7 +23,6 @@ class Npc extends Creature {
   walkPositions: Array<{ x: number; z: number }>;
   lastPosition: number;
   targetPosition: number;
-  name: string;
   context: GameContext;
 
   constructor(
