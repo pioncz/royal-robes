@@ -17,7 +17,7 @@ const initialState: IGameDbContext = {
   setName: () => {},
   setGameInstance: () => {},
   restart: () => {},
-  statistics: { health: 0, experience: 0, gold: 0, alive: true },
+  statistics: { health: 100, experience: 0, gold: 0, alive: true },
   setStatistics: () => {},
 };
 

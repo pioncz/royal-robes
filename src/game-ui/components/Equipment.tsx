@@ -1,5 +1,5 @@
 import React from 'react';
-import Border from 'game-ui/basic/Border'
+import Border from 'game-ui/basic/Border';
 import { styled } from '@stitches/react';
 import amuletBg from 'assets/eq/amulet.png';
 import armorBg from 'assets/eq/armor.png';
@@ -53,7 +53,7 @@ const Equipment = () => {
       name: 'boots',
       background: bootsBg,
     },
-  ]
+  ];
 
   return (
     <Root>
@@ -66,23 +66,20 @@ const Equipment = () => {
             backgroundSize: '60%',
             backgroundPosition: 'center',
             width: 48,
-            height: 48
-          }} />
+            height: 48,
+          }}
+        />
       ))}
     </Root>
-  )
+  );
 };
-
-
 
 const Root = styled('div', {
   display: 'grid',
-  // gridTemplateColumns: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(3, 1fr)',
   gap: '4px',
   width: 48 * 3 + 4 * 2 + 10,
   gridAutoColumns: '33%',
-  justifyContent: 'center',
-  gridAutoFlow: 'column',
 });
 
 export default Equipment;

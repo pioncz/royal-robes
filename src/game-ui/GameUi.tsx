@@ -1,7 +1,5 @@
 import { useContext, useState } from 'react';
 import WelcomeModal from './components/WelcomeModal';
-import Backdrop from './basic/Backdrop';
-import Background from './components/Background';
 import GameOver from './components/GameOver';
 import Dock from './components/Dock';
 import StatisticsModal from './components/StatisticsModal';
@@ -36,8 +34,6 @@ const GameUi = () => {
         onQuestLogClick={() => setQuestLogOpen((v) => !v)}
       />
       <AnimatePresence>
-        {welcomeModalOpen && <Background key="background" />}
-        {backdropVisible && <Backdrop key="backdrop" />}
         {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}
         {gameOverVisible && <GameOver />}
         {statisticsOpen && (
