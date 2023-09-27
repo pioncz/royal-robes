@@ -19,7 +19,7 @@ class Creature {
   speed: number;
   health: number;
   maxHealth: number;
-  defence: number;
+  defense: number;
   attack: number;
   creatureEffects?: CreatureEffects;
   creatureHeader: CreatureHeader;
@@ -31,7 +31,7 @@ class Creature {
     color,
     speed = 100,
     health = 100,
-    defence = 10,
+    defense = 10,
     attack = 5,
     creatureEffects = true,
   }: {
@@ -41,7 +41,7 @@ class Creature {
     color?: string;
     speed?: number;
     health?: number;
-    defence?: number;
+    defense?: number;
     attack?: number;
     creatureEffects?: boolean;
   }) {
@@ -49,7 +49,7 @@ class Creature {
     this.speed = speed;
     this.health = health;
     this.maxHealth = health;
-    this.defence = defence;
+    this.defense = defense;
     this.attack = attack;
 
     this.$ = new THREE.Group();
@@ -133,7 +133,7 @@ class Creature {
     this.$.position.z = z;
   };
   calculateDamage = (opponent: Creature) =>
-    Math.max(this.attack - opponent.defence, 0);
+    Math.max(this.attack - opponent.defense, 0);
   dealDamage(damage: number) {
     this.health = Math.max(this.health - damage, 0);
     this.creatureHeader.setHealth(this.health);

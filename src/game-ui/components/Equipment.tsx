@@ -1,4 +1,3 @@
-import React from 'react';
 import Border from 'game-ui/basic/Border';
 import { styled } from '@stitches/react';
 import amuletBg from 'assets/eq/amulet.png';

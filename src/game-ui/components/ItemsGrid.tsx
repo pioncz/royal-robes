@@ -1,4 +1,3 @@
-import React from 'react';
 import Box from '../basic/Box';
 import { styled } from '@stitches/react';
 

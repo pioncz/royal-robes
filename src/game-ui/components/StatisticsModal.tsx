@@ -6,24 +6,18 @@ import { styled } from '@stitches/react';
 import GameDbContext from '../contexts/GameDbContext';
 import Equipment from './Equipment';
 import ItemsGrid from './ItemsGrid';
+import capitalize from 'lodash/capitalize';
 
 const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
   const { name, statistics } = useContext(GameDbContext);
+  const { alive, ...visibleStatistics } = statistics; // eslint-disable-line
 
-  const stats = [
-    {
-      stat: 'Health',
-      value: statistics.health,
-    },
-    {
-      stat: 'Experience',
-      value: statistics.experience,
-    },
-    {
-      stat: 'Gold',
-      value: statistics.gold,
-    },
-  ];
+  const stats = Object.entries(visibleStatistics).map(
+    ([stat, value]) => ({
+      stat: capitalize(stat),
+      value,
+    }),
+  );
 
   return (
     <StyledModal

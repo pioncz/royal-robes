@@ -51,7 +51,7 @@ class Enemy extends Creature {
       speed: 20,
       health: 20,
       attack: 10,
-      defence: 1,
+      defense: 1,
     });
 
     this.context = context;

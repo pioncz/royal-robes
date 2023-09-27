@@ -15,11 +15,6 @@ const GameUi = () => {
 
   const gameOverVisible = !statistics.alive;
   const welcomeModalOpen = !name;
-  const backdropVisible =
-    welcomeModalOpen ||
-    gameOverVisible ||
-    statisticsOpen ||
-    questLogOpen;
 
   const handleClick = () => {
     if (!statistics.alive) {
