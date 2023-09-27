@@ -6,6 +6,7 @@ const QuestLogModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <StyledModal
       title="Quest Log"
+      onClose={onClose}
       content={
         <>
           <div>Here you will find all your quests.</div>

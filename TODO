@@ -1,3 +1,9 @@
+replace import { styled } from '@stitches/react'; with 
+import { styled } from 'game-ui/utils/theme';
+implement fonSizes
+implement lineHeights
+implement sizes
+
 Level up system:
 - show avatar with lvl and lvl progress
 - lvl /experience formula: const experienceForLevel(baseExp, level) => baseExp * (Math.pow(level, 1.6))

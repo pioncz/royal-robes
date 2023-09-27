@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 
 const Input = ({
   onChange,
@@ -20,14 +20,14 @@ const Input = ({
 
 const Root = styled('input', {
   border: '2px solid rgba(255, 255, 255, 0.133)',
-  background: 'rgb(75 88 131)',
+  background: '$purple450',
   padding: '8px 12px',
   fontFamily: 'inherit',
   fontSize: 18,
   outline: 'none',
 
   '&:hover': {
-    background: 'rgb(117 134 192)',
+    background: '$purple300',
   },
 
   '&:focus, &:focus-visible': {

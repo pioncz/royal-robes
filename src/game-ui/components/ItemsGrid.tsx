@@ -1,5 +1,5 @@
 import Box from '../basic/Box';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 
 const ItemsGrid = () => {
   return (
@@ -15,17 +15,14 @@ const ItemsGrid = () => {
 const ItemBox = styled('div', {
   width: 48,
   height: 48,
-  background: '#353D56',
-  boxShadow:
-    'inset 2px 2px 0px rgba(255, 255, 255, 0.233), inset -2px -2px 0px rgba(0, 0, 0, 0.233)',
-
+  background: '$purple450',
+  boxShadow: '$boxShadows$thin3d',
   '&:hover': {
-    background: '#424D6B',
+    background: '$purple400',
   },
 
   '&:active': {
-    boxShadow:
-      'inset 2px 2px 0px rgba(0, 0, 0, 0.233), inset -2px -2px 0px rgba(255, 255, 255, 0.233)',
+    boxShadow: '$boxShadows$thin3dInverted',
   },
 });
 

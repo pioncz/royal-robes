@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import Modal from '../basic/Modal';
 import Button from '../basic/Button';
 import Box from '../basic/Box';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import GameDbContext from '../contexts/GameDbContext';
 import Equipment from './Equipment';
 import ItemsGrid from './ItemsGrid';
@@ -74,14 +74,14 @@ const StyledModal = styled(Modal, {
 
 const SectionWrapper = styled(Box, {
   width: '100%',
-  borderBottom: '1px solid #ffffff22',
+  borderBottom: '1px solid $border',
 });
 
 const Section = styled(Box, {
   padding: '10px',
 
   '&:nth-child(n+2)': {
-    borderLeft: '1px solid #ffffff22',
+    borderLeft: '1px solid $border',
   },
 });
 

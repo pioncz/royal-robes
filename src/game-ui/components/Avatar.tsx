@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import AvatarUrl from '/avatar.png';
 
 const Avatar = () => {
@@ -15,15 +15,13 @@ const Root = styled('div', {
   position: 'absolute',
   left: 30,
   bottom: 30,
-  background:
-    'linear-gradient(180deg, rgb(117, 134, 192), rgb(36, 41, 58))',
+  background: 'linear-gradient(180deg, $purple300, $purple500)',
   padding: 4,
-  boxShadow:
-    'inset 2px 2px 0px rgba(255, 255, 255, 0.233), inset -2px -2px 0px rgba(0, 0, 0, 0.233)',
+  boxShadow: '$boxShadows$thin3d',
 });
 
 const Content = styled('div', {
-  background: `url(${AvatarUrl}), rgb(36, 41, 58)`,
+  background: `url(${AvatarUrl}), $purple500`,
 
   width: 120,
   height: 120,
