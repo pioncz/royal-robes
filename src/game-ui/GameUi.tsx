@@ -4,6 +4,7 @@ import GameOver from './components/GameOver';
 import Dock from './components/Dock';
 import StatisticsModal from './components/StatisticsModal';
 import QuestLogModal from './components/QuestLogModal';
+import Avatar from './components/Avatar';
 import { styled } from '@stitches/react';
 import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
@@ -28,6 +29,7 @@ const GameUi = () => {
         onStatisticsClick={() => setStatisticsOpen((v) => !v)}
         onQuestLogClick={() => setQuestLogOpen((v) => !v)}
       />
+      <Avatar />
       <AnimatePresence>
         {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}
         {gameOverVisible && <GameOver />}
