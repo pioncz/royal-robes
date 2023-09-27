@@ -1,8 +1,3 @@
-GameDb:
- - add position to update
- - save it only in 10 second delays
- - on init read position, health, gold, experience from storage
-
 Level up system:
 - which lvl for how many experience?
 - animation on lvl up

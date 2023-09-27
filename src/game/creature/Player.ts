@@ -32,7 +32,7 @@ class Player extends Creature {
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
       attack: 15,
-      defence: 4,
+      defense: 4,
     });
 
     this.$.position.set(0, 0.5, 0);
@@ -104,6 +104,8 @@ class Player extends Creature {
       gold: this.gold,
       health: this.health,
       experience: this.experience,
+      attack: this.attack,
+      defense: this.defense,
     });
   }
   restart() {
@@ -112,12 +114,7 @@ class Player extends Creature {
     this.health = 100;
     this.context?.map?.restart();
     this.alive = true;
-    this.onUpdate({
-      alive: this.alive,
-      health: this.health,
-      gold: this.gold,
-      experience: this.experience,
-    });
+    this.handleUpdate();
   }
   receiveLoot(loot: EnemyLoot) {
     this.gold += loot?.gold || 0;

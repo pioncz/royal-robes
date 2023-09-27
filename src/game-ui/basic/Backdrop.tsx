@@ -1,12 +1,13 @@
 import { styled } from '@stitches/react';
 import { motion } from 'framer-motion';
 
-const Backdrop = () => {
+const Backdrop = ({ onClick }: { onClick?: () => void }) => {
   return (
     <Root
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      onClick={onClick}
     />
   );
 };

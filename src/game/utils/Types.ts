@@ -81,6 +81,8 @@ export type PlayerStatistics = {
   gold: number;
   health: number;
   experience: number;
+  attack: number;
+  defense: number;
 };
 
 export type EnemyLoot = {

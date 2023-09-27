@@ -10,15 +10,21 @@ const Box = (
     justifyContent = 'center',
     alignItems = 'center',
     gap = 0,
+    width,
     onClick,
   }: {
     children?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
     flexDirection?: 'column' | 'row';
-    justifyContent?: 'center';
-    alignItems?: 'center';
+    justifyContent?:
+      | 'center'
+      | 'flex-start'
+      | 'flex-end'
+      | 'space-between';
+    alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch';
     gap?: number;
+    width?: string;
     onClick?: () => void;
   },
   ref: React.ForwardedRef<HTMLDivElement>,
@@ -33,6 +39,7 @@ const Box = (
         justifyContent,
         alignItems,
         gap,
+        width,
         ...style,
       }}
     >
