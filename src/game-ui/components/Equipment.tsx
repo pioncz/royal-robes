@@ -1,5 +1,5 @@
 import Border from 'game-ui/basic/Border';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import amuletBg from 'assets/eq/amulet.png';
 import armorBg from 'assets/eq/armor.png';
 import bagBg from 'assets/eq/bag.png';

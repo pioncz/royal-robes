@@ -5,7 +5,7 @@ import Dock from './components/Dock';
 import StatisticsModal from './components/StatisticsModal';
 import QuestLogModal from './components/QuestLogModal';
 import Avatar from './components/Avatar';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
 

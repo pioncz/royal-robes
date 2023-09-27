@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import { motion } from 'framer-motion';
 
 const Backdrop = ({ onClick }: { onClick?: () => void }) => {

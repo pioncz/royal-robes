@@ -90,7 +90,7 @@ const StatsSection = styled(Section, {
 });
 
 const Statistic = styled('div', {
-  fontSize: 16,
+  fontSize: '$5',
   lineHeight: '18px',
 });
 

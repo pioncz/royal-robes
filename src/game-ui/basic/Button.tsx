@@ -15,7 +15,7 @@ const Root = styled('button', {
   border: '1px solid #000',
   padding: '8px 12px',
   fontFamily: 'inherit',
-  fontSize: 18,
+  fontSize: '$4',
   background: '$purple300',
   textTransform: 'uppercase',
   boxShadow: '$boxShadows$thick3d',

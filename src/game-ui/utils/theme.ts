@@ -19,7 +19,13 @@ export const { styled, css } = createStitches({
       4: '20px',
       5: '30px',
     },
-    fontSizes: {},
+    fontSizes: {
+      1: '80px',
+      2: '64px',
+      3: '32px',
+      4: '18px',
+      5: '16px',
+    },
     lineHeights: {},
     sizes: {},
     boxShadows: {

@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import React from 'react';
 
 const Box = (

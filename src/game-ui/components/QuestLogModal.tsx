@@ -1,6 +1,6 @@
 import Modal from '../basic/Modal';
 import Button from '../basic/Button';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 
 const QuestLogModal = ({ onClose }: { onClose: () => void }) => {
   return (

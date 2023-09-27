@@ -23,7 +23,7 @@ const Root = styled('input', {
   background: '$purple450',
   padding: '8px 12px',
   fontFamily: 'inherit',
-  fontSize: 18,
+  fontSize: '$4',
   outline: 'none',
 
   '&:hover': {

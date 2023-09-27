@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import { motion } from 'framer-motion';
 import BackgroundUrl from 'assets/background.jpg';
 

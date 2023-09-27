@@ -56,14 +56,14 @@ const Root = styled(motion.div, {
 
 const Title = styled('div', {
   background: '$purple700',
-  fontSize: 32,
+  fontSize: '$3',
   borderBottom: '2px solid $border',
   flex: 0,
 });
 
 const Content = styled('div', {
   padding: '20px 10px',
-  fontSize: 22,
+  fontSize: '$4',
   flex: 1,
 });
 

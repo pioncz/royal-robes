@@ -1,6 +1,6 @@
 import { useEffect, memo, useContext } from 'react';
 import Game from './Game';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import GameDbContext from 'game-ui/contexts/GameDbContext';
 import throttle from 'lodash/throttle';
 import { PlayerStatistics, Point } from './utils/Types';

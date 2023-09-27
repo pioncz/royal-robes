@@ -1,6 +1,6 @@
 import Button from 'game-ui/basic/Button';
 import Box from 'game-ui/basic/Box';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 
 const Dock = ({
   onStatisticsClick,
