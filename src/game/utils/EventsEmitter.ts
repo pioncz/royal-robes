@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Listener = (args?: any) => void; 
+type Listener = (args?: any) => void;
 
 class EventsEmitter {
   events: Record<string, Listener[]>;
@@ -12,16 +12,16 @@ class EventsEmitter {
     if (typeof this.events[event] !== 'object') {
       this.events[event] = [];
     }
-  
+
     this.events[event].push(listener);
   }
 
-  removeListener(event: string, listener: Listener) {
+  off(event: string, listener: Listener) {
     let idx;
 
     if (typeof this.events[event] === 'object') {
       idx = this.events[event].indexOf(listener);
-  
+
       if (idx > -1) {
         this.events[event].splice(idx, 1);
       }
@@ -30,9 +30,7 @@ class EventsEmitter {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emit(event: string, ...args: any) {
-    let i,
-      listeners,
-      length;
+    let i, listeners, length;
 
     if (typeof this.events[event] === 'object') {
       listeners = this.events[event].slice();
@@ -47,7 +45,7 @@ class EventsEmitter {
   once(event: string, listener: Listener) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const g = (...args: any) => {
-      this.removeListener(event, g);
+      this.off(event, g);
       listener.apply(this, args);
     };
 

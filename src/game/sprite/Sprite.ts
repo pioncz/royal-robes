@@ -65,7 +65,7 @@ class Sprite {
   }
   play(name: string, replayTimes = 1, stopAfter = false) {
     const animation = this.spriteData?.animations.find(
-      (animation) => animation.name === name,
+      (a) => a.name === name,
     );
 
     if (!animation) {
@@ -111,7 +111,7 @@ class Sprite {
     ) {
       if (!this.animationFrames) {
         const animation = this.spriteData?.animations.find(
-          (animation) => animation.name === this.animationName,
+          (a) => a.name === this.animationName,
         );
         this.animationFrames = animation?.frames || [];
       }
