@@ -20,19 +20,40 @@ class Player extends Creature {
   light: THREE.PointLight;
   fadeLightOnDeathAnimation: Animation | null;
   gold: number;
+  level: number;
   experience: number;
 
   constructor(
     context: GameContext,
-    { name }: { name: string },
+    {
+      gold,
+      name,
+      experience,
+      level,
+      health,
+      maxHealth,
+      attack,
+      defense,
+    }: {
+      gold: number;
+      name: string;
+      experience: number;
+      level: number;
+      health: number;
+      maxHealth: number;
+      attack: number;
+      defense: number;
+    },
     onUpdate: (newStats: PlayerStatistics) => void,
   ) {
     super({
       name,
       debug: context.debug,
       maxAnisotropy: context.maxAnisotropy,
-      attack: 15,
-      defense: 4,
+      attack,
+      defense,
+      health,
+      maxHealth,
     });
 
     this.$.position.set(0, 0.5, 0);
@@ -49,8 +70,9 @@ class Player extends Creature {
     this.onUpdate = onUpdate;
     this.context = context;
     this.fadeLightOnDeathAnimation = null;
-    this.gold = 0;
-    this.experience = 0;
+    this.gold = gold;
+    this.experience = experience;
+    this.level = level;
 
     const spriteData =
       context.assetsLoader.assets[AssetNames.Nightborne];
@@ -103,9 +125,11 @@ class Player extends Creature {
       alive: this.alive,
       gold: this.gold,
       health: this.health,
+      maxHealth: this.maxHealth,
       experience: this.experience,
       attack: this.attack,
       defense: this.defense,
+      level: this.level,
     });
   }
   restart() {

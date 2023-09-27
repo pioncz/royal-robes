@@ -12,10 +12,18 @@ const GameComponent = () => {
     setGameInstance,
     setStatistics,
     setPosition,
+    statistics,
   } = useContext(GameDbContext);
 
   useEffect(() => {
-    const g = new Game({ containerId: 'game', name, position });
+    const { alive, ...constructorStatistics } = statistics; // eslint-disable-line
+
+    const g = new Game({
+      containerId: 'game',
+      name,
+      position,
+      ...constructorStatistics,
+    });
     const statsHandler = (playerStatistics: PlayerStatistics) => {
       setStatistics(playerStatistics);
     };

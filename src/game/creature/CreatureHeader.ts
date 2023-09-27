@@ -15,14 +15,16 @@ class CreatureHeader {
     maxAnisotropy,
     name,
     health,
+    maxHealth,
   }: {
     maxAnisotropy: number;
     name: string;
     health: number;
+    maxHealth: number;
   }) {
     this.name = name;
     this.health = health;
-    this.maxHealth = health;
+    this.maxHealth = maxHealth;
 
     const size = 256;
     const width = 2;

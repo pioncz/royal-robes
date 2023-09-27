@@ -80,6 +80,8 @@ export type PlayerStatistics = {
   alive: boolean;
   gold: number;
   health: number;
+  maxHealth: number;
+  level: number;
   experience: number;
   attack: number;
   defense: number;

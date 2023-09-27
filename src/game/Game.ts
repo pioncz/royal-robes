@@ -44,10 +44,24 @@ class Main extends EventsEmitted {
     containerId,
     name,
     position,
+    gold,
+    health,
+    maxHealth,
+    level,
+    experience,
+    attack,
+    defense,
   }: {
     containerId: string;
     name: string;
     position: Point;
+    gold: number;
+    health: number;
+    maxHealth: number;
+    level: number;
+    experience: number;
+    attack: number;
+    defense: number;
   }) {
     super();
     this.assetsLoader = new AssetsLoader();
@@ -80,7 +94,16 @@ class Main extends EventsEmitted {
         // Player
         this.player = new Player(
           this.context,
-          { name },
+          {
+            name,
+            experience,
+            gold,
+            health,
+            maxHealth,
+            level,
+            attack,
+            defense,
+          },
           (newStats) => {
             this.emit('playerUpdate', newStats);
           },
