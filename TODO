@@ -1,10 +1,12 @@
 Level up system:
-- which lvl for how many experience?
-- animation on lvl up
+- show avatar with lvl and lvl progress
+- lvl /experience formula: const experienceForLevel(baseExp, level) => baseExp * (Math.pow(level, 1.6))
+- animation on lvl up: text LEVEL UP + some glow/light effect?
 - reset cooldowns / hp on lvl up
 
---- lower prio / pozniej
 Npc / EnemySpawner dodane do mapy
+
+--- lower prio / pozniej
 gracz nie moze przechodzic przez potwory. Map.ts szukaj "Check creatures collision"
 przełączanie między trybem normal/debug live za pomocą ~
 npc: chodzi w kolko, jak gracz jest blisko to pokazuje dymek dialogu, jak gracz zagada, to sie zatrzyma i zacznie rozmawiac
