@@ -62,7 +62,7 @@ const Title = styled('div', {
 });
 
 const Content = styled('div', {
-  padding: '20px 10px',
+  padding: '$4 $2',
   fontSize: '$4',
   flex: 1,
 });

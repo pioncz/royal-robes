@@ -3,7 +3,7 @@ import { styled } from 'game-ui/utils/theme';
 
 const ItemsGrid = () => {
   return (
-    <Box flexDirection="row" gap={2}>
+    <Box flexDirection="row" gap="$0">
       <ItemBox />
       <ItemBox />
       <ItemBox />

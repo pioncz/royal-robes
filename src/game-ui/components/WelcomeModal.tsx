@@ -43,7 +43,7 @@ const Content = styled('div', {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: 20,
+  gap: '$4',
   flex: 1,
 });
 

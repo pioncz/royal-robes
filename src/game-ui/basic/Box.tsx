@@ -23,7 +23,7 @@ const Box = (
       | 'flex-end'
       | 'space-between';
     alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch';
-    gap?: number;
+    gap?: number | string;
     width?: string;
     onClick?: () => void;
   },
@@ -38,9 +38,11 @@ const Box = (
         flexDirection,
         justifyContent,
         alignItems,
-        gap,
         width,
         ...style,
+      }}
+      css={{
+        gap,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ export const { styled, css } = createStitches({
       border: 'rgb(255 255 255 / 13%)',
     },
     space: {
+      0: '2px',
       1: '5px',
       2: '10px',
       3: '15px',

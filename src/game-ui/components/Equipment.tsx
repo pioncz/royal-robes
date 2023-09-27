@@ -76,8 +76,7 @@ const Equipment = () => {
 const Root = styled('div', {
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: '4px',
-  width: 48 * 3 + 4 * 2 + 10,
+  gap: '$1',
   gridAutoColumns: '33%',
 });
 

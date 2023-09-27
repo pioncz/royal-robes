@@ -13,10 +13,10 @@ const Avatar = () => {
 
 const Root = styled('div', {
   position: 'absolute',
-  left: 30,
-  bottom: 30,
-  background: 'linear-gradient(180deg, $purple300, $purple500)',
-  padding: 4,
+  left: '$5',
+  bottom: '$5',
+  background: 'linear-gradient(180deg, $purple300, $purple450)',
+  padding: '$1',
   boxShadow: '$boxShadows$thin3d',
 });
 

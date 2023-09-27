@@ -21,7 +21,7 @@ const Input = ({
 const Root = styled('input', {
   border: '2px solid rgba(255, 255, 255, 0.133)',
   background: '$purple450',
-  padding: '8px 12px',
+  padding: '$1 $2',
   fontFamily: 'inherit',
   fontSize: '$4',
   outline: 'none',

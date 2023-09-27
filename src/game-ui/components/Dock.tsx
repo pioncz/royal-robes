@@ -19,7 +19,7 @@ const Dock = ({
 
 const Root = styled(Box, {
   position: 'absolute',
-  bottom: 40,
+  bottom: '$5',
   left: '50%',
   transform: 'translateX(-50%)',
 });
