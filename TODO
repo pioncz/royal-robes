@@ -1,8 +1,4 @@
-Level up system:
-- show avatar with lvl and lvl progress
-- lvl /experience formula: const experienceForLevel(baseExp, level) => baseExp * (Math.pow(level, 1.6))
-- animation on lvl up: text LEVEL UP + some glow/light effect?
-- reset cooldowns / hp on lvl up
+Hp bar animated?
 
 --- lower prio / pozniej
 

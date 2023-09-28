@@ -10,11 +10,13 @@ import capitalize from 'lodash/capitalize';
 
 const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
   const { name, statistics } = useContext(GameDbContext);
-  const { alive, ...visibleStatistics } = statistics; // eslint-disable-line
+  // eslint-disable-next-line
+  const { alive, experience, level, health, ...visibleStatistics } =
+    statistics;
 
   const stats = Object.entries(visibleStatistics).map(
     ([stat, value]) => ({
-      stat: capitalize(stat),
+      stat: stat === 'maxHealth' ? 'Health' : capitalize(stat),
       value,
     }),
   );

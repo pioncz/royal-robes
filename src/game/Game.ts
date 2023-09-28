@@ -13,7 +13,7 @@ import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
 import EventsEmitted from './utils/EventsEmitter';
 import EnemySpawner from './creature/EnemySpawner';
-import { Point } from './utils/Types';
+import { PlayerStatistics, Point } from './utils/Types';
 
 const fpsInterval = 1 / 80;
 const debug = false;
@@ -241,8 +241,8 @@ class Main extends EventsEmitted {
     this.scene.animateFinish();
   }
 
-  restart = () => {
-    this?.player?.restart();
+  restart = (statistics: PlayerStatistics) => {
+    this?.player?.restart(statistics);
   };
 
   remove = () => {

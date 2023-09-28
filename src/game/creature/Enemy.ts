@@ -50,6 +50,7 @@ class Enemy extends Creature {
       color,
       speed: 20,
       health: 20,
+      maxHealth: 20,
       attack: 10,
       defense: 1,
     });

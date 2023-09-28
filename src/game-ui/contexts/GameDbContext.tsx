@@ -23,7 +23,7 @@ const initialState: IGameDbContext = {
   statistics: {
     health: 100,
     maxHealth: 100,
-    level: 1,
+    level: 0,
     experience: 0,
     gold: 0,
     alive: true,
@@ -64,7 +64,7 @@ export const GameDbContextProvider = ({
       return;
     }
 
-    gameRef.current.restart();
+    gameRef.current.restart(initialState.statistics);
   };
 
   return (

@@ -8,6 +8,7 @@ import {
 import { type GameContext } from 'game/Game';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 import Animation from 'game/utils/Animation';
+import { getExperienceForLevel } from 'game/utils/Level';
 
 class Player extends Creature {
   state: CreatureStates;
@@ -132,20 +133,42 @@ class Player extends Creature {
       level: this.level,
     });
   }
-  restart() {
+  restart(statistics: PlayerStatistics) {
     this.state = 'idle';
     this.sprite.playContinuous('idle');
-    this.health = 100;
     this.context?.map?.restart();
     this.alive = true;
+    this.health = statistics.health;
+    this.maxHealth = statistics.maxHealth;
+    this.level = statistics.level;
+    this.experience = statistics.experience;
+    this.gold = statistics.gold;
+    this.defense = statistics.defense;
+    this.attack = statistics.attack;
+    this.creatureHeader.setHealth(this.health);
+
     this.handleUpdate();
   }
   receiveLoot(loot: EnemyLoot) {
     this.gold += loot?.gold || 0;
     this.handleUpdate();
   }
+  levelUp() {
+    this.level += 1;
+    this.health = this.maxHealth;
+    this?.creatureEffects?.add('level_up', `LEVEL UP!`, 2);
+  }
   receiveExperience(experience: number) {
     this.experience += experience;
+    let experienceForNextLevel = getExperienceForLevel(
+      this.level + 1,
+    );
+
+    while (experienceForNextLevel <= this.experience) {
+      this.levelUp();
+      experienceForNextLevel = getExperienceForLevel(this.level + 1);
+    }
+
     this.handleUpdate();
   }
   animate(delta: number) {

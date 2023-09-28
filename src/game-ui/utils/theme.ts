@@ -40,6 +40,8 @@ export const { styled, css } = createStitches({
         'inset 3px 3px 0px rgba(0, 0, 0, 0.233), inset -3px -3px 0px rgba(255, 255, 255, 0.233)',
     },
     zIndices: {},
-    transitions: {},
+    transitions: {
+      1: 'all 0.2s ease-in-out',
+    },
   },
 });

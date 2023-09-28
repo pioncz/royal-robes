@@ -34,6 +34,7 @@ const GameUi = () => {
         avatarUrl={avatar}
         name={name}
         level={statistics.level}
+        experience={statistics.experience}
       />
       <AnimatePresence>
         {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}

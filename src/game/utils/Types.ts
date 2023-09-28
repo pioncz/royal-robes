@@ -74,7 +74,10 @@ export type CreatureStates =
   | 'dying'
   | 'to_remove';
 
-export type CreatureEffectsTextTypes = 'damage' | 'experience';
+export type CreatureEffectsTextTypes =
+  | 'damage'
+  | 'experience'
+  | 'level_up';
 
 export type PlayerStatistics = {
   alive: boolean;
