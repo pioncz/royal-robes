@@ -1,5 +1,5 @@
 import Border from 'game-ui/basic/Border';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import amuletBg from 'assets/eq/amulet.png';
 import armorBg from 'assets/eq/armor.png';
 import bagBg from 'assets/eq/bag.png';
@@ -76,8 +76,7 @@ const Equipment = () => {
 const Root = styled('div', {
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: '4px',
-  width: 48 * 3 + 4 * 2 + 10,
+  gap: '$1',
   gridAutoColumns: '33%',
 });
 

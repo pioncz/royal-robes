@@ -1,23 +1,32 @@
-Level up system:
-- which lvl for how many experience?
-- animation on lvl up
-- reset cooldowns / hp on lvl up
+Hp bar animated?
 
 --- lower prio / pozniej
+
 Npc / EnemySpawner dodane do mapy
+
 gracz nie moze przechodzic przez potwory. Map.ts szukaj "Check creatures collision"
-przełączanie między trybem normal/debug live za pomocą ~
-npc: chodzi w kolko, jak gracz jest blisko to pokazuje dymek dialogu, jak gracz zagada, to sie zatrzyma i zacznie rozmawiac
-przechodzenie obok potworow powinno byc 'miekkie' jak przy scianie
-slad krwi przy atakowaniu
-noszenie equipmentu
-handlowanie z NPC
-system levelowania: jaka skala? animacja przy lvl up, reset hp
-podstawowy quest: zabij 5 potworow, zdobadz nagrode
-Mini map; Big map in the dock
-wyglad postaci: base skin (4 katy obrotu) + equipment
 potwory nie moga przechodzic przez elementy mapy
+
+przechodzenie obok potworow powinno byc 'miekkie' jak przy scianie
+
+npc: chodzi w kolko, jak gracz jest blisko to pokazuje dymek dialogu, jak gracz zagada, to sie zatrzyma i zacznie rozmawiac
+
+slad krwi przy atakowaniu
+
+noszenie equipmentu
+
+handlowanie z NPC
+
+podstawowy quest: zabij 5 potworow, zdobadz nagrode
+
+MVP mapy: mala baza, 2 rozne spawny, 2 rozne npc (handlarz, questy)
+
+Mini map; Big map in the dock
+
+Mini quest - schowana skrzynia
+
+wyglad postaci: base skin (4 katy obrotu) + equipment
+
 occlusion culling? pokaz gracza jesli przechodzi obok wysokich budynkow
-przeniesc projekt na osobne repo
-dodac jakis prosty UI?
-?sprite nie jest tak ostry,wyrazne jak sciany i podlogi
+
+Audio everywhere!!!

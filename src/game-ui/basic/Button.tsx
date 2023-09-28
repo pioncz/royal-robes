@@ -1,36 +1,32 @@
 import React from 'react';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 
 const Button = ({
   onClick,
   children,
 }: {
-    onClick: () => void,
-  children: React.ReactNode,
+  onClick: () => void;
+  children: React.ReactNode;
 }) => {
-  return (
-    <Root
-      onClick={onClick}
-    >{children}</Root>
-  )
+  return <Root onClick={onClick}>{children}</Root>;
 };
 
 const Root = styled('button', {
   border: '1px solid #000',
-  padding: '8px 12px',
+  padding: '$1 $2',
   fontFamily: 'inherit',
-  fontSize: 18,
-  background: 'rgb(117 134 192)',
+  fontSize: '$4',
+  background: '$purple300',
   textTransform: 'uppercase',
-  boxShadow: 'inset 3px 3px 0px rgba(255, 255, 255, 0.233), inset -3px -3px 0px rgba(0, 0, 0, 0.233)',
-  
+  boxShadow: '$boxShadows$thick3d',
+
   '&:hover': {
-    background: 'rgb(129 149 214)',
+    background: '$purple200',
   },
   '&:active': {
-    boxShadow: 'inset 3px 3px 0px rgba(0, 0, 0, 0.233), inset -3px -3px 0px rgba(255, 255, 255, 0.233)',
-    background: 'rgb(89 104 152)',
-  }
+    boxShadow: '$boxShadows$thick3dInverted',
+    background: '$purple400',
+  },
 });
 
 export default Button;

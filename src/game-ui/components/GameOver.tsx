@@ -1,6 +1,5 @@
-import Heading from 'game-ui/basic/Heading';
 import Box from 'game-ui/basic/Box';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import { motion } from 'framer-motion';
 
 const GameOver = () => {
@@ -19,14 +18,21 @@ const GameOver = () => {
         opacity: 0,
       }}
     >
-      <Heading>GAME OVER</Heading>
-      <Heading level={4}>Click anywhere to respawn...</Heading>
+      <Title>GAME OVER</Title>
+      <Subtitle>Click anywhere to respawn...</Subtitle>
     </Root>
   );
 };
 
 const Root = styled(motion(Box), {
   position: 'absolute',
+});
+
+const Title = styled('div', {
+  fontSize: '$1',
+});
+const Subtitle = styled('div', {
+  fontSize: '$3',
 });
 
 export default GameOver;

@@ -13,7 +13,7 @@ import Npc from './creature/Npc';
 import Enemy from './creature/Enemy';
 import EventsEmitted from './utils/EventsEmitter';
 import EnemySpawner from './creature/EnemySpawner';
-import { Point } from './utils/Types';
+import { PlayerStatistics, Point } from './utils/Types';
 
 const fpsInterval = 1 / 80;
 const debug = false;
@@ -44,10 +44,24 @@ class Main extends EventsEmitted {
     containerId,
     name,
     position,
+    gold,
+    health,
+    maxHealth,
+    level,
+    experience,
+    attack,
+    defense,
   }: {
     containerId: string;
     name: string;
     position: Point;
+    gold: number;
+    health: number;
+    maxHealth: number;
+    level: number;
+    experience: number;
+    attack: number;
+    defense: number;
   }) {
     super();
     this.assetsLoader = new AssetsLoader();
@@ -80,7 +94,16 @@ class Main extends EventsEmitted {
         // Player
         this.player = new Player(
           this.context,
-          { name },
+          {
+            name,
+            experience,
+            gold,
+            health,
+            maxHealth,
+            level,
+            attack,
+            defense,
+          },
           (newStats) => {
             this.emit('playerUpdate', newStats);
           },
@@ -218,8 +241,8 @@ class Main extends EventsEmitted {
     this.scene.animateFinish();
   }
 
-  restart = () => {
-    this?.player?.restart();
+  restart = (statistics: PlayerStatistics) => {
+    this?.player?.restart(statistics);
   };
 
   remove = () => {

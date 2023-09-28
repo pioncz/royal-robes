@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import Modal from '../basic/Modal';
 import Button from '../basic/Button';
 import Box from '../basic/Box';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import GameDbContext from '../contexts/GameDbContext';
 import Equipment from './Equipment';
 import ItemsGrid from './ItemsGrid';
@@ -10,11 +10,13 @@ import capitalize from 'lodash/capitalize';
 
 const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
   const { name, statistics } = useContext(GameDbContext);
-  const { alive, ...visibleStatistics } = statistics; // eslint-disable-line
+  // eslint-disable-next-line
+  const { alive, experience, level, health, ...visibleStatistics } =
+    statistics;
 
   const stats = Object.entries(visibleStatistics).map(
     ([stat, value]) => ({
-      stat: capitalize(stat),
+      stat: stat === 'maxHealth' ? 'Health' : capitalize(stat),
       value,
     }),
   );
@@ -35,7 +37,7 @@ const StatisticsModal = ({ onClose }: { onClose: () => void }) => {
                 <Box
                   flexDirection="row"
                   key={stat}
-                  gap={20}
+                  gap="$4"
                   justifyContent="space-between"
                   width="100%"
                 >
@@ -67,30 +69,30 @@ const StyledModal = styled(Modal, {
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 10,
-    padding: '0 0 10px',
+    gap: '$2',
+    padding: '0 0 $2',
   },
 });
 
 const SectionWrapper = styled(Box, {
   width: '100%',
-  borderBottom: '1px solid #ffffff22',
+  borderBottom: '1px solid $border',
 });
 
 const Section = styled(Box, {
-  padding: '10px',
+  padding: '$2',
 
   '&:nth-child(n+2)': {
-    borderLeft: '1px solid #ffffff22',
+    borderLeft: '1px solid $border',
   },
 });
 
 const StatsSection = styled(Section, {
-  paddingTop: 5,
+  paddingTop: '$1',
 });
 
 const Statistic = styled('div', {
-  fontSize: 16,
+  fontSize: '$5',
   lineHeight: '18px',
 });
 

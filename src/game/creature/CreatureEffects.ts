@@ -18,10 +18,10 @@ class CreatureEffects {
   constructor(maxAnisotropy: number) {
     this.maxAnisotropy = maxAnisotropy;
     this.textAnimations = [];
-    this.size = 256;
+    this.size = 512;
     this.orientation = 'right';
 
-    const geometry = new THREE.PlaneGeometry(1, 1);
+    const geometry = new THREE.PlaneGeometry(1, 2);
     const canvas = document.createElement('canvas');
     canvas.width = this.size;
     canvas.height = this.size;
@@ -50,10 +50,14 @@ class CreatureEffects {
   turn(orientation: CreatureOrientation) {
     this.orientation = orientation;
   }
-  add(type: CreatureEffectsTextTypes, value: string | number) {
+  add(
+    type: CreatureEffectsTextTypes,
+    value: string | number,
+    duration = 1,
+  ) {
     this.textAnimations.push(
       new Animation({
-        duration: 1,
+        duration,
         data: {
           type,
           value,
@@ -83,26 +87,38 @@ class CreatureEffects {
           if (finished) {
             this.textAnimations.splice(i, 1);
           } else if (type === 'damage') {
-            const y = Math.round(80 + 140 * (1 - progress));
-            const x = orientation === 'left' ? 10 : this.size - 10;
+            const y = Math.round(160 + 140 * (1 - progress));
+            const x = orientation === 'left' ? 20 : this.size - 20;
 
             this.ctx.textAlign =
               orientation === 'left' ? 'start' : 'end';
-            this.ctx.font = `72px ${FontNames.ExpressionPro}`;
+            this.ctx.font = `92px ${FontNames.ExpressionPro}`;
             this.ctx.fillStyle = '#6d0000';
             this.ctx.lineWidth = 8;
             this.ctx.strokeStyle = '#000000';
             this.ctx.strokeText(value, x, y);
             this.ctx.fillText(value, x, y);
           } else if (type === 'experience') {
-            const y = Math.round(80 + 140 * (1 - progress));
-            const x = orientation === 'left' ? 10 : this.size - 10;
+            const y = Math.round(160 + 140 * (1 - progress));
+            const x = orientation === 'left' ? 20 : this.size - 20;
             const text = `+${value}exp`;
 
             this.ctx.textAlign =
               orientation === 'left' ? 'start' : 'end';
-            this.ctx.font = `72px ${FontNames.ExpressionPro}`;
+            this.ctx.font = `92px ${FontNames.ExpressionPro}`;
             this.ctx.fillStyle = '#CECECE';
+            this.ctx.lineWidth = 8;
+            this.ctx.strokeStyle = '#000000';
+            this.ctx.strokeText(text, x, y);
+            this.ctx.fillText(text, x, y);
+          } else if (type === 'level_up') {
+            const y = Math.round(160 + 140 * (1 - progress));
+            const x = this.size / 2;
+            const text = value;
+
+            this.ctx.textAlign = 'center';
+            this.ctx.font = `92px ${FontNames.ExpressionPro}`;
+            this.ctx.fillStyle = '#FFD900';
             this.ctx.lineWidth = 8;
             this.ctx.strokeStyle = '#000000';
             this.ctx.strokeText(text, x, y);

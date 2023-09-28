@@ -12,6 +12,7 @@ export interface IGameDbContext {
   setStatistics: (newStatistics: PlayerStatistics) => void;
   position: Point;
   setPosition: (newPosition: Point) => void;
+  avatar: string;
 }
 
 const initialState: IGameDbContext = {
@@ -21,6 +22,8 @@ const initialState: IGameDbContext = {
   restart: () => {},
   statistics: {
     health: 100,
+    maxHealth: 100,
+    level: 0,
     experience: 0,
     gold: 0,
     alive: true,
@@ -30,6 +33,7 @@ const initialState: IGameDbContext = {
   setStatistics: () => {},
   position: { x: 20.5, z: 4 },
   setPosition: () => {},
+  avatar: '/avatar.png',
 };
 
 const GameDbContext = createContext(initialState);
@@ -60,7 +64,7 @@ export const GameDbContextProvider = ({
       return;
     }
 
-    gameRef.current.restart();
+    gameRef.current.restart(initialState.statistics);
   };
 
   return (
@@ -74,6 +78,7 @@ export const GameDbContextProvider = ({
         setStatistics,
         position,
         setPosition,
+        avatar: initialState.avatar,
       }}
     >
       {children}

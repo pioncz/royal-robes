@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import { motion } from 'framer-motion';
 import Backdrop from './Backdrop';
 
@@ -47,23 +47,23 @@ const Root = styled(motion.div, {
   position: 'absolute',
   width: 500,
   height: 300,
-  background: 'rgb(36 41 58)',
+  background: '$purple500',
   textAlign: 'center',
-  border: '4px solid #ffffff22',
+  border: '4px solid $border',
   display: 'flex',
   flexDirection: 'column',
 });
 
 const Title = styled('div', {
-  background: '#151822',
-  fontSize: 32,
-  borderBottom: '2px solid #ffffff22',
+  background: '$purple700',
+  fontSize: '$3',
+  borderBottom: '2px solid $border',
   flex: 0,
 });
 
 const Content = styled('div', {
-  padding: '20px 10px',
-  fontSize: 22,
+  padding: '$4 $2',
+  fontSize: '$4',
   flex: 1,
 });
 

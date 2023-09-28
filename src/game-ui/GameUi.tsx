@@ -4,12 +4,14 @@ import GameOver from './components/GameOver';
 import Dock from './components/Dock';
 import StatisticsModal from './components/StatisticsModal';
 import QuestLogModal from './components/QuestLogModal';
-import { styled } from '@stitches/react';
+import Profile from './components/Profile';
+import { styled } from 'game-ui/utils/theme';
 import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
 
 const GameUi = () => {
-  const { name, statistics, restart } = useContext(GameDbContext);
+  const { name, statistics, restart, avatar } =
+    useContext(GameDbContext);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
   const [questLogOpen, setQuestLogOpen] = useState(false);
 
@@ -27,6 +29,12 @@ const GameUi = () => {
       <Dock
         onStatisticsClick={() => setStatisticsOpen((v) => !v)}
         onQuestLogClick={() => setQuestLogOpen((v) => !v)}
+      />
+      <Profile
+        avatarUrl={avatar}
+        name={name}
+        level={statistics.level}
+        experience={statistics.experience}
       />
       <AnimatePresence>
         {welcomeModalOpen && <WelcomeModal key="welcomeModal" />}

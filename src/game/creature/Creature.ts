@@ -31,6 +31,7 @@ class Creature {
     color,
     speed = 100,
     health = 100,
+    maxHealth = 100,
     defense = 10,
     attack = 5,
     creatureEffects = true,
@@ -41,6 +42,7 @@ class Creature {
     color?: string;
     speed?: number;
     health?: number;
+    maxHealth?: number;
     defense?: number;
     attack?: number;
     creatureEffects?: boolean;
@@ -48,7 +50,7 @@ class Creature {
     this.name = name;
     this.speed = speed;
     this.health = health;
-    this.maxHealth = health;
+    this.maxHealth = maxHealth;
     this.defense = defense;
     this.attack = attack;
 
@@ -102,6 +104,7 @@ class Creature {
       maxAnisotropy,
       name,
       health,
+      maxHealth,
     });
     this.creatureHeader.$.position.set(0, 0.4, 0);
     this.$.add(this.creatureHeader.$);

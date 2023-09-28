@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import border1_11 from 'assets/borders/border1-11.png';
 import border1_12 from 'assets/borders/border1-12.png';
 import border1_13 from 'assets/borders/border1-13.png';
@@ -12,10 +12,20 @@ import border1_33 from 'assets/borders/border1-33.png';
 const variants = {
   primary: {
     background: 'rgb(234 212 170)',
-  }
+  },
 };
 
-const Border = ({ style, children, className, size = 'small' }: { className?: string, children?: React.ReactNode, size?: 'small' | 'large', style?: React.CSSProperties }) => {
+const Border = ({
+  style,
+  children,
+  className,
+  size = 'small',
+}: {
+  className?: string;
+  children?: React.ReactNode;
+  size?: 'small' | 'large';
+  style?: React.CSSProperties;
+}) => {
   return (
     <Root className={className} style={style}>
       <FrameTop size={size} />
@@ -28,7 +38,7 @@ const Border = ({ style, children, className, size = 'small' }: { className?: st
       <Corner14 size={size} />
       <Content>{children}</Content>
     </Root>
-  )
+  );
 };
 
 const Root = styled('span', {
@@ -48,9 +58,9 @@ const Frame = styled('span', {
       large: {
         width: 32,
         height: 32,
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 const FrameTop = styled(Frame, {
@@ -58,7 +68,7 @@ const FrameTop = styled(Frame, {
   left: 0,
   width: '100% !important',
   background: `url(${border1_12})`,
-  backgroundSize: 'contain'
+  backgroundSize: 'contain',
 });
 
 const FrameLeft = styled(Frame, {
@@ -66,7 +76,7 @@ const FrameLeft = styled(Frame, {
   left: 0,
   height: '100% !important',
   background: `url(${border1_21})`,
-  backgroundSize: 'contain'
+  backgroundSize: 'contain',
 });
 
 const FrameRight = styled(Frame, {
@@ -74,7 +84,7 @@ const FrameRight = styled(Frame, {
   right: 0,
   height: '100% !important',
   background: `url(${border1_23})`,
-  backgroundSize: 'contain'
+  backgroundSize: 'contain',
 });
 
 const FrameBottom = styled(Frame, {
@@ -82,7 +92,7 @@ const FrameBottom = styled(Frame, {
   left: 0,
   width: '100% !important',
   background: `url(${border1_32})`,
-  backgroundSize: 'contain'
+  backgroundSize: 'contain',
 });
 
 const Corner = styled('span', {
@@ -97,41 +107,41 @@ const Corner = styled('span', {
       large: {
         width: 32,
         height: 32,
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 const Corner11 = styled(Corner, {
   top: 0,
   left: 0,
   background: `url(${border1_11})`,
-  backgroundSize: 'cover'
+  backgroundSize: 'cover',
 });
 
 const Corner12 = styled(Corner, {
   top: 0,
   right: 0,
   background: `url(${border1_13})`,
-  backgroundSize: 'cover'
+  backgroundSize: 'cover',
 });
 
 const Corner13 = styled(Corner, {
   bottom: 0,
   left: 0,
   background: `url(${border1_31})`,
-  backgroundSize: 'cover'
+  backgroundSize: 'cover',
 });
 
 const Corner14 = styled(Corner, {
   bottom: 0,
   right: 0,
   background: `url(${border1_33})`,
-  backgroundSize: 'cover'
+  backgroundSize: 'cover',
 });
 
 const Content = styled('div', {
-  position: 'relative'
+  position: 'relative',
 });
 
 export default Border;

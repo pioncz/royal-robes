@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import Modal from '../basic/Modal';
 import Input from '../basic/Input';
 import Button from '../basic/Button';
-import { styled } from '@stitches/react';
+import { styled } from 'game-ui/utils/theme';
 import GameDbContext from '../contexts/GameDbContext';
 import Background from './Background';
 
@@ -43,7 +43,7 @@ const Content = styled('div', {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: 20,
+  gap: '$4',
   flex: 1,
 });
 
