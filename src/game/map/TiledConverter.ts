@@ -1,6 +1,6 @@
-const findPosition = (index: number) => ({});
+import { TiledMap, TilesetLink } from 'game/utils/Types';
 
-const findTileset = (id: number, tilesets: any) => {
+const findTileset = (id: number, tilesets: TilesetLink[]) => {
   for (let i = tilesets.length - 1; i > -1; i--) {
     const tileset = tilesets[i];
 
@@ -10,19 +10,23 @@ const findTileset = (id: number, tilesets: any) => {
   }
 };
 
-// eslint-disable-next-line
-const TiledConverter = (tiledMap: any) => {
-  if (!tiledMap || !tiledMap.layers || !tiledMap.tilesets) {
+const TiledConverter = (tiledMap?: TiledMap) => {
+  if (
+    !tiledMap ||
+    !tiledMap.layers ||
+    !tiledMap.tilesets ||
+    !tiledMap.width
+  ) {
     console.error(
       "Error while converting tiled map. Map doesn't exist or is broken.",
     );
 
-    return;
+    return [];
   }
+
   const { layers, tilesets, width } = tiledMap;
   const layers2 = [layers[0], layers[1]];
   const returnTiles = [];
-  let i = false;
 
   for (let layerIdx = 0; layerIdx < layers2.length; layerIdx++) {
     const layer = layers[layerIdx];
@@ -32,11 +36,6 @@ const TiledConverter = (tiledMap: any) => {
       const tileset = findTileset(tileId, tilesets);
 
       if (tileId === 0 || !tileset) continue;
-
-      if (!tileset && !i) {
-        i = true;
-        console.log(tileId, tileset, tilesets);
-      }
 
       const z = Math.floor(dataIdx / width);
       const x = dataIdx % width;

@@ -93,3 +93,20 @@ export type PlayerStatistics = {
 export type EnemyLoot = {
   gold?: number;
 };
+
+export type TilesetLink = {
+  firstgid: number;
+  source: string;
+};
+
+export type TilesetLayer = {
+  data: number[];
+  name: string;
+};
+
+export type TiledMap = {
+  width: number;
+  height: number;
+  layers: TilesetLayer[];
+  tilesets: TilesetLink[];
+};

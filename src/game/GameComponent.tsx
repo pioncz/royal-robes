@@ -41,7 +41,7 @@ const GameComponent = () => {
       g.remove();
       setGameInstance();
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   return <Root id="game" />;
 };

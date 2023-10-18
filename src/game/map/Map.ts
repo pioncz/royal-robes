@@ -8,7 +8,6 @@ import {
   type MapCell,
   type MapTile,
 } from 'game/utils/Types';
-import { MapData } from './MapData';
 import Sprite from 'game/sprite/Sprite';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 import TiledConverter from './TiledConverter';

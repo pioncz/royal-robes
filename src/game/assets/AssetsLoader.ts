@@ -1,6 +1,6 @@
 import NightbornSprite from '/sprites/nightborne.json?url';
 import { AssetNames, FontPaths } from './AssetsLoaderHelpers';
-import { SpriteData, Tileset } from 'game/utils/Types';
+import { SpriteData, Tileset, TiledMap } from 'game/utils/Types';
 import FarmTileset from '/tilesets/FarmTileset.json?url';
 import CatacombsTiles from '/tilesets/CatacombsTileset.json?url';
 import BeastWaterTileset from '/tilesets/BeastWaterTileset.json?url';
@@ -12,7 +12,7 @@ class AssetsLoader {
   assets: Record<string, SpriteData>;
   tilesets: Record<string, Tileset>;
   reject: ((value?: unknown) => void) | null = null;
-  tiledMap: any; // eslint-disable-line
+  tiledMap: TiledMap | undefined;
 
   constructor() {
     let resolveAll: ((value?: unknown) => void) | null = null;
@@ -27,7 +27,6 @@ class AssetsLoader {
     );
     this.assets = {};
     this.tilesets = {};
-    this.tiledMap = null;
 
     const spritesPromise = new Promise(
       (resolve: (value?: unknown) => void) => {
