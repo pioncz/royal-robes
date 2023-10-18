@@ -3,26 +3,31 @@ import { AssetNames, FontPaths } from './AssetsLoaderHelpers';
 import { SpriteData, Tileset } from 'game/utils/Types';
 import FarmTileset from '/tilesets/FarmTileset.json?url';
 import CatacombsTiles from '/tilesets/CatacombsTileset.json?url';
+import BeastWaterTileset from '/tilesets/BeastWaterTileset.json?url';
+import GrasslandGroundTileset from '/tilesets/GrasslandGroundTileset.json?url';
+import Map from '/maps/map.tmj?url';
 
 class AssetsLoader {
   load: Promise<unknown>;
   assets: Record<string, SpriteData>;
   tilesets: Record<string, Tileset>;
   reject: ((value?: unknown) => void) | null = null;
+  tiledMap: any; // eslint-disable-line
 
   constructor() {
-    let resolve: ((value?: unknown) => void) | null = null;
+    let resolveAll: ((value?: unknown) => void) | null = null;
     this.load = new Promise(
       (
         promiseResolve: (value?: unknown) => void,
         promiseReject: (value?: unknown) => void,
       ) => {
-        resolve = promiseResolve;
+        resolveAll = promiseResolve;
         this.reject = promiseReject;
       },
     );
     this.assets = {};
     this.tilesets = {};
+    this.tiledMap = null;
 
     const spritesPromise = new Promise(
       (resolve: (value?: unknown) => void) => {
@@ -57,6 +62,40 @@ class AssetsLoader {
       },
     );
 
+    const beastWaterTilesetPromise = new Promise(
+      (resolve: (value?: unknown) => void) => {
+        fetch(BeastWaterTileset)
+          .then((response) => response.json())
+          .then((spriteData) => {
+            this.tilesets[AssetNames.BeastWaterTileset] = spriteData;
+            resolve();
+          });
+      },
+    );
+
+    const grasslandGroundTilesetPromise = new Promise(
+      (resolve: (value?: unknown) => void) => {
+        fetch(GrasslandGroundTileset)
+          .then((response) => response.json())
+          .then((spriteData) => {
+            this.tilesets[AssetNames.GrasslandGroundTileset] =
+              spriteData;
+            resolve();
+          });
+      },
+    );
+
+    const mapPromise = new Promise(
+      (resolve: (value?: unknown) => void) => {
+        fetch(Map)
+          .then((response) => response.json())
+          .then((tiledMap) => {
+            this.tiledMap = tiledMap;
+            resolve();
+          });
+      },
+    );
+
     const fontPromises = Object.entries(FontPaths).map(
       ([fontName, fontPath]) => {
         return new Promise<void>((resolve, reject) => {
@@ -73,10 +112,13 @@ class AssetsLoader {
       spritesPromise,
       farmTilesetPromise,
       catacombTilesetPromise,
+      mapPromise,
+      beastWaterTilesetPromise,
+      grasslandGroundTilesetPromise,
       ...fontPromises,
     ]).then(() => {
-      if (resolve) {
-        resolve();
+      if (resolveAll) {
+        resolveAll();
       }
     });
   }

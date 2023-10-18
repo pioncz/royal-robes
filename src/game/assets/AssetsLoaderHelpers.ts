@@ -2,6 +2,8 @@ export enum AssetNames {
   Nightborne = 'nightborne',
   FarmTileset = 'farmTileset',
   CatacombsTileset = 'catacombsTileset',
+  BeastWaterTileset = 'beastWaterTileset',
+  GrasslandGroundTileset = 'grasslandGroundTileset',
 }
 
 export enum FontNames {

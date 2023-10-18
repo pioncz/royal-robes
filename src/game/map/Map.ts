@@ -11,6 +11,7 @@ import {
 import { MapData } from './MapData';
 import Sprite from 'game/sprite/Sprite';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
+import TiledConverter from './TiledConverter';
 
 const FloorHeight = 0.05;
 const WallHeight = 2.5;
@@ -36,7 +37,7 @@ class Map {
       onPositionUpdate: (newPosition: Point) => void;
     },
   ) {
-    this.mapData = MapData;
+    this.mapData = TiledConverter(context.assetsLoader.tiledMap);
     this.mapTiles = [];
     this.onPositionUpdate = onPositionUpdate;
 
@@ -55,8 +56,19 @@ class Map {
       context.assetsLoader.tilesets[AssetNames.FarmTileset];
     const catacombTileset =
       context.assetsLoader.tilesets[AssetNames.CatacombsTileset];
+    const beastWaterTileset =
+      context.assetsLoader.tilesets[AssetNames.BeastWaterTileset];
+    const grasslandGroundTileset =
+      context.assetsLoader.tilesets[
+        AssetNames.GrasslandGroundTileset
+      ];
     this.tilesetManager
-      .load([farmTileset, catacombTileset])
+      .load([
+        farmTileset,
+        catacombTileset,
+        beastWaterTileset,
+        grasslandGroundTileset,
+      ])
       .then(() => {
         const mapTiles = this.mapData.map((mapCell) => {
           const tile = this.tilesetManager.findTile(mapCell.id);
@@ -142,6 +154,7 @@ class Map {
         ...(!tile.texture || tile.color
           ? { color: tile.color || '#049ef4' }
           : {}),
+        transparent: true,
         shininess: 0,
         flatShading: true,
       });
