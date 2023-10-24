@@ -110,3 +110,12 @@ export type TiledMap = {
   layers: TilesetLayer[];
   tilesets: TilesetLink[];
 };
+
+export type TiledTileset = {
+  columns: number;
+  image: string;
+  imageData?: HTMLImageElement;
+  name: string;
+  tileheight: number;
+  tilewidth: number;
+};
