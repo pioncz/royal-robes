@@ -9,6 +9,7 @@ import {
   type MapTile,
   type TiledMap,
   TilesetLink,
+  TilesetLayer,
 } from 'game/utils/Types';
 import Sprite from 'game/sprite/Sprite';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
@@ -24,6 +25,7 @@ import {
 class Map {
   context: GameContext;
   tiledMap: TiledMap | undefined;
+  collisionLayer: TilesetLayer | undefined;
   sprites: Sprite[];
   $: THREE.Group;
   walls: THREE.Group;
@@ -63,6 +65,11 @@ class Map {
 
     for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
       const layer = layers[layerIdx];
+
+      if (layer.name.toLowerCase().startsWith('collision')) {
+        this.collisionLayer = layer;
+        // continue;
+      }
 
       for (let dataIdx = 0; dataIdx < layer.data.length; dataIdx++) {
         const tileId = layer.data[dataIdx];
@@ -134,7 +141,13 @@ class Map {
     this.onPositionUpdate({ x, z });
   }
   private isPositionValid(toPosition: { x: number; z: number }) {
-    return true;
+    const mapWidth = this.tiledMap?.width || 0;
+    const x = Math.floor(toPosition.x);
+    const z = Math.floor(toPosition.z);
+    const dataIdx = mapWidth * x + z;
+    const data = this.collisionLayer?.data?.[dataIdx] || 0;
+    console.log(toPosition, this.collisionLayer?.data?.[dataIdx]);
+    return data <= 0;
   }
   isPlayerInRadius(
     position: { x: number; z: number },

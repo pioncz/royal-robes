@@ -152,7 +152,6 @@ class AssetsLoader {
       mapPromise,
       ...fontPromises,
     ]).then(() => {
-      console.log(this.tiledTileset);
       if (resolveAll) {
         resolveAll();
       }
