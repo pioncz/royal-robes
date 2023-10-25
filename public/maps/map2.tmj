@@ -1,0 +1,48 @@
+{ "compressionlevel":-1,
+ "height":1,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[14, 5],
+         "height":1,
+         "id":1,
+         "name":"Water",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":2,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":19,
+ "nextobjectid":4,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.10.2",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"beast-water.tsj"
+        }, 
+        {
+         "firstgid":16,
+         "source":"grassland-ground.tsj"
+        }, 
+        {
+         "firstgid":1772,
+         "source":"UtilsTileset.tsj"
+        }, 
+        {
+         "firstgid":1804,
+         "source":"TX Plant.tsj"
+        }, 
+        {
+         "firstgid":2060,
+         "source":"TX Props.tsj"
+        }],
+ "tilewidth":32,
+ "type":"map",
+ "version":"1.10",
+ "width":2
+}

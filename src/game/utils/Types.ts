@@ -118,4 +118,5 @@ export type TiledTileset = {
   name: string;
   tileheight: number;
   tilewidth: number;
+  textures?: Record<number, THREE.CanvasTexture>;
 };

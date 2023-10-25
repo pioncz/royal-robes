@@ -7,22 +7,28 @@ import {
   type Point,
   type MapCell,
   type MapTile,
+  type TiledMap,
+  TilesetLink,
 } from 'game/utils/Types';
 import Sprite from 'game/sprite/Sprite';
 import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
 import TiledConverter from './TiledConverter';
+import {
+  findTileset,
+  findTilesetLink,
+  getTilePosition,
+} from './MapHelpers';
 
 const FloorHeight = 0.05;
 const WallHeight = 2.5;
 
 class Map {
-  mapData: MapCell[];
+  context: GameContext;
+  tiledMap: TiledMap | undefined;
   sprites: Sprite[];
   $: THREE.Group;
   walls: THREE.Group;
   floors: THREE.Group;
-  tilesetManager: TilesetManager;
-  mapTiles: MapTile[];
   initialPosition: Point;
   onPositionUpdate: (newPosition: Point) => void;
 
@@ -36,62 +42,163 @@ class Map {
       onPositionUpdate: (newPosition: Point) => void;
     },
   ) {
-    this.mapData = TiledConverter(context.assetsLoader.tiledMap);
-    this.mapTiles = [];
+    this.context = context;
+    this.tiledMap = context.assetsLoader.tiledMap;
     this.onPositionUpdate = onPositionUpdate;
-
     // Sprites to animate
     this.sprites = [];
     this.$ = new THREE.Group();
-
     this.walls = new THREE.Group();
     this.$.add(this.walls);
-
     this.floors = new THREE.Group();
     this.$.add(this.floors);
 
-    this.tilesetManager = new TilesetManager(context.maxAnisotropy);
-    const farmTileset =
-      context.assetsLoader.tilesets[AssetNames.FarmTileset];
-    const catacombTileset =
-      context.assetsLoader.tilesets[AssetNames.CatacombsTileset];
-    const beastWaterTileset =
-      context.assetsLoader.tilesets[AssetNames.BeastWaterTileset];
-    const grasslandGroundTileset =
-      context.assetsLoader.tilesets[
-        AssetNames.GrasslandGroundTileset
-      ];
-    this.tilesetManager
-      .load([
-        farmTileset,
-        catacombTileset,
-        beastWaterTileset,
-        grasslandGroundTileset,
-      ])
-      .then(() => {
-        const mapTiles = this.mapData.map((mapCell) => {
-          const tile = this.tilesetManager.findTile(mapCell.id);
-
-          if (!tile) {
-            console.error('Error, no tile with id', mapCell.id);
-          }
-
-          return { tile, cell: mapCell };
-        });
-
-        const walls = mapTiles.filter(
-          ({ tile }) => tile?.type === 'wall',
-        ) as MapTile[];
-        const floors = mapTiles.filter(
-          ({ tile }) => tile?.type === 'floor',
-        ) as MapTile[];
-
-        this.mapTiles = mapTiles.filter((p) => !!p.tile) as MapTile[];
-        this.buildWalls(walls);
-        this.buildFloors(floors);
-      });
     this.setPosition(initialPosition);
     this.initialPosition = initialPosition;
+    this.buildWorld();
+
+    // this.tilesetManager = new TilesetManager(context.maxAnisotropy);
+    // const farmTileset =
+    //   context.assetsLoader.tilesets[AssetNames.FarmTileset];
+    // const catacombTileset =
+    //   context.assetsLoader.tilesets[AssetNames.CatacombsTileset];
+    // const beastWaterTileset =
+    //   context.assetsLoader.tilesets[AssetNames.BeastWaterTileset];
+    // const grasslandGroundTileset =
+    //   context.assetsLoader.tilesets[
+    //     AssetNames.GrasslandGroundTileset
+    //   ];
+    // this.tilesetManager
+    //   .load([
+    //     farmTileset,
+    //     catacombTileset,
+    //     beastWaterTileset,
+    //     grasslandGroundTileset,
+    //   ])
+    //   .then(() => {
+    //     const mapTiles = this.mapData.map((mapCell) => {
+    //       const tile = this.tilesetManager.findTile(mapCell.id);
+
+    //       if (!tile) {
+    //         console.error('Error, no tile with id', mapCell.id);
+    //       }
+
+    //       return { tile, cell: mapCell };
+    //     });
+
+    //     const walls = mapTiles.filter(
+    //       ({ tile }) => tile?.type === 'wall',
+    //     ) as MapTile[];
+    //     const floors = mapTiles.filter(
+    //       ({ tile }) => tile?.type === 'floor',
+    //     ) as MapTile[];
+
+    //     this.mapTiles = mapTiles.filter((p) => !!p.tile) as MapTile[];
+    //     this.buildWalls(walls);
+    //     this.buildFloors(floors);
+    //   });
+  }
+  private buildWorld() {
+    if (!this.tiledMap) return;
+
+    const { layers, tilesets, width } = this.tiledMap;
+
+    for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
+      const layer = layers[layerIdx];
+
+      for (let dataIdx = 0; dataIdx < layer.data.length; dataIdx++) {
+        const tileId = layer.data[dataIdx];
+        const tilesetLink = findTilesetLink(tileId, tilesets);
+        const tileset =
+          tilesetLink?.source &&
+          this.context.assetsLoader.tiledTileset?.[
+            tilesetLink?.source
+          ];
+        const tileRelativeId = tileId - (tilesetLink?.firstgid || 0);
+
+        if (
+          tileId === 0 ||
+          !tilesetLink ||
+          !tileset ||
+          !tileset.imageData
+        ) {
+          if (tileId !== 0) {
+            console.error('Invalid tileset for tileId ', tileId);
+          }
+          continue;
+        }
+
+        if (!tileset.textures?.[tileRelativeId]) {
+          // texture
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          if (!ctx) {
+            console.error(
+              'Failed to retrieve context 2d from canvas',
+            );
+            return;
+          }
+
+          const x =
+            (tileRelativeId % tileset.columns) * tileset.tilewidth;
+          const y =
+            Math.floor(tileRelativeId / tileset.columns) *
+            tileset.tileheight;
+
+          canvas.width = tileset.tilewidth;
+          canvas.height = tileset.tileheight;
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(
+            tileset.imageData,
+            x,
+            y,
+            tileset.tilewidth,
+            tileset.tileheight,
+            0,
+            0,
+            tileset.tilewidth,
+            tileset.tileheight,
+          );
+          const newTexture = new THREE.CanvasTexture(canvas);
+          newTexture.anisotropy = this.context.maxAnisotropy;
+          newTexture.magFilter = THREE.NearestFilter;
+          newTexture.minFilter = THREE.LinearMipMapLinearFilter;
+
+          if (!tileset.textures) {
+            tileset.textures = {};
+          }
+
+          tileset.textures[tileRelativeId] = newTexture;
+          // texture end
+        }
+        const texture = tileset.textures[tileRelativeId];
+
+        // mesh
+        const geometryPlane = new THREE.BoxGeometry(
+          1,
+          FloorHeight,
+          1,
+        );
+        const materialPlane = new THREE.MeshPhongMaterial({
+          map: texture,
+          transparent: true,
+          shininess: 0,
+          flatShading: true,
+        });
+        const meshPosition = getTilePosition(
+          dataIdx,
+          width,
+          layerIdx,
+        );
+        const floor = new THREE.Mesh(geometryPlane, materialPlane);
+        floor.position.x = meshPosition.x + 0.5;
+        floor.position.y = meshPosition.y - FloorHeight;
+        floor.position.z = meshPosition.z + 0.5;
+        this.floors.add(floor);
+        // mesh end
+      }
+    }
   }
   private buildWalls(mapTiles: MapTile[]) {
     mapTiles.forEach(({ cell, tile }) => {
@@ -166,9 +273,9 @@ class Map {
     });
   }
   private getPosTileObjectByPosition(x: number, z: number) {
-    return this.mapTiles.filter(
-      ({ cell }) => cell.x === x && cell.z === z,
-    );
+    // return this.mapTiles.filter(
+    //   ({ cell }) => cell.x === x && cell.z === z,
+    // );
   }
   private getPosTileObjectsByRange(
     x1: number,
@@ -176,75 +283,17 @@ class Map {
     z1: number,
     z2: number,
   ) {
-    return this.mapTiles.filter(
-      ({ cell }) =>
-        cell.x >= x1 && cell.x <= x2 && cell.z >= z1 && cell.z <= z2,
-    );
+    // return this.mapTiles.filter(
+    //   ({ cell }) =>
+    //     cell.x >= x1 && cell.x <= x2 && cell.z >= z1 && cell.z <= z2,
+    // );
   }
   private setPosition({ x, z }: { x: number; z: number }) {
     this.$.position.set(-x, 0, -z);
     this.onPositionUpdate({ x, z });
   }
   private isPositionValid(toPosition: { x: number; z: number }) {
-    const floorDataObjects = this.getPosTileObjectByPosition(
-      Math.floor(toPosition.x),
-      Math.floor(toPosition.z),
-    ).filter((obj) => obj.tile.type === 'floor');
-
-    // Fail fast if there is no floor
-    if (!floorDataObjects.length) {
-      return false;
-    }
-
-    // Check walls collision
-    let isValid = true;
-    // Get wall objects around toPosition (3x3 square)
-    const x1 = Math.floor(toPosition.x) - 1;
-    const x2 = Math.floor(toPosition.x) + 1;
-    const z1 = Math.floor(toPosition.z) - 1;
-    const z2 = Math.floor(toPosition.z) + 1;
-
-    const wallDataObjects = this.getPosTileObjectsByRange(
-      x1,
-      x2,
-      z1,
-      z2,
-    ).filter((obj) => obj.tile.type === 'wall' && !obj.tile.walkable);
-
-    if (wallDataObjects.length) {
-      wallDataObjects.forEach(({ cell }) => {
-        if (cell.r === 90) {
-          if (
-            Math.abs(cell.x - toPosition.x) < 0.6 &&
-            toPosition.z + 0.5 >= cell.z &&
-            toPosition.z - 1.5 <= cell.z
-          ) {
-            isValid = false;
-          }
-        } else {
-          if (
-            Math.abs(cell.z - toPosition.z) < 0.6 &&
-            toPosition.x + 0.5 >= cell.x &&
-            toPosition.x - 1.5 <= cell.x
-          ) {
-            isValid = false;
-          }
-        }
-      });
-    }
-
-    // Check creatures collision
-    // this.creaturesGroup.children.forEach((creature) => {
-    //   const a = toPosition.x - creature.position.x;
-    //   const b = toPosition.z - creature.position.z;
-    //   const distance = Math.sqrt(a * a + b * b);
-
-    //   if (distance < 1) {
-    //     isValid = false;
-    //   }
-    // });
-
-    return isValid;
+    return true;
   }
   isPlayerInRadius(
     position: { x: number; z: number },
