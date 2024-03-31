@@ -144,9 +144,9 @@ class Map {
     const mapWidth = this.tiledMap?.width || 0;
     const x = Math.floor(toPosition.x);
     const z = Math.floor(toPosition.z);
-    const dataIdx = mapWidth * x + z;
+    const dataIdx = mapWidth * z + x;
     const data = this.collisionLayer?.data?.[dataIdx] || 0;
-    console.log(toPosition, this.collisionLayer?.data?.[dataIdx]);
+    console.log(data);
     return data <= 0;
   }
   isPlayerInRadius(
