@@ -5,6 +5,7 @@ import Dock from './components/Dock';
 import StatisticsModal from './components/StatisticsModal';
 import QuestLogModal from './components/QuestLogModal';
 import Profile from './components/Profile';
+import Debug from './components/Debug';
 import { styled } from 'game-ui/utils/theme';
 import { AnimatePresence } from 'framer-motion';
 import GameDbContext from './contexts/GameDbContext';
@@ -46,6 +47,7 @@ const GameUi = () => {
           <QuestLogModal onClose={() => setQuestLogOpen(false)} />
         )}
       </AnimatePresence>
+      <Debug />
     </Root>
   );
 };

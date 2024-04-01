@@ -16,7 +16,7 @@ import EnemySpawner from './creature/EnemySpawner';
 import { PlayerStatistics, Point } from './utils/Types';
 
 const fpsInterval = 1 / 80;
-const debug = true;
+const debug = window.localStorage.getItem('debug') === 'true';
 
 export type GameContext = {
   debug: boolean;

@@ -68,7 +68,9 @@ class Map {
 
       if (layer.name.toLowerCase().startsWith('collision')) {
         this.collisionLayer = layer;
-        // continue;
+        if (!this.context.debug) {
+          continue;
+        }
       }
 
       for (let dataIdx = 0; dataIdx < layer.data.length; dataIdx++) {
