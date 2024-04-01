@@ -5,19 +5,13 @@ import { getMoveStepForSpeed } from 'game/creature/CreatureHelpers';
 import { type GameContext } from 'game/Game';
 import {
   type Point,
-  type MapCell,
-  type MapTile,
   type TiledMap,
-  TilesetLink,
   TilesetLayer,
 } from 'game/utils/Types';
 import Sprite from 'game/sprite/Sprite';
-import { AssetNames } from 'game/assets/AssetsLoaderHelpers';
-import TiledConverter from './TiledConverter';
 import {
   createTextureFromTileset,
   createTileMesh,
-  findTileset,
   findTilesetLink,
   getTilePosition,
 } from './MapHelpers';
@@ -122,22 +116,6 @@ class Map {
       }
     }
   }
-  private getPosTileObjectByPosition(x: number, z: number) {
-    // return this.mapTiles.filter(
-    //   ({ cell }) => cell.x === x && cell.z === z,
-    // );
-  }
-  private getPosTileObjectsByRange(
-    x1: number,
-    x2: number,
-    z1: number,
-    z2: number,
-  ) {
-    // return this.mapTiles.filter(
-    //   ({ cell }) =>
-    //     cell.x >= x1 && cell.x <= x2 && cell.z >= z1 && cell.z <= z2,
-    // );
-  }
   private setPosition({ x, z }: { x: number; z: number }) {
     this.$.position.set(-x, 0, -z);
     this.onPositionUpdate({ x, z });
@@ -148,7 +126,6 @@ class Map {
     const z = Math.floor(toPosition.z);
     const dataIdx = mapWidth * z + x;
     const data = this.collisionLayer?.data?.[dataIdx] || 0;
-    console.log(data);
     return data <= 0;
   }
   isPlayerInRadius(

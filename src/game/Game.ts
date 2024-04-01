@@ -114,7 +114,7 @@ class Main extends EventsEmitted {
         // Npc
         this.npc = new Npc(this.context, {
           color: '#00ff00',
-          position: { x: 13, y: 0.5, z: 91 },
+          position: { x: 23, y: 0.5, z: 1 },
         });
         this.map.$.add(this.npc.$);
 
@@ -122,7 +122,7 @@ class Main extends EventsEmitted {
           amount: 3,
           radius: 2,
           delay: 5,
-          origin: { x: 38, z: 92 },
+          origin: { x: 28, z: 2 },
         });
 
         this.loadingAssets = false;

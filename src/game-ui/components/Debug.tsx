@@ -6,7 +6,6 @@ const Component = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
-      console.log(e.key);
       if (e.key === '`') {
         window.localStorage.setItem('debug', (!debug).toString());
         window.location.reload();
