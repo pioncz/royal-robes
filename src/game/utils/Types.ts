@@ -50,19 +50,7 @@ export type Tileset = {
   asset?: HTMLImageElement;
 };
 
-export type MapCell = {
-  x: number;
-  y: number;
-  z: number;
-  id: string;
-  r?: number;
-};
-
 export type CreatureOrientation = 'left' | 'right';
-
-export type MapSize = { x: number; z: number; y?: number };
-
-export type MapTile = { tile: Tile; cell: MapCell };
 
 export type CreatureStates =
   | 'idle'

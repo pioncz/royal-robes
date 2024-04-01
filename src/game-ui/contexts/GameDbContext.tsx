@@ -3,7 +3,7 @@ import { useStorage } from 'game-ui/utils/useStorage';
 import Game from 'game/Game';
 import { type PlayerStatistics, type Point } from 'game/utils/Types';
 
-export interface IGameDbContext {
+interface IGameDbContext {
   name: string;
   setName: (newValue: string) => void;
   setGameInstance: (game?: Game) => void;

@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import TilesetManager from './TilesetManager';
 import { pointInDirection } from 'game/utils/Math';
 import { getMoveStepForSpeed } from 'game/creature/CreatureHelpers';
 import { type GameContext } from 'game/Game';

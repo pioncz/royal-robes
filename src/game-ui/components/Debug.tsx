@@ -1,5 +1,5 @@
 import { styled } from '@stitches/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Component = () => {
   const debug = window.localStorage.getItem('debug') === 'true';
@@ -11,7 +11,7 @@ const Component = () => {
         window.location.reload();
       }
     });
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <>
