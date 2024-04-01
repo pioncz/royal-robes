@@ -1,32 +1,12 @@
-Hp bar animated?
+czy potrzebujemy TiledConverter, TilesetManager?
+Remove old types
 
---- lower prio / pozniej
+Co jest walkable a co nie?
+Spawny gracza, mobow, npc wrzucic do mapy
+Obiekty: krzewy i drzewa
 
+Naprawić typy
+Przejść na format Tiled dla tilesetów
+Sprawdzić co mozna uproscic - flow od zaladowania tilesetu do stworzenia obiektu na mapie. Zakładam ze teraz nie jest optymalnie
 Npc / EnemySpawner dodane do mapy
-
-gracz nie moze przechodzic przez potwory. Map.ts szukaj "Check creatures collision"
-potwory nie moga przechodzic przez elementy mapy
-
-przechodzenie obok potworow powinno byc 'miekkie' jak przy scianie
-
-npc: chodzi w kolko, jak gracz jest blisko to pokazuje dymek dialogu, jak gracz zagada, to sie zatrzyma i zacznie rozmawiac
-
-slad krwi przy atakowaniu
-
-noszenie equipmentu
-
-handlowanie z NPC
-
-podstawowy quest: zabij 5 potworow, zdobadz nagrode
-
-MVP mapy: mala baza, 2 rozne spawny, 2 rozne npc (handlarz, questy)
-
-Mini map; Big map in the dock
-
-Mini quest - schowana skrzynia
-
-wyglad postaci: base skin (4 katy obrotu) + equipment
-
-occlusion culling? pokaz gracza jesli przechodzi obok wysokich budynkow
-
-Audio everywhere!!!
+Player default position dodane do mapy

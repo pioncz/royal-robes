@@ -2,13 +2,13 @@
   "assetUrl": "tilesets/catacombs.png",
   "tiles": [
     {
-      "id": "c1",
+      "id": "c0",
       "frame": { "x": 90, "y": 115 },
       "frameSize": { "width": 50, "height": 70 },
       "type": "wall"
     },
     {
-      "id": "c2",
+      "id": "c1",
       "frames": [
         { "x": 0, "y": 588 },
         { "x": 7, "y": 588 },
@@ -26,26 +26,26 @@
       "walkable": true
     },
     {
-      "id": "c3",
+      "id": "c2",
       "frame": { "x": 148, "y": 123 },
       "frameSize": { "width": 25, "height": 65 },
       "size": { "width": 0.5 },
       "type": "wall"
     },
     {
-      "id": "f1",
+      "id": "c3",
       "frame": { "x": 600, "y": 250 },
       "frameSize": { "width": 50, "height": 70 },
       "type": "floor"
     },
     {
-      "id": "f2",
+      "id": "c4",
       "frame": { "x": 650, "y": 267 },
       "frameSize": { "width": 50, "height": 70 },
       "type": "floor"
     },
     {
-      "id": "f3",
+      "id": "c5",
       "frame": { "x": 722, "y": 270 },
       "frameSize": { "width": 50, "height": 70 },
       "type": "floor"
