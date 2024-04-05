@@ -56,6 +56,40 @@ class Map {
 
     const { layers, tilesets, width } = this.tiledMap;
 
+    const objectRoots: Record<string, string> = {};
+    const objectDefinitions = layers.find(
+      (l) => l.name === 'Objects' && l.type === 'group',
+    );
+    for (
+      let objectIdx = 0;
+      objectIdx < (objectDefinitions?.layers?.length || 0);
+      objectIdx++
+    ) {
+      const objectLayer = objectDefinitions?.layers?.[objectIdx];
+      if (!objectLayer) {
+        continue;
+      }
+      const objectName = objectLayer.name;
+      const tileLayer = objectLayer.layers?.find(
+        (l) => l.name !== 'Root',
+      );
+      const rootLayer = objectLayer.layers?.find(
+        (l) => l.name === 'Root',
+      );
+      const rootDataId = rootLayer?.data?.findIndex((d) => d > 0);
+      const tileId =
+        rootDataId !== undefined && rootDataId > -1
+          ? rootLayer?.data?.[rootDataId]
+          : undefined;
+      if (!tileLayer || !rootLayer || !tileId || !tileId) {
+        continue;
+      }
+      objectRoots[tileId] = {
+        name: objectName,
+        data: tileLayer.data,
+      };
+    }
+    console.log(objectRoots);
     for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
       const layer = layers[layerIdx];
 
@@ -66,52 +100,80 @@ class Map {
         }
       }
 
-      for (let dataIdx = 0; dataIdx < layer.data.length; dataIdx++) {
-        const tileId = layer.data[dataIdx];
-        const tilesetLink = findTilesetLink(tileId, tilesets);
-        const tileset =
-          tilesetLink?.source &&
-          this.context.assetsLoader.tiledTileset?.[
-            tilesetLink?.source
-          ];
-        const tileRelativeId = tileId - (tilesetLink?.firstgid || 0);
+      if (layer?.data?.length === undefined) {
+        continue;
+      }
 
-        if (
-          tileId === 0 ||
-          !tilesetLink ||
-          !tileset ||
-          !tileset.imageData
+      if (layer.name.toLowerCase().startsWith('object')) {
+        for (
+          let dataIdx = 0;
+          dataIdx < layer.data.length;
+          dataIdx++
         ) {
-          if (tileId !== 0) {
-            console.error('Invalid tileset for tileId ', tileId);
-          }
-          continue;
-        }
+          const tileId: number = layer.data[dataIdx];
+          const tiledObject = objectRoots['' + tileId];
 
-        if (!tileset.textures?.[tileRelativeId]) {
-          const newTexture = createTextureFromTileset({
-            maxAnisotropy: this.context.maxAnisotropy,
-            tileset,
-            tileId: tileRelativeId,
+          if (tiledObject) {
+            console.log(
+              'Object found',
+              tiledObject.name,
+              tiledObject.data,
+            );
+          }
+        }
+      } else {
+        for (
+          let dataIdx = 0;
+          dataIdx < layer.data.length;
+          dataIdx++
+        ) {
+          const tileId: number = layer.data[dataIdx];
+          const tilesetLink = findTilesetLink(tileId, tilesets);
+          const tileset =
+            tilesetLink?.source &&
+            this.context.assetsLoader.tiledTileset?.[
+              tilesetLink?.source
+            ];
+          const tileRelativeId =
+            tileId - (tilesetLink?.firstgid || 0);
+
+          if (
+            tileId === 0 ||
+            !tilesetLink ||
+            !tileset ||
+            !tileset.imageData
+          ) {
+            if (tileId !== 0) {
+              console.error('Invalid tileset for tileId ', tileId);
+            }
+            continue;
+          }
+
+          if (!tileset.textures?.[tileRelativeId]) {
+            const newTexture = createTextureFromTileset({
+              maxAnisotropy: this.context.maxAnisotropy,
+              tileset,
+              tileId: tileRelativeId,
+            });
+
+            if (!tileset.textures) {
+              tileset.textures = {};
+            }
+
+            if (newTexture) {
+              tileset.textures[tileRelativeId] = newTexture;
+            }
+          }
+          const texture = tileset.textures[tileRelativeId];
+          if (!texture) return;
+          const position = getTilePosition(dataIdx, width, layerIdx);
+          const mesh = createTileMesh({
+            texture,
+            position,
           });
 
-          if (!tileset.textures) {
-            tileset.textures = {};
-          }
-
-          if (newTexture) {
-            tileset.textures[tileRelativeId] = newTexture;
-          }
+          this.floors.add(mesh);
         }
-        const texture = tileset.textures[tileRelativeId];
-        if (!texture) return;
-        const position = getTilePosition(dataIdx, width, layerIdx);
-        const mesh = createTileMesh({
-          texture,
-          position,
-        });
-
-        this.floors.add(mesh);
       }
     }
   }
