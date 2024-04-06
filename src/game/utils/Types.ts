@@ -88,8 +88,12 @@ export type TilesetLink = {
 };
 
 export type TilesetLayer = {
-  data: number[];
+  data?: number[];
+  layers?: TilesetLayer[];
   name: string;
+  type?: 'tilelayer' | 'group';
+  width?: number;
+  height?: number;
 };
 
 export type TiledMap = {
@@ -97,6 +101,8 @@ export type TiledMap = {
   height: number;
   layers: TilesetLayer[];
   tilesets: TilesetLink[];
+  tilewidth: number;
+  tileheight: number;
 };
 
 export type TiledTileset = {

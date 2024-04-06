@@ -1,8 +1,8 @@
-Spawny gracza, mobow, npc wrzucic do mapy
-Obiekty: krzewy i drzewa
+Czy kazdy SQM to nowy obiekt / nowa textura? sprobuj z 1 textura
+Mało FPS. Jak powyższe nie zadziała to trzeba pokombinować
+Wyprostować mapę
 
-Naprawić typy
+Spawny gracza, mobow, npc wrzucic do mapy
+
 Przejść na format Tiled dla tilesetów
 Sprawdzić co mozna uproscic - flow od zaladowania tilesetu do stworzenia obiektu na mapie. Zakładam ze teraz nie jest optymalnie
-Npc / EnemySpawner dodane do mapy
-Player default position dodane do mapy
