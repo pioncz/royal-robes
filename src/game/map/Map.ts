@@ -14,6 +14,7 @@ import {
   findTilesetLink,
   getTilePosition,
 } from './MapHelpers';
+import TiledObject from './TiledObject';
 
 class Map {
   context: GameContext;
@@ -119,6 +120,15 @@ class Map {
               tiledObject.name,
               tiledObject.data,
             );
+            const position = getTilePosition(
+              dataIdx,
+              width,
+              layerIdx,
+            );
+            const newObject = new TiledObject(this.context, {
+              position,
+            });
+            this.$.add(newObject.$);
           }
         }
       } else {
