@@ -11,6 +11,7 @@ import Sprite from 'game/sprite/Sprite';
 import {
   createTextureFromTileset,
   createTileMesh,
+  cropLayerData,
   findTilesetLink,
   getTilePosition,
 } from './MapHelpers';
@@ -57,7 +58,7 @@ class Map {
 
     const { layers, tilesets, width } = this.tiledMap;
 
-    const objectRoots: Record<string, string> = {};
+    const objectRoots: Record<string, TilesetLayer> = {};
     const objectDefinitions = layers.find(
       (l) => l.name === 'Objects' && l.type === 'group',
     );
@@ -82,15 +83,33 @@ class Map {
         rootDataId !== undefined && rootDataId > -1
           ? rootLayer?.data?.[rootDataId]
           : undefined;
-      if (!tileLayer || !rootLayer || !tileId || !tileId) {
+      const nameParts = tileLayer?.name?.split('_') || [];
+      const layerWidth = Number(nameParts?.[1]) || 0;
+      const layerHeight = Number(nameParts?.[2]) || 0;
+      const croppedData = cropLayerData(
+        tileLayer?.data,
+        width,
+        layerWidth,
+        layerHeight,
+      );
+      if (
+        !tileLayer ||
+        !rootLayer ||
+        !tileId ||
+        !tileId ||
+        !layerWidth ||
+        !layerHeight
+      ) {
         continue;
       }
       objectRoots[tileId] = {
         name: objectName,
-        data: tileLayer.data,
+        data: croppedData,
+        width: layerWidth,
+        height: layerHeight,
       };
     }
-    console.log(objectRoots);
+
     for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
       const layer = layers[layerIdx];
 
@@ -115,11 +134,6 @@ class Map {
           const tiledObject = objectRoots['' + tileId];
 
           if (tiledObject) {
-            console.log(
-              'Object found',
-              tiledObject.name,
-              tiledObject.data,
-            );
             const position = getTilePosition(
               dataIdx,
               width,

@@ -95,3 +95,24 @@ export const createTileMesh = ({
 
   return floor;
 };
+
+export const cropLayerData = (
+  layerData: number[] | undefined,
+  width: number,
+  cropWidth: number,
+  cropHeight: number,
+) => {
+  let croppedData: number[] = [];
+
+  if (!layerData) {
+    return [];
+  }
+
+  for (let i = 0; i < cropHeight; i++) {
+    croppedData = [
+      ...croppedData,
+      ...layerData.slice(i * width, i * width + cropWidth),
+    ];
+  }
+  return croppedData;
+};

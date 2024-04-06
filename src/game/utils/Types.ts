@@ -91,7 +91,9 @@ export type TilesetLayer = {
   data?: number[];
   layers?: TilesetLayer[];
   name: string;
-  type: 'tilelayer' | 'group';
+  type?: 'tilelayer' | 'group';
+  width?: number;
+  height?: number;
 };
 
 export type TiledMap = {
