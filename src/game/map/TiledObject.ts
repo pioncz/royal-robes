@@ -30,6 +30,26 @@ class TiledObject {
     this.context = context;
 
     const canvas = document.createElement('canvas');
+    const newTexture = new THREE.CanvasTexture(canvas);
+    newTexture.anisotropy = context.maxAnisotropy;
+    newTexture.magFilter = THREE.NearestFilter;
+    newTexture.minFilter = THREE.LinearMipMapLinearFilter;
+
+    const geometrySprite = new THREE.PlaneGeometry(width, height);
+    const materialSprite = new THREE.MeshBasicMaterial({
+      map: newTexture,
+      transparent: true,
+      opacity: 1.0,
+      side: THREE.DoubleSide,
+      depthTest: false,
+    });
+    this.$ = new THREE.Mesh(geometrySprite, materialSprite);
+    this.$.position.set(
+      position.x + 0.5,
+      height / 2 - 0.5,
+      position.z + 0.5,
+    );
+
     const ctx = canvas.getContext('2d');
     canvas.width = tilewidth * width;
     canvas.height = tileheight * height;
@@ -74,26 +94,6 @@ class TiledObject {
         );
       }
     }
-
-    const newTexture = new THREE.CanvasTexture(canvas);
-    newTexture.anisotropy = context.maxAnisotropy;
-    newTexture.magFilter = THREE.NearestFilter;
-    newTexture.minFilter = THREE.LinearMipMapLinearFilter;
-
-    const geometrySprite = new THREE.PlaneGeometry(width, height);
-    const materialSprite = new THREE.MeshBasicMaterial({
-      map: newTexture,
-      transparent: true,
-      opacity: 1.0,
-      side: THREE.DoubleSide,
-      depthTest: false,
-    });
-    this.$ = new THREE.Mesh(geometrySprite, materialSprite);
-    this.$.position.set(
-      position.x + 0.5,
-      height / 2,
-      position.z + 0.5,
-    );
   }
   animate() {}
 }
