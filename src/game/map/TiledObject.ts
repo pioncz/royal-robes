@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GameContext } from 'game/Game';
-import { Point } from 'game/utils/Types';
+import { Point, TilesetLink } from 'game/utils/Types';
+import { findTilesetLink } from './MapHelpers';
 
 class TiledObject {
   $: THREE.Mesh;
@@ -10,22 +11,89 @@ class TiledObject {
     context: GameContext,
     {
       position,
+      tilewidth,
+      tileheight,
+      width = 0,
+      height = 0,
+      data,
+      tilesets,
     }: {
       position: Point;
+      tilewidth: number;
+      tileheight: number;
+      width?: number;
+      height?: number;
+      data?: number[];
+      tilesets: TilesetLink[];
     },
   ) {
     this.context = context;
 
-    const geometrySprite = new THREE.PlaneGeometry(1, 2);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = tilewidth * width;
+    canvas.height = tileheight * height;
+    if (!ctx) {
+      console.error('Failed to retrieve context 2d from canvas');
+      return;
+    }
+    ctx.imageSmoothingEnabled = false;
+
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        const tileId: number = data[i];
+        const tilesetLink = findTilesetLink(tileId, tilesets);
+        const tileset =
+          tilesetLink?.source &&
+          this.context.assetsLoader.tiledTileset?.[
+            tilesetLink?.source
+          ];
+        const tileRelativeId = tileId - (tilesetLink?.firstgid || 0);
+
+        if (!tileset || !tileset.imageData) {
+          continue;
+        }
+
+        const tilesetX =
+          (tileRelativeId % tileset.columns) * tilewidth;
+        const tilesetY =
+          Math.floor(tileRelativeId / tileset.columns) * tileheight;
+        const destinationX = (i % width) * tilewidth;
+        const destinationY = Math.floor(i / width) * tileheight;
+
+        ctx.drawImage(
+          tileset.imageData,
+          tilesetX,
+          tilesetY,
+          tileset.tilewidth,
+          tileset.tileheight,
+          destinationX,
+          destinationY,
+          tileset.tilewidth,
+          tileset.tileheight,
+        );
+      }
+    }
+
+    const newTexture = new THREE.CanvasTexture(canvas);
+    newTexture.anisotropy = context.maxAnisotropy;
+    newTexture.magFilter = THREE.NearestFilter;
+    newTexture.minFilter = THREE.LinearMipMapLinearFilter;
+
+    const geometrySprite = new THREE.PlaneGeometry(width, height);
     const materialSprite = new THREE.MeshBasicMaterial({
-      color: 'red',
+      map: newTexture,
       transparent: true,
       opacity: 1.0,
       side: THREE.DoubleSide,
       depthTest: false,
     });
     this.$ = new THREE.Mesh(geometrySprite, materialSprite);
-    this.$.position.set(position.x + 0.5, 0.5, position.z + 0.5);
+    this.$.position.set(
+      position.x + 0.5,
+      height / 2,
+      position.z + 0.5,
+    );
   }
   animate() {}
 }

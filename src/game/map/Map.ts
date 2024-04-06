@@ -56,7 +56,8 @@ class Map {
   private buildWorld() {
     if (!this.tiledMap) return;
 
-    const { layers, tilesets, width } = this.tiledMap;
+    const { layers, tilesets, width, tileheight, tilewidth } =
+      this.tiledMap;
 
     const objectRoots: Record<string, TilesetLayer> = {};
     const objectDefinitions = layers.find(
@@ -141,6 +142,12 @@ class Map {
             );
             const newObject = new TiledObject(this.context, {
               position,
+              tileheight,
+              tilewidth,
+              width: tiledObject.width,
+              height: tiledObject.height,
+              data: tiledObject.data,
+              tilesets,
             });
             this.$.add(newObject.$);
           }

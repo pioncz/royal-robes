@@ -101,6 +101,8 @@ export type TiledMap = {
   height: number;
   layers: TilesetLayer[];
   tilesets: TilesetLink[];
+  tilewidth: number;
+  tileheight: number;
 };
 
 export type TiledTileset = {
