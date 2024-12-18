@@ -1,27 +1,16 @@
-# React + TypeScript + Vite
+# Royal Robes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is an early attempt to build 2.5D RPG game. Map is built with Tiled and converted to JSON. Object collision with map elements is not finished yet.
+Player can move around and use spacebar to attack enemies that spawn north of the player. 
+There is an NPC on the west south. He has only one feature - stops movement when player is close enough.
+There is some basic UI with player level, nickname, health, avatar and player statistics.
+Animations are made from srpites. By deafault the game opens in the debug mode.
 
-Currently, two official plugins are available:
+![Screenshot](/ss1.png?raw=true "Screenshot 1")
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How to run
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```bash
+yarn install
+yarn start
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
