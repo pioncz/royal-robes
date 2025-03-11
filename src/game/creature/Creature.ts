@@ -55,7 +55,7 @@ class Creature {
     this.attack = attack;
 
     this.$ = new THREE.Group();
-    this.$.rotation.y = -Math.PI / 4;
+    this.$.rotation.y = Math.PI / 4;
 
     const canvas = document.createElement('canvas');
     const texture = new THREE.CanvasTexture(canvas);
