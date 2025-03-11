@@ -52,7 +52,7 @@ class Scene {
       3 * x,
       -3 * x,
       -15.01,
-      20,
+      30,
     );
 
     // Set camera to true isometric position
