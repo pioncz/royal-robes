@@ -16,16 +16,24 @@ export const findTilesetLink = (
   }
 };
 
+/**
+ * Get the position for a tile in the isometric view
+ */
 export const getTilePosition = (
   idx: number,
   width: number,
   layerId: number,
-) =>
-  new THREE.Vector3(
-    idx % width,
+) => {
+  const tileX = idx % width;
+  const tileZ = Math.floor(idx / width);
+  
+  // Y position is used for stacking different layers
+  return new THREE.Vector3(
+    tileX,
     0.0001 * layerId,
-    Math.floor(idx / width),
+    tileZ
   );
+};
 
 export const createTextureFromTileset = ({
   maxAnisotropy,
@@ -74,6 +82,9 @@ export const createTextureFromTileset = ({
   return newTexture;
 };
 
+/**
+ * Create a mesh for a tile with proper isometric positioning
+ */
 export const createTileMesh = ({
   texture,
   position,
@@ -89,8 +100,10 @@ export const createTileMesh = ({
     flatShading: true,
   });
   const floor = new THREE.Mesh(geometryPlane, materialPlane);
+  
+  // Position the tile, adding 0.5 to center it in its grid space
   floor.position.x = position.x + 0.5;
-  floor.position.y = position.y - FloorHeight;
+  floor.position.y = position.y - FloorHeight / 2; // Adjust Y position so bottom of box is at y level
   floor.position.z = position.z + 0.5;
 
   return floor;

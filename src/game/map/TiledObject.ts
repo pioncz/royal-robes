@@ -49,6 +49,7 @@ class TiledObject {
       height / 2 - 0.5,
       position.z + 0.5,
     );
+    this.$.rotation.y = Math.PI / 4;
 
     const ctx = canvas.getContext('2d');
     canvas.width = tilewidth * width;
