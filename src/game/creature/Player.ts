@@ -59,7 +59,7 @@ class Player extends Creature {
 
     this.$.position.set(0, 0.5, 0);
 
-    this.light = new THREE.PointLight('#F9DDFF', 1, 120, 1);
+    this.light = new THREE.PointLight('#F9DDFF', 0.4, 8, 0.1);
     this.light.position.set(0, 0.8, 0);
     this.$.add(this.light);
 

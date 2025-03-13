@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GameContext } from 'game/Game';
 import { Point, TilesetLink } from 'game/utils/Types';
 import { findTilesetLink } from './MapHelpers';
+import createCustomPhongMaterial from 'game/materials/CustomPhongMaterial';
 
 class TiledObject {
   $: THREE.Mesh;
@@ -36,12 +37,11 @@ class TiledObject {
     newTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
     const geometrySprite = new THREE.PlaneGeometry(width, height);
-    const materialSprite = new THREE.MeshBasicMaterial({
+    const materialSprite = createCustomPhongMaterial({
       map: newTexture,
       transparent: true,
-      opacity: 1.0,
-      side: THREE.DoubleSide,
-      depthTest: false,
+      shininess: 0,
+      flatShading: true,
     });
     this.$ = new THREE.Mesh(geometrySprite, materialSprite);
     this.$.position.set(
