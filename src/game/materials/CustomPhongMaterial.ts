@@ -22,13 +22,12 @@ float specularStrength;
 
 void RE_Direct_BlinnPhong( const in IncidentLight directLight, const in vec3 geometryPosition, const in vec3 geometryNormal, const in vec3 geometryViewDir, const in vec3 geometryClearcoatNormal, const in BlinnPhongMaterial material, inout ReflectedLight reflectedLight ) {
 
-float dotNL = abs( dot( geometryNormal, directLight.direction ) );
+float dotNL = abs( dot( vec3( 1.0, 1.0, 1.0 ), vec3( 1.0, 1.0, 1.0 ) ) );
 float lightFactor = max( abs( dotNL ), 0.5 );
 vec3 irradiance = lightFactor * directLight.color;
 
 reflectedLight.directDiffuse += irradiance * BRDF_Lambert( material.diffuseColor );
 
-reflectedLight.directSpecular += irradiance * BRDF_BlinnPhong( directLight.direction, geometryViewDir, geometryNormal, material.specularColor, material.specularShininess ) * material.specularStrength;
 
 }
 
