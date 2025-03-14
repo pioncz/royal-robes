@@ -96,7 +96,7 @@ class Scene {
   onWindowResize = () => {
     // Update camera aspect ratio on window resize
     const aspectRatio = window.innerWidth / window.innerHeight;
-    const x = 2.5; // Same value as in constructor
+    const x = 1.4; // Same value as in constructor
 
     this.camera.left = -4 * x * aspectRatio;
     this.camera.right = 4 * x * aspectRatio;
