@@ -26,7 +26,7 @@ class CreatureHeader {
     this.health = health;
     this.maxHealth = maxHealth;
 
-    const size = 256;
+    const size = 512;
     const width = 2;
     const height = 0.5;
     const geometry = new THREE.PlaneGeometry(width, height);
@@ -36,9 +36,10 @@ class CreatureHeader {
     canvas.width = this.width;
     canvas.height = this.height;
     this.texture = new THREE.CanvasTexture(canvas);
-    this.texture.anisotropy = maxAnisotropy;
     this.texture.magFilter = THREE.NearestFilter;
-    this.texture.minFilter = THREE.LinearMipMapLinearFilter;
+    this.texture.minFilter = THREE.NearestFilter;
+    // Disable mipmapping to prevent blurring
+    this.texture.generateMipmaps = false;
     const material = new THREE.MeshBasicMaterial({
       map: this.texture,
       transparent: true,
@@ -68,17 +69,16 @@ class CreatureHeader {
     const y = 14;
     this.ctx.textBaseline = 'top';
     this.ctx.textAlign = 'center';
-    this.ctx.font = `62px ${FontNames.m5x7}`;
-    // this.ctx.font = `62px m5x7`;
+    this.ctx.font = `124px ${FontNames.m5x7}`;
     this.ctx.fillStyle = '#ffffff';
-    this.ctx.lineWidth = 12;
+    this.ctx.lineWidth = 14;
     this.ctx.strokeStyle = '#000000';
-    this.ctx.strokeText(this.name, x, y);
-    this.ctx.fillText(this.name, x, y);
+    this.ctx.strokeText(this.name.toUpperCase(), x, y);
+    this.ctx.fillText(this.name.toUpperCase(), x, y);
 
     const hpBarX = this.width / 4;
-    const hpBarY = 80;
-    const hpBarHeight = 25;
+    const hpBarY = 160;
+    const hpBarHeight = 50;
     const hpBarBorder = 5;
     this.ctx.fillStyle = '#000000';
     this.ctx.fillRect(hpBarX, hpBarY, this.width / 2, hpBarHeight);

@@ -29,7 +29,9 @@ class CreatureEffects {
     this.texture = new THREE.CanvasTexture(canvas);
     this.texture.anisotropy = this.maxAnisotropy;
     this.texture.magFilter = THREE.NearestFilter;
-    this.texture.minFilter = THREE.LinearMipMapLinearFilter;
+    this.texture.minFilter = THREE.NearestFilter;
+    // Disable mipmapping to prevent blurring
+    this.texture.generateMipmaps = false;
     const material = new THREE.MeshBasicMaterial({
       map: this.texture,
       transparent: true,
